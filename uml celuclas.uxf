@@ -1,0 +1,34 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><help_text>Space for diagram notes
+ hola
+</help_text><element><id>UMLClass</id><coordinates><x>210</x><y>30</y><w>240</w><h>200</h></coordinates><panel_attributes>Célula
+--
+
+estado_célula:Bool
+_num_celulas: Entero_
+celulas vecinas: lista de células vecinas en el tablero
+
+--
+
+
+
+cambio_de_estado()
+revisión_infección-&gt;Bool	
+
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>200</x><y>380</y><w>240</w><h>180</h></coordinates><panel_attributes>Tablero
+--
+
+numpy.array n*n formado por células
+
+--
+
+evolución_tablero() 
+estado_células()
+
+
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>360</x><y>220</y><w>30</w><h>170</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;150;10;10</additional_attributes></element></diagram>
