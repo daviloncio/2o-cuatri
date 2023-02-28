@@ -1,21 +1,25 @@
-<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><help_text>Space for diagram notes
+<diagram program="umletino" version="15.0.0"><zoom_level>9</zoom_level><help_text>Space for diagram notes
  hola
-</help_text><element><id>UMLClass</id><coordinates><x>440</x><y>0</y><w>210</w><h>150</h></coordinates><panel_attributes>CÉLULA
+</help_text><element><id>UMLClass</id><coordinates><x>342</x><y>12</y><w>189</w><h>135</h></coordinates><panel_attributes>CÉLULA
 --
 estado_célula (0/1)
 --
 revisar_estado_célula()
 actualización_célula(vecinos,estado)
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>210</x><y>350</y><w>210</w><h>150</h></coordinates><panel_attributes>CEL INVERSOR BINARIO
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>144</x><y>174</y><w>189</w><h>135</h></coordinates><panel_attributes>CEL INVERSOR BINARIO
 --
-id: Long="36548"
-[waiting for message]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>420</x><y>670</y><w>210</w><h>150</h></coordinates><panel_attributes>MUNDO
+actualización(vecinos)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>333</x><y>381</y><w>189</w><h>108</h></coordinates><panel_attributes>MUNDO
+--
+m
+n
+estado_inicial(matriz)
 --
 estado_mundo()
-actualización_mundo()
-comunicacion_vecinos() ?</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>630</x><y>350</y><w>210</w><h>150</h></coordinates><panel_attributes>CEL SUM INV BINARIO
+actualiza()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>522</x><y>174</y><w>189</w><h>135</h></coordinates><panel_attributes>CEL SUM INV BINARIO
 --
-id: Long="36548"
-[waiting for message]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>540</x><y>140</y><w>230</w><h>230</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;210;210</additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>140</y><w>270</w><h>230</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>243;12;10;210</additional_attributes></element><element><id>Relation</id><coordinates><x>590</x><y>490</y><w>180</w><h>200</h></coordinates><panel_attributes>lt=&lt;-
-</panel_attributes><additional_attributes>160;10;10;180</additional_attributes></element><element><id>Relation</id><coordinates><x>310</x><y>490</y><w>170</w><h>200</h></coordinates><panel_attributes>lt=&lt;-
-</panel_attributes><additional_attributes>10;10;150;180</additional_attributes></element></diagram>
+actualizaciónEs(vecinos)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>432</x><y>138</y><w>216</w><h>54</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;220;40</additional_attributes></element><element><id>Relation</id><coordinates><x>216</x><y>138</y><w>234</w><h>54</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>233;12;10;40</additional_attributes></element><element><id>Relation</id><coordinates><x>486</x><y>300</y><w>162</w><h>99</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>160;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>234</x><y>300</y><w>153</w><h>99</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>10;10;150;90</additional_attributes></element></diagram>
