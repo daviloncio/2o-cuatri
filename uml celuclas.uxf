@@ -1,55 +1,21 @@
 <diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><help_text>Space for diagram notes
  hola
-</help_text><element><id>UMLClass</id><coordinates><x>10</x><y>140</y><w>240</w><h>200</h></coordinates><panel_attributes>Célula
---
-
-estado_célula:Bool
-_num_celulas: Entero_
-celulas vecinas: lista de células vecinas en el tablero
-
---
-
-
-
-cambio_de_estado()
-revisión_infección-&gt;Bool	
-
-
-
-
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>490</y><w>240</w><h>180</h></coordinates><panel_attributes>Tablero
---
-
-numpy.array n*n formado por células
-
---
-
-evolución_tablero() 
-estado_células()
-
-
-
-
-
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>160</x><y>330</y><w>30</w><h>170</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;150;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>720</x><y>50</y><w>210</w><h>150</h></coordinates><panel_attributes>CÉLULA
+</help_text><element><id>UMLClass</id><coordinates><x>440</x><y>0</y><w>210</w><h>150</h></coordinates><panel_attributes>CÉLULA
 --
 estado_célula (0/1)
 --
 revisar_estado_célula()
 actualización_célula(vecinos,estado)
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>80</x><y>20</y><w>210</w><h>150</h></coordinates><panel_attributes>_object: Class_
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>210</x><y>350</y><w>210</w><h>150</h></coordinates><panel_attributes>CEL INVERSOR BINARIO
 --
 id: Long="36548"
-[waiting for message]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>490</x><y>400</y><w>210</w><h>150</h></coordinates><panel_attributes>CEL INVERSOR BINARIO
---
-id: Long="36548"
-[waiting for message]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>720</y><w>210</w><h>150</h></coordinates><panel_attributes>MUNDO
+[waiting for message]</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>420</x><y>670</y><w>210</w><h>150</h></coordinates><panel_attributes>MUNDO
 --
 estado_mundo()
 actualización_mundo()
-comunicacion_vecinos() ?</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>910</x><y>400</y><w>210</w><h>150</h></coordinates><panel_attributes>CEL SUM INV BINARIO
+comunicacion_vecinos() ?</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>630</x><y>350</y><w>210</w><h>150</h></coordinates><panel_attributes>CEL SUM INV BINARIO
 --
 id: Long="36548"
-[waiting for message]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>820</x><y>190</y><w>230</w><h>230</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;210;210</additional_attributes></element><element><id>Relation</id><coordinates><x>570</x><y>190</y><w>270</w><h>230</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>243;12;10;210</additional_attributes></element><element><id>Relation</id><coordinates><x>870</x><y>540</y><w>180</w><h>200</h></coordinates><panel_attributes>lt=&lt;-
-</panel_attributes><additional_attributes>160;10;10;180</additional_attributes></element><element><id>Relation</id><coordinates><x>590</x><y>540</y><w>170</w><h>200</h></coordinates><panel_attributes>lt=&lt;-
+[waiting for message]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>540</x><y>140</y><w>230</w><h>230</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;210;210</additional_attributes></element><element><id>Relation</id><coordinates><x>290</x><y>140</y><w>270</w><h>230</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>243;12;10;210</additional_attributes></element><element><id>Relation</id><coordinates><x>590</x><y>490</y><w>180</w><h>200</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>160;10;10;180</additional_attributes></element><element><id>Relation</id><coordinates><x>310</x><y>490</y><w>170</w><h>200</h></coordinates><panel_attributes>lt=&lt;-
 </panel_attributes><additional_attributes>10;10;150;180</additional_attributes></element></diagram>
