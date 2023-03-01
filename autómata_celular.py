@@ -1,6 +1,6 @@
 import numpy as np
 
-
+#mundo plot debe encapsular la lógica de impresión 
         
             
     
@@ -55,15 +55,31 @@ class Mundo:
             l.append([])
             for e in range(self.__n):
                 l[i].append(CelulaSumInvBin(self.__estado_inicial.pop(0),(i,e)))
-        self.__lista_estados=[]
+   
         self.__matriz_celulas=np.array(l)
+        self.__lista_estados=[]        
+    
         for fila in self.__matriz_celulas:
             for element in fila:
                 self.__lista_estados.append(element.revisar_estado_celula())
+                
     def estado(self):
         return self.__lista_estados
     def actualiza(self):
-        pass
-
+        
+        self.__imagen=[]
+        for fila in self.__matriz_celulas:
+            for element in fila:
+                self.__imagen.append(element.revisar_estado_celula())
+        imagenfinal=np.array(self.__imagen)
+        self.__mapa=imagenfinal.reshape(self.__m,self.__n)
+        
+        for fila in self.__matriz_celulas:
+            for element in fila:
+                #sacar vecinos de la celula en las coordenadas (fila,element)
+                #a la celula con las coordenadas (fila,element) la actualice 
+        
 mun=Mundo(2,2,[1,0,1,0])
-mun.estado()
+mun.actualiza()
+
+
