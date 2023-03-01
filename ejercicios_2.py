@@ -155,5 +155,6 @@ print(infix_to_sufix("m*n+(p-q)+r"))
 print (infix_to_sufix("(A + B) * (C + D)"))
 if __name__== " __main__ ":
     import doctest
-    doctest.testmod()
-  
+    doctest.testmod(name=infix_to_sufix)
+    doctest.testmod(name=from_prefix_to_infix)
+    doctest.testmod(name=decimal_to_base_rec)

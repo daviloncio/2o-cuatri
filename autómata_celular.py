@@ -76,6 +76,7 @@ class Mundo:
         
         for fila in self.__matriz_celulas:
             for element in fila:
+                pass
                 #sacar vecinos de la celula en las coordenadas (fila,element)
                 #a la celula con las coordenadas (fila,element) la actualice 
         
