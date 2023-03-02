@@ -77,14 +77,13 @@ class Graph:
     def edges_count(self):
         '''Returns the number of edges in the graph'''
         return self._edges_count
-    def get_vertices_attribute(self, name):
+    def get_vertices_attribute(self, name):  #debe devolver un diccionario con clave(nombre vertice) y valor debe ser otro diccionario
         '''Get vertices attribute from graph
             Returns:
             Dictionary of attributes keyed by vertex name.  '''
-          #?????
-        pass
+        return self._vertices
     def set_vertices_attribute(self, name, value = 'WHITE'):
         '''Set name attribute of vertices to a value
         '''
-        #nuevo atributo??
+        #modificar el atributo??
         pass
