@@ -13,9 +13,9 @@ def decimal_to_base_rec (num:int, base:int)->str:
     """
     Test the decimal_to_base_rec function
     >>> decimal_to_base_rec(19,2)
-    1100
+    '1100'
     >>> decimal_to_base_rec(7,5)
-    21
+    '21'
     """
     
     cociente,resto=divmod(num,base)
@@ -151,9 +151,8 @@ def infix_to_sufix(expr,oper = ['+', '-', '*', '/', '(', ')', '^'] )->str:
     while s:    #al final, vacía la pila, dentro de la cual solo quedan operadores, y los añade al final de la expresión en orden de llegada (LIFO)
         expresion_final+=s.pop()
     return expresion_final
-print(infix_to_sufix("m*n+(p-q)+r"))
-print (infix_to_sufix("(A + B) * (C + D)"))
+
 if __name__== " __main__ ":
     import doctest
     doctest.testmod()
-  
+
