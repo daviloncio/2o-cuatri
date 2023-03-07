@@ -1,6 +1,6 @@
 import numpy as np
 
-#mundo plot debe encapsular la lógica de impresión 
+#mundo plot debe encapsular la lógica de impresión  (parte2)
         
             
     
@@ -10,19 +10,27 @@ import numpy as np
     
 class Celula:
     def __init__(self,estado:int,coord:tuple) -> None:
-        self.estado=estado
-        self.__i=coord[0]
-        self.__j=coord[1]
+        
+        self._estado=estado
+        self._i=coord[0]
+        self._j=coord[1]
+        
     def devolver_coordenadas(self):
-        return self.__i,self.__j
+        
+        return self._i,self._j
+    
     def revisar_estado_celula(self):
-        return self.estado #porque self.estado es privado 
+        
+        return self._estado #porque self.estado es privado 
+    
     def actualización_celula(self):
-        if self.estado == 1:
-            self.estado = 0
-            return self.estado
-        self.estado = 1
-        return self.estado  
+        
+        if  self._estado == 1:
+            self._estado = 0
+        else:
+            self._estado = 1
+            
+        return self._estado  
         
         
 class CelulaInvBin(Celula):
@@ -31,13 +39,43 @@ class CelulaInvBin(Celula):
         super().actualización_celula()
 
 class CelulaSumInvBin(Celula):
+    def __init__(self, estado: int, coord: tuple) -> None:
+        super().__init__(estado, coord)
 
     def actualización_celula(self,mapa_actual):
-        def comprobación(i,j):
-            pass
-                
-        recorrer_i=self.__i-1
         
+        x,y=self._i-1,self._j-1
+        
+        contador_vecinos_0 = 0  
+        contador_vecinos_1 = 0 
+        
+        for e in range(x,x+3):  #si usamos continue, deja todo lo que este haciendo y pasa a la siguiente iteración del bucle
+            for r in range(y,y+3):
+                
+                if (e,r) == (self._i,self._j):
+                    continue
+                
+                try:
+                    estado_vecino = mapa_actual[e][r]
+                    
+                    
+                    if estado_vecino == 0:
+                        contador_vecinos_0 += 1
+                        
+                    else:
+                        contador_vecinos_1 += 1
+                        
+                except:
+                    continue   #saltará except solo cuando las coordenadas indicadas en el bucle no coincidan con las coordenadas de ninguna celula del mundo.
+        
+        if self._estado == 1 and contador_vecinos_1 <= contador_vecinos_0:
+            
+            super().actualización_celula()
+            
+        if self._estado == 0 and contador_vecinos_1 >= contador_vecinos_0:
+            
+            super().actualización_celula()
+            
 class Mundo:
     def __init__(self,m,n,estado_inicial) -> None:
         
@@ -49,38 +87,51 @@ class Mundo:
             
             return KeyError('no hay elementos suficientes en la lista del estado inicial para poder asignar a cada célula del mundo uno de ellos')
         
-        #self.matriz_celulas=np.array(self.__m)
         l=[]
         for i in range(self.__m):
-            l.append([])
-            for e in range(self.__n):
-                l[i].append(CelulaSumInvBin(self.__estado_inicial.pop(0),(i,e)))
-   
-        self.__matriz_celulas=np.array(l)
-        self.__lista_estados=[]        
     
-        for fila in self.__matriz_celulas:
-            for element in fila:
-                self.__lista_estados.append(element.revisar_estado_celula())
+            for e in range(self.__n):
                 
+                l.append(CelulaSumInvBin(self.__estado_inicial.pop(0),(i,e)))
+   
+        self.__matriz_celulas=np.array(l) #realmente hay que usarlo?
+        self.__matriz_celulas=self.__matriz_celulas.reshape(self.__m,self.__n)
+        
+        self.__lista_estados=[]      
+    
+        for fila in self.__matriz_celulas:  
+            
+            for element in fila:
+                
+                self.__lista_estados.append(element.revisar_estado_celula()) #habra que cambiarlo por cada actualización
+                
+        self.__lista_estados=np.array(self.__lista_estados)        
+        self.__lista_estados=self.__lista_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
+
     def estado(self):
         return self.__lista_estados
-    def actualiza(self):
-        
-        self.__imagen=[]
-        for fila in self.__matriz_celulas:
-            for element in fila:
-                self.__imagen.append(element.revisar_estado_celula())
-        imagenfinal=np.array(self.__imagen)
-        self.__mapa=imagenfinal.reshape(self.__m,self.__n)
+    def actualiza(self):  
         
         for fila in self.__matriz_celulas:
             for element in fila:
-                pass
-                #sacar vecinos de la celula en las coordenadas (fila,element)
-                #a la celula con las coordenadas (fila,element) la actualice 
+                
+                element.actualización_celula(self.__lista_estados) #después de actualizar cada celula, toca actualizar self.__lista_estados
+                
+        self.__lista_estados = [] #olvidamos la captura anterior una vez actualizada toda célula.
+                
+        for fila in self.__matriz_celulas:  #repetimos codigo del init para actualizar
+            
+            for element in fila:
+                
+                self.__lista_estados.append(element.revisar_estado_celula()) 
         
-mun=Mundo(2,2,[1,0,1,0])
+        self.__lista_estados=np.array(self.__lista_estados)        
+        self.__lista_estados=self.__lista_estados.reshape(self.__m,self.__n) 
+        
+        
+mun=Mundo(2,3,[1,0,1,0,1,0])
+mun.estado()
 mun.actualiza()
+print(mun.estado())
 
 
