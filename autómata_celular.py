@@ -5,9 +5,7 @@ import numpy as np
             
     
             
-            
-            
-    
+
 class Celula:
     def __init__(self,estado:int,coord:tuple) -> None:
         
@@ -23,20 +21,23 @@ class Celula:
         
         return self._estado #porque self.estado es privado 
     
-    def actualización_celula(self):
-        
-        if  self._estado == 1:
+    def actualización_celula(self,i):
+        if i == 0:
             self._estado = 0
-        else:
-            self._estado = 1
-            
+        elif i == 1:
+            self._estado=1
+        elif i == "i":
+            if self._estado== 1:
+                self._estado= 0
+            else:
+                self._estado=1
         return self._estado  
         
         
 class CelulaInvBin(Celula):
 
-    def actualización_celula(self):
-        super().actualización_celula()
+    def actualización_celula(self,i):
+        super().actualización_celula('i')
 
 class CelulaSumInvBin(Celula):
     def __init__(self, estado: int, coord: tuple) -> None:
@@ -54,27 +55,30 @@ class CelulaSumInvBin(Celula):
                 
                 if (e,r) == (self._i,self._j):
                     continue
+                if e or r < 0 :
+                    continue
                 
                 try:
                     estado_vecino = mapa_actual[e][r]
-                    
-                    
                     if estado_vecino == 0:
                         contador_vecinos_0 += 1
                         
-                    else:
+                    elif estado_vecino == 1:
                         contador_vecinos_1 += 1
-                        
                 except:
                     continue   #saltará except solo cuando las coordenadas indicadas en el bucle no coincidan con las coordenadas de ninguna celula del mundo.
         
-        if self._estado == 1 and contador_vecinos_1 <= contador_vecinos_0:
+        if contador_vecinos_0 > contador_vecinos_1:
             
-            super().actualización_celula()
+            super().actualización_celula(1)
             
-        if self._estado == 0 and contador_vecinos_1 >= contador_vecinos_0:
+        elif contador_vecinos_1 > contador_vecinos_0:
             
-            super().actualización_celula()
+            super().actualización_celula(0)
+        elif contador_vecinos_0 == contador_vecinos_1:
+            
+            super().actualización_celula("i")
+            
             
 class Mundo:
     def __init__(self,m,n,estado_inicial) -> None:
@@ -105,8 +109,8 @@ class Mundo:
                 
                 self.__lista_estados.append(element.revisar_estado_celula()) #habra que cambiarlo por cada actualización
                 
-        self.__lista_estados=np.array(self.__lista_estados)        
-        self.__lista_estados=self.__lista_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
+        self.__lista_estados = np.array(self.__lista_estados)        
+        self.__lista_estados = self.__lista_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
 
     def estado(self):
         return self.__lista_estados
@@ -129,8 +133,9 @@ class Mundo:
         self.__lista_estados=self.__lista_estados.reshape(self.__m,self.__n) 
         
         
-mun=Mundo(3,3,[0,1,0,1,0,1,0,1,0])
+mun=Mundo(3,3,[0,0,1,1,0,0,0,1,0])
 mun.estado()
+print(mun.estado())
 mun.actualiza()
 print(mun.estado())
 
