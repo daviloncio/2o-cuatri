@@ -129,7 +129,7 @@ class Mundo:
         self.__lista_estados=self.__lista_estados.reshape(self.__m,self.__n) 
         
         
-mun=Mundo(2,3,[1,0,1,0,1,0])
+mun=Mundo(3,3,[0,1,0,1,0,1,0,1,0])
 mun.estado()
 mun.actualiza()
 print(mun.estado())
