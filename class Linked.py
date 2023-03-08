@@ -1,3 +1,5 @@
+#ejercicio 8
+
 class LinkedVertex:
     def __init__(self, vertex):
         self._adyacents = {} # store the labels of its adyacent vertices
@@ -13,29 +15,39 @@ class LinkedVertex:
             self._attributes['degree']=valor+1
         else:
             raise TypeError("there is no vertex named" + v)
-
+    def exists_adyacent(self, v):
+        '''Return True if v is adyacent otherwise return False'''
+        if v in self._adyacents:
+            return True
+        else: 
+            return False
     def get_attribute(self, name):
         '''Returns the attribute name of the vertex
         Raise TypeError exception if there is no such attribute
         '''
-        if name in self._attributes:
-            return self._attributes[name]
+        if name in self._attributes.keys:
+            return self._attributes(name)
         else:
             raise TypeError("There is not such attribute")
-    def set_attribute(self, name, value = None):
+
+    def set_attribute(self, name, value):
         '''Set the attribute name of the vertex to value
         Raise TypeError exception if there is no such attribute
         '''
-        pass
+        if name in self._attributes.keys:
+            self._attributes[name]=value
+        else:
+            raise TypeError("There is not such attribute")
     def get_adyacents(self):
         '''Returns a geneartor over the outcoming adyacent vertices'''
-        pass
+        for element in self._adyacents:
+            yield element
     def __str__(self):
         v = '[' + str(self._attributes['key']) + ','
         v += ' adj: ' + str(self._adyacents) + ']'
         return v
     
-
+#ejercicio 9s
 class Graph:
     def __init__(self):
         '''Create an empty directed graph.'''
@@ -62,28 +74,49 @@ class Graph:
         '''Return an iterator over the graph vertices.'''
         for vertice in self._vertices:
             print(vertice)
-        pass
     def neighbors(self, v):
         '''Returns a genearator over the outgoing edges of the vertex v'''
         if type(v) != LinkedVertex:
             raise TypeError('there is not such vertex')
-        
-        
-        
-        pass
+        else:
+            pass #?????
     def vertices_count(self):
         '''Returns the number of vertices in the graph'''
         return self._vertices_count
     def edges_count(self):
         '''Returns the number of edges in the graph'''
         return self._edges_count
-    def get_vertices_attribute(self, name):  #debe devolver un diccionario con clave(nombre vertice) y valor debe ser otro diccionario
+    def get_vertices_attribute(self, name):  #preguntar
         '''Get vertices attribute from graph
             Returns:
-            Dictionary of attributes keyed by vertex name.  '''
-        return self._vertices
+            Dictionary of attributes keyed by vertex name.  '''#Que es el vertex name?
     def set_vertices_attribute(self, name, value = 'WHITE'):
         '''Set name attribute of vertices to a value
         '''
+        #falta una v? en todos los vertices?
         #modificar el atributo??
         pass
+    def get_vertex_attribute(self, v, name):
+        '''Returns the attribute of the vertex v
+        Raise TypeError exception if there is no such vertex
+        '''
+        if v in self._vertices:
+            return  v.get_attribute(name)
+        else: 
+            raise TypeError("There is no such vertex")
+    def set_vertex_attribute(self, v, name, value):
+        '''
+        Set name attributes of a vertex to a value
+        Returns the attribute of the vertex v
+        '''
+        if v in self._vertices:
+            v.set_attribute(name,value)
+            return v.get_attribute(name)
+        else: 
+            raise TypeError("There is no such vertex")
+    def __str__(self):
+        '''Returns the string representation of the graph'''
+        g = ''
+        for i in self._vertices:
+            g += str(self._vertices[i])
+        return g
