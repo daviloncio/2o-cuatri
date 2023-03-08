@@ -1,4 +1,4 @@
-e=-1
-r=-1
-if e or r < 0:
-    print(False)
+e={'e':1}
+e['e']=2
+print(e)
+

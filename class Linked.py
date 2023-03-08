@@ -10,35 +10,35 @@ class LinkedVertex:
     def add_adyacent(self,v,weight):
         
         if type(v) == LinkedVertex():
-            self._adyacents[v]=weight
-            valor=self._attributes['degree']
-            self._attributes['degree']=valor+1
+            self._adyacents[v] = weight
+            valor = self._attributes['degree']
+            self._attributes['degree'] = valor+1
         else:
             raise TypeError("there is no vertex named" + v)
     def exists_adyacent(self, v):
         '''Return True if v is adyacent otherwise return False'''
         if v in self._adyacents:
             return True
-        else: 
-            return False
+        
+        return False
     def get_attribute(self, name):
         '''Returns the attribute name of the vertex
         Raise TypeError exception if there is no such attribute
         '''
         if name in self._attributes.keys:
             return self._attributes(name)
-        else:
-            raise TypeError("There is not such attribute")
+        
+        raise TypeError("There is not such attribute")
 
     def set_attribute(self, name, value):
         '''Set the attribute name of the vertex to value
         Raise TypeError exception if there is no such attribute
         '''
         if name in self._attributes.keys:
-            self._attributes[name]=value
+            self._attributes[name] = value
         else:
             raise TypeError("There is not such attribute")
-    def get_adyacents(self):
+    def get_adyacents(self):  #??
         '''Returns a geneartor over the outcoming adyacent vertices'''
         for element in self._adyacents:
             yield element
@@ -46,6 +46,8 @@ class LinkedVertex:
         v = '[' + str(self._attributes['key']) + ','
         v += ' adj: ' + str(self._adyacents) + ']'
         return v
+    
+
     
 #ejercicio 9s
 class Graph:
