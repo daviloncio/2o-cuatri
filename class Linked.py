@@ -63,25 +63,28 @@ class Graph:
         if vertex in self._vertices:
             raise TypeError("Vertex already in the graph")
         else:
-            self._vertices[vertex]=LinkedVertex(vertex)
+            self._vertices[vertex] = LinkedVertex(vertex)
             self._vertices_count += 1
 
-    def add_edge_from_to(self, v_from, v_to, weight = None):
+    def add_edge_from_to(self, v_from: LinkedVertex, v_to: LinkedVertex, weight = None):  #david tio recuerda que un edge es una arista
         if type(v_from) and type(v_to) == LinkedVertex():
             v_from.add_adyacent(v_to,weight)
             self._edges_count += 1
+            
         else:
             raise TypeError("There is no such vertex")
     def vertices(self):
         '''Return an iterator over the graph vertices.'''
         for vertice in self._vertices:
-            print(vertice)
-    def neighbors(self, v):
+            yield vertice
+    def neighbors(self, v:LinkedVertex):
         '''Returns a genearator over the outgoing edges of the vertex v'''
         if type(v) != LinkedVertex:
             raise TypeError('there is not such vertex')
         else:
-            pass #?????
+            for vertice in v._adyacents:
+                yield v._adyacents[vertice]  #esto se va quedando con cada valor del diccionario que tiene cada vértice con sus adyacentes
+                
     def vertices_count(self):
         '''Returns the number of vertices in the graph'''
         return self._vertices_count
