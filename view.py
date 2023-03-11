@@ -9,7 +9,7 @@ class MundoPlot:
         self.__color0=color0
         self.__color1=color1
         
-    def plot_estado(output):
+    def plot_estado(self,output):
         #num_rows, num_cols, estado, filename
         cell_size = self.cell_size
         num_rows = self.__mundo.getrows()
