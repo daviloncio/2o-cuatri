@@ -116,7 +116,11 @@ class Mundo:
                 
         self.__lista_estados = np.array(self.__lista_estados)        
         self.__lista_estados = self.__lista_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
-
+        
+    def getrows(self):
+        return self.__m
+    def getcols(self):
+        return self.__n
     def estado(self):
         return self.__lista_estados
     def actualiza(self):  
