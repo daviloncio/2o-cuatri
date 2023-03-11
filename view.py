@@ -9,7 +9,7 @@ class MundoPlot:
         self.__color0=color0
         self.__color1=color1
         
-    def plot_estado(self,output):
+    def plot_estado(self,filename):
         #num_rows, num_cols, estado, filename
         cell_size = self.cell_size
         num_rows = self.__mundo.getrows()
@@ -26,6 +26,6 @@ class MundoPlot:
                 for dy in range(cell_size):
                     for dx in range(cell_size):
                         image.putpixel((x+dx, y+dy), color)
-        image.save(output + ".png")
+        image.save(filename + ".png")
         
     
