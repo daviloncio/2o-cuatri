@@ -25,18 +25,18 @@ class Celula:
         if i == 0:
             self._estado = 0
         elif i == 1:
-            self._estado=1
+            self._estado = 1
         elif i == "i":
             if self._estado== 1:
-                self._estado= 0
+                self._estado = 0
             else:
-                self._estado=1
+                self._estado = 1
         return self._estado  
         
         
 class CelulaInvBin(Celula):
 
-    def actualización_celula(self,i):
+    def actualización_celula(self):
         super().actualización_celula('i')
 
 class CelulaSumInvBin(Celula):
@@ -55,25 +55,30 @@ class CelulaSumInvBin(Celula):
                 
                 if (e,r) == (self._i,self._j):
                     continue
-                if e or r < 0 :
+                
+                if e < 0 or r < 0 :
                     continue
                 
                 try:
+
                     estado_vecino = mapa_actual[e][r]
+
                     if estado_vecino == 0:
                         contador_vecinos_0 += 1
                         
                     elif estado_vecino == 1:
+
                         contador_vecinos_1 += 1
                 except:
-                    continue   #saltará except solo cuando las coordenadas indicadas en el bucle no coincidan con las coordenadas de ninguna celula del mundo.
+                    continue
+                       #saltará except solo cuando las coordenadas indicadas en el bucle no coincidan con las coordenadas de ninguna celula del mundo.
         
         if contador_vecinos_0 > contador_vecinos_1:
-            
+
             super().actualización_celula(1)
             
         elif contador_vecinos_1 > contador_vecinos_0:
-            
+
             super().actualización_celula(0)
         elif contador_vecinos_0 == contador_vecinos_1:
             
@@ -117,6 +122,7 @@ class Mundo:
     def actualiza(self):  
         
         for fila in self.__matriz_celulas:
+            
             for element in fila:
                 
                 element.actualización_celula(self.__lista_estados) #después de actualizar cada celula, toca actualizar self.__lista_estados
@@ -133,8 +139,8 @@ class Mundo:
         self.__lista_estados=self.__lista_estados.reshape(self.__m,self.__n) 
         
         
-mun=Mundo(3,3,[0,0,1,1,0,0,0,1,0])
-mun.estado()
+mun=Mundo(3,3,[1,0,1,0,1,0,1,0,1])
+
 print(mun.estado())
 mun.actualiza()
 print(mun.estado())

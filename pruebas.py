@@ -1,4 +1,8 @@
-e={'e':1}
-e['e']=2
-print(e)
+import numpy as np
+
+(e,r)=(1,1)
+if e < 0 or r < 0:
+    print('q')
+
+
 
