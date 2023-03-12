@@ -21,7 +21,7 @@ class Celula:
         
         return self._estado #porque self.estado es privado 
     
-    def actualización_celula(self,i):
+    def actualización_celula(self,i):  
         if i == 0:
             self._estado = 0
         elif i == 1:
@@ -35,8 +35,11 @@ class Celula:
         
         
 class CelulaInvBin(Celula):
+    def __init__(self, estado: int, coord: tuple) -> None:
+        super().__init__(estado, coord)
 
-    def actualización_celula(self):
+    def actualización_celula(self,mapa): 
+        #en esta clase el mapa no lo usaremos para nada pero como la clase mundo no va a distinguir qué tipo de célula vamos a actualizar pues simepre recibirá el parámetro de las coordenadas
         super().actualización_celula('i')
 
 class CelulaSumInvBin(Celula):
@@ -103,37 +106,39 @@ class Mundo:
                 
                 l.append(CelulaSumInvBin(self.estado[i*self.__m+e],(i,e)))  
 
-        self.__matriz_celulas=np.array(l) #realmente hay que usarlo?
-        self.__matriz_celulas=self.__matriz_celulas.reshape(self.__m,self.__n)
+        self.matriz_celulas=np.array(l) #realmente hay que usarlo?
+        self.matriz_celulas=self.matriz_celulas.reshape(self.__m,self.__n)
         
         self.array_estados=[]      
     
-        for fila in self.__matriz_celulas:  
+        for fila in self.matriz_celulas:  
             
             for element in fila:
                 
                 self.array_estados.append(element.revisar_estado_celula()) #habra que cambiarlo por cada actualización
                 
-        self.__lista_estados = np.array(self.__lista_estados)        
-        self.__lista_estados = self.__lista_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
+        self.array_estados = np.array(self.array_estados)        
+        self.array_estados = self.array_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
         
     def getrows(self):
         return self.__m
     def getcols(self):
         return self.__n
-    def estado(self):
-        return self.__lista_estados
+    def estado_(self):
+        return self.estado
     def actualiza(self):  
         
-        for fila in self.__matriz_celulas:
+        for fila in self.matriz_celulas:
             
             for element in fila:
+                    
+                    element.actualización_celula(self.array_estados) #clase mundo no sabe qué tipo de celula vamos a actualizar, pòr lo que siempre pasamos el mapa con los estados
                 
-                element.actualización_celula(self.array_estados) #después de actualizar cada celula, toca actualizar self.array_estados
+                 #después de actualizar cada celula, toca actualizar self.array_estados
                 
         self.estado = [] #olvidamos la captura anterior una vez actualizada toda célula.
                 
-        for fila in self.__matriz_celulas:  #repetimos codigo del init para actualizar
+        for fila in self.matriz_celulas:  #repetimos codigo del init para actualizar
             
             for element in fila:
                 
@@ -143,9 +148,14 @@ class Mundo:
         self.array_estados=self.array_estados.reshape(self.__m,self.__n) 
         
         
-mun=Mundo(3,3,[1,0,1,0,1,0,1,0,1])
-print(mun.estado)
+mun=Mundo(6,6, [1,0,1,1,0,1,
+                    0,0,1,1,0,0,
+                    1,0,0,0,0,1,
+                    1,0,1,1,0,1,
+                    0,0,0,0,0,0,
+                    0,1,1,1,1,0])
+print(mun.estado_())
 mun.actualiza()
-print(mun.estado)
+print(mun.estado_())
 
 

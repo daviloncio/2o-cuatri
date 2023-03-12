@@ -11,7 +11,7 @@ class MundoPlot:
         
     def plot_estado(self,filename):
         #num_rows, num_cols, estado, filename
-        cell_size = self.cell_size
+        cell_size = self.__cell_size
         num_rows = self.__mundo.getrows()
         num_cols=  self.__mundo.getcols()
         estado= self._mundo.estado()
