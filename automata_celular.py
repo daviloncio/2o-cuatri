@@ -90,59 +90,57 @@ class Mundo:
         
         self.__m=m
         self.__n=n
-        self.__estado_inicial=estado_inicial
-        
-        if m*n < len(self.__estado_inicial):
+        self.estado=estado_inicial
+                
+        if m*n < len(self.estado):
             
-            return KeyError('no hay elementos suficientes en la lista del estado inicial para poder asignar a cada célula del mundo uno de ellos')
-        
+            return KeyError('no hay elementos suficientes en la lista del estado inicial como para poder asignar a cada célula del mundo uno de ellos')
+
         l=[]
         for i in range(self.__m):
     
             for e in range(self.__n):
                 
-                l.append(CelulaSumInvBin(self.__estado_inicial.pop(0),(i,e)))
-   
+                l.append(CelulaSumInvBin(self.estado[i*self.__m+e],(i,e)))  
+
         self.__matriz_celulas=np.array(l) #realmente hay que usarlo?
         self.__matriz_celulas=self.__matriz_celulas.reshape(self.__m,self.__n)
         
-        self.__lista_estados=[]      
+        self.array_estados=[]      
     
         for fila in self.__matriz_celulas:  
             
             for element in fila:
                 
-                self.__lista_estados.append(element.revisar_estado_celula()) #habra que cambiarlo por cada actualización
+                self.array_estados.append(element.revisar_estado_celula()) #habra que cambiarlo por cada actualización
                 
-        self.__lista_estados = np.array(self.__lista_estados)        
-        self.__lista_estados = self.__lista_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
+        self.array_estados = np.array(self.array_estados)        
+        self.array_estados = self.array_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
 
-    def estado(self):
-        return self.__lista_estados
+    
     def actualiza(self):  
         
         for fila in self.__matriz_celulas:
             
             for element in fila:
                 
-                element.actualización_celula(self.__lista_estados) #después de actualizar cada celula, toca actualizar self.__lista_estados
+                element.actualización_celula(self.array_estados) #después de actualizar cada celula, toca actualizar self.array_estados
                 
-        self.__lista_estados = [] #olvidamos la captura anterior una vez actualizada toda célula.
+        self.estado = [] #olvidamos la captura anterior una vez actualizada toda célula.
                 
         for fila in self.__matriz_celulas:  #repetimos codigo del init para actualizar
             
             for element in fila:
                 
-                self.__lista_estados.append(element.revisar_estado_celula()) 
+                self.estado.append(element.revisar_estado_celula()) 
         
-        self.__lista_estados=np.array(self.__lista_estados)        
-        self.__lista_estados=self.__lista_estados.reshape(self.__m,self.__n) 
+        self.array_estados=np.array(self.estado)        
+        self.array_estados=self.array_estados.reshape(self.__m,self.__n) 
         
         
 mun=Mundo(3,3,[1,0,1,0,1,0,1,0,1])
-
-print(mun.estado())
+print(mun.estado)
 mun.actualiza()
-print(mun.estado())
+print(mun.estado)
 
 
