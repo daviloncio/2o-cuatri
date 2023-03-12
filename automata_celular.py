@@ -114,10 +114,15 @@ class Mundo:
                 
                 self.array_estados.append(element.revisar_estado_celula()) #habra que cambiarlo por cada actualización
                 
-        self.array_estados = np.array(self.array_estados)        
-        self.array_estados = self.array_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
-
-    
+        self.__lista_estados = np.array(self.__lista_estados)        
+        self.__lista_estados = self.__lista_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
+        
+    def getrows(self):
+        return self.__m
+    def getcols(self):
+        return self.__n
+    def estado(self):
+        return self.__lista_estados
     def actualiza(self):  
         
         for fila in self.__matriz_celulas:
