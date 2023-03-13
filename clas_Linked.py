@@ -1,4 +1,8 @@
+from stackarray import *
+from queue import *
+#Se debe tener la clase pila guardada como queue. En caso de no tenerse, sustituir from queue import * por la clase pila de el notebook de teoria
 #ejercicio 8
+
 
 class LinkedVertex:
     def __init__(self, vertex:str):
@@ -108,7 +112,7 @@ class Graph:
         else:
             raise TypeError('atributo del vértice mal introducido')
             
-    def set_vertices_attribute(self, name, value = 'WHITE'):  #creo que name solo puede ser key,degree,color o parent
+    def set_vertices_attribute(self, name, value = 'white'):  #creo que name solo puede ser key,degree,color o parent
         '''Set name attribute of vertices to a value
         '''
         if name in LinkedVertex()._attributes.keys():
@@ -148,3 +152,63 @@ class Graph:
         return g
     
 g = Graph()
+#EJERCICIO 10
+#10.1: Busqueda en profundidad usando la pila
+
+def DFS_iter(G: Graph,vertex: LinkedVertex):
+    if type (G) != Graph:
+        raise KeyError("There is no such graph")
+    elif type(vertex) != LinkedVertex:
+        raise KeyError("There is no such vertex")
+    else:
+        G.set_vertices_attribute("color","white")
+        s = Stack()
+        s.push(vertex)
+        while s.is_empty == False:
+            v = s.pop()
+            if G.get_vertex_attribute(v,"color") == "white":
+                G.set_vertex_attribute(v,"color","black")
+                for w in G.neighbors(vertex):
+                    if G.get_vertex_attribute(w,"color")== "white":
+                        G.set_vertex_attribute(w,"parent",v)
+                        s.push(w)
+
+#10.2: Busqueda en profundidad recursivo
+
+def DFS_rec(G: Graph,v: LinkedVertex):
+    if type (G) != Graph:
+        raise KeyError("There is no such graph")
+    elif type(v) != LinkedVertex:
+        raise KeyError("There is no such vertex")
+    else:
+        G.set_vertex_attribute(v,"color","grey")
+        for w in G.neighbors(v):
+            if G.get_vertex_attribute(w,"color")== "white":
+                G.set_vertex_attribute(w,"parent",v)
+                DFS_rec(G,w)
+        G.set_vertex_attribute(v,"color","black")
+        
+        
+##Si se quiere ejecutar este algoritmo más de una vez, descomentar la siguiente linea
+#graph.set_vertices_attribute("color","white") #donde graph es el grafo que sobre el que se desea implementar el alogritmo
+
+      
+#10.3: Busqueda de anchura
+def BFS(G: Graph,v: LinkedVertex):
+    if type (G) != Graph:
+        raise KeyError("There is no such graph")
+    elif type(v) != LinkedVertex:
+        raise KeyError("There is no such vertex")
+    else:
+        G.set_vertices_attribute("color","white")
+        q = Queue()
+        q.enqueue(v)
+        while q.is_empty == False:
+            v.deque
+            for w in G.neighbors(v):
+                if g.get_vertex_attribute(w,"color")== "white":
+                    G.set_vertex_attribute(w,"color","grey")
+                    G.set_vertex_attribute(w,"parent",v)
+                    q.enqueue(w)
+            G.set_vertex_attribute(w,"color","black")
+                    
