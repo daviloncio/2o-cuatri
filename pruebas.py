@@ -1,6 +1,4 @@
-class Prueba:
-    def __init__(self,hola) -> None:
-        self._hola=hola
-g=Prueba('heeey')
-g._hola = 'hola'
-print(g._hola)
+a=0
+b=1
+
+print(max(a,b))

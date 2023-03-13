@@ -28,6 +28,8 @@ class Celula:
             self.__estado = 0
         elif i == 1:
             self.__estado = 1
+        elif i == 2:   #esta condición solo la usaremos en la clase CelulaPersonal
+            self.__estado = 2  
         elif i == "i":
             if self.__estado== 1:
                 self.__estado = 0
@@ -159,5 +161,61 @@ mun=Mundo(6,6, [1,0,1,1,0,1,
 print(mun.estado_())
 mun.actualiza()
 print(mun.estado_())
+
+class CelulaPersonal(Celula):
+    
+    def __init__(self, estado: int, coord: tuple) -> None:
+        super().__init__(estado, coord)  #esta vez el estado podrá ser 0,1,2 
+        
+    def actualización_celula(self, mapa):
+        
+        x,y=self._i-1,self._j-1
+        
+        contador_vecinos_0 = 0
+        contador_vecinos_1 = 0
+        contador_vecinos_2 = 0
+
+        for e in range(x,x+3):  #revisamos si hay algún vecino que implique cambio de estado
+            for r in range(y,y+3):
+                
+                if (e,r) == (self._i,self._j):
+                    continue
+                
+                if e < 0 or r < 0 :
+                    continue
+                
+                try:
+
+                    estado_vecino = mapa[e][r]
+
+                    if estado_vecino == 0:
+                        contador_vecinos_0 += 1
+                        
+                    elif estado_vecino == 1:
+                        contador_vecinos_1 += 1
+                        
+                    elif estado_vecino == 2:
+                        contador_vecinos_1 += 1
+                except:
+                    continue
+                    
+        if contador_vecinos_2>contador_vecinos_1 and contador_vecinos_2>contador_vecinos_0:
+            
+            super().actualización_celula(2)
+        
+        elif contador_vecinos_1>contador_vecinos_2 and contador_vecinos_1>contador_vecinos_0:
+            
+            super().actualización_celula(1)
+            
+        elif contador_vecinos_0>contador_vecinos_2 and contador_vecinos_0>contador_vecinos_1:
+            
+            super().actualización_celula(0)
+        
+        else:  #si hay algún empate no cambiaremos 
+            None
+        
+        
+        
+        
 
 
