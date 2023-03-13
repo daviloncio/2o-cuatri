@@ -2,15 +2,17 @@ import numpy as np
 
 #mundo plot debe encapsular la lógica de impresión  (parte2)
         
-            
+#todo atributo debe ser privado
+
+#que métodos deberían ser protegidos o privados??
     
             
 
 class Celula:
     def __init__(self,estado:int,coord:tuple) -> None:
         
-        self._estado=estado
-        self._i=coord[0]
+        self.__estado=estado
+        self._i=coord[0]  #protegido para que puedan leerlo las clases que heredan de Celula
         self._j=coord[1]
         
     def devolver_coordenadas(self):
@@ -19,19 +21,19 @@ class Celula:
     
     def revisar_estado_celula(self):
         
-        return self._estado #porque self.estado es privado 
+        return self.__estado #porque self.__estado es privado 
     
     def actualización_celula(self,i):  
         if i == 0:
-            self._estado = 0
+            self.__estado = 0
         elif i == 1:
-            self._estado = 1
+            self.__estado = 1
         elif i == "i":
-            if self._estado== 1:
-                self._estado = 0
+            if self.__estado== 1:
+                self.__estado = 0
             else:
-                self._estado = 1
-        return self._estado  
+                self.__estado = 1
+        return self.__estado  
         
         
 class CelulaInvBin(Celula):
@@ -93,9 +95,9 @@ class Mundo:
         
         self.__m=m
         self.__n=n
-        self.estado=estado_inicial
+        self.__estado=estado_inicial
                 
-        if m*n < len(self.estado):
+        if m*n < len(self.__estado):
             
             return KeyError('no hay elementos suficientes en la lista del estado inicial como para poder asignar a cada célula del mundo uno de ellos')
 
@@ -104,48 +106,48 @@ class Mundo:
     
             for e in range(self.__n):
                 
-                l.append(CelulaSumInvBin(self.estado[i*self.__m+e],(i,e)))  
+                l.append(CelulaSumInvBin(self.__estado[i*self.__m+e],(i,e)))  
 
-        self.matriz_celulas=np.array(l) #realmente hay que usarlo?
-        self.matriz_celulas=self.matriz_celulas.reshape(self.__m,self.__n)
+        self.__matriz_celulas=np.array(l) #realmente hay que usarlo?
+        self.__matriz_celulas=self.__matriz_celulas.reshape(self.__m,self.__n)
         
-        self.array_estados=[]      
+        self.__array_estados=[]      
     
-        for fila in self.matriz_celulas:  
+        for fila in self.__matriz_celulas:  
             
             for element in fila:
                 
-                self.array_estados.append(element.revisar_estado_celula()) #habra que cambiarlo por cada actualización
+                self.__array_estados.append(element.revisar_estado_celula()) #habra que cambiarlo por cada actualización
                 
-        self.array_estados = np.array(self.array_estados)        
-        self.array_estados = self.array_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
+        self.__array_estados = np.array(self.__array_estados)        
+        self.__array_estados = self.__array_estados.reshape(self.__m,self.__n)  #asi tenemos coordenadas
         
     def getrows(self):
         return self.__m
     def getcols(self):
         return self.__n
     def estado_(self):
-        return self.estado
+        return self.__estado
     def actualiza(self):  
         
-        for fila in self.matriz_celulas:
+        for fila in self.__matriz_celulas:
             
             for element in fila:
                     
-                    element.actualización_celula(self.array_estados) #clase mundo no sabe qué tipo de celula vamos a actualizar, pòr lo que siempre pasamos el mapa con los estados
+                    element.actualización_celula(self.__array_estados) #clase mundo no sabe qué tipo de celula vamos a actualizar, pòr lo que siempre pasamos el mapa con los estados
                 
-                 #después de actualizar cada celula, toca actualizar self.array_estados
+                 #después de actualizar cada celula, toca actualizar self.__array_estados
                 
-        self.estado = [] #olvidamos la captura anterior una vez actualizada toda célula.
+        self.__estado = [] #olvidamos la captura anterior una vez actualizada toda célula.
                 
-        for fila in self.matriz_celulas:  #repetimos codigo del init para actualizar
+        for fila in self.__matriz_celulas:  #repetimos codigo del init para actualizar
             
             for element in fila:
                 
-                self.estado.append(element.revisar_estado_celula()) 
+                self.__estado.append(element.revisar_estado_celula()) 
         
-        self.array_estados=np.array(self.estado)        
-        self.array_estados=self.array_estados.reshape(self.__m,self.__n) 
+        self.__array_estados=np.array(self.__estado)        
+        self.__array_estados=self.__array_estados.reshape(self.__m,self.__n) 
         
         
 mun=Mundo(6,6, [1,0,1,1,0,1,

@@ -1,4 +1,6 @@
-a=(0,1)
-x =0
-y=0
-print(x,y+a)
+class Prueba:
+    def __init__(self,hola) -> None:
+        self._hola=hola
+g=Prueba('heeey')
+g._hola = 'hola'
+print(g._hola)

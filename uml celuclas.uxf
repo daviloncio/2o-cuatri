@@ -1,37 +1,57 @@
 <diagram program="umletino" version="15.0.0"><zoom_level>9</zoom_level><help_text>Space for diagram notes
  hola
-</help_text><element><id>UMLClass</id><coordinates><x>315</x><y>198</y><w>189</w><h>135</h></coordinates><panel_attributes>CÉLULA
+</help_text><element><id>UMLClass</id><coordinates><x>234</x><y>270</y><w>189</w><h>135</h></coordinates><panel_attributes>CÉLULA
 --
-estado_célula (0/1)
-coordenadas
+__estado (0/1)
+coord[0] -&gt; _i  
+coord[1] -&gt; _j
+
 --
-revisar_estado_célula()
-actualización_célula(self)
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>81</x><y>378</y><w>189</w><h>135</h></coordinates><panel_attributes>CEL INVERSOR BINARIO
+revisar_estado_célula(self)
+devolver_coordenadas(self)
+actualización_célula(self,i)
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>450</y><w>243</w><h>135</h></coordinates><panel_attributes>CEL INVERSOR BINARIO
 --
-actualización(self)
-invocamos con super() 
-la actualizacion
+
+atributos heredados de célula
+
+--
+actualización_celula(self,mapa)--&gt;
+dentro, invocamos con super() la actualización
 de la célula abstracta
 
-puede que valga con no hacer nada
-y así hereda el método actualizacion</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>315</x><y>0</y><w>189</w><h>108</h></coordinates><panel_attributes>MUNDO
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>162</x><y>18</y><w>306</w><h>171</h></coordinates><panel_attributes>MUNDO
 --
-m
-n
-estado_inicial(matriz)
+__m
+__n
+__estado
+__array_estados (como estados, pero con coordenadas)
+__matriz_celulas (array con objetos celula)
 --
 estado_mundo()
 actualiza()
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>522</x><y>378</y><w>189</w><h>135</h></coordinates><panel_attributes>CEL SUM INV BINARIO
+get_cols()
+get_rows()
+estado_()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>324</x><y>396</y><w>243</w><h>81</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;250;70</additional_attributes></element><element><id>Relation</id><coordinates><x>72</x><y>396</y><w>270</w><h>72</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>273;12;10;60</additional_attributes></element><element><id>Text</id><coordinates><x>36</x><y>666</y><w>720</w><h>144</h></coordinates><panel_attributes>cada célula tendrá unas coordenadas asignadas, cel inv binario no usará las coordenadas.
+
+estas coordenadas (i,j) son atributos protegidos debido a que las clases que heredan de celula deben de ser capaces de leer el atributo.
+
+mundo va llamando a las células según su coordenada. independientemente de si a la propia célula le importan
+sus vecinos le pasamos siempre el mapa con los estados por si se fija en ellos.
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>324</x><y>180</y><w>27</w><h>108</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+</panel_attributes><additional_attributes>10;100;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>441</x><y>459</y><w>270</w><h>144</h></coordinates><panel_attributes>CELULA SUMINVBIN
 --
-actualización(solo importan los vecinos)
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>405</x><y>324</y><w>243</w><h>72</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;250;60</additional_attributes></element><element><id>Relation</id><coordinates><x>153</x><y>324</y><w>270</w><h>72</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>273;12;10;60</additional_attributes></element><element><id>Text</id><coordinates><x>558</x><y>63</y><w>441</w><h>99</h></coordinates><panel_attributes>cada célula tendrá una coordenada asignada,
-cel inv binario no usará las coordenadas.
 
-mundo va llamando a las células según su coordenada,
-independientemente de si a la propia célula le importan
-sus vecinos
+atributos heredados de célula
 
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>405</x><y>99</y><w>27</w><h>117</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
-</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element></diagram>
+--
+actualización_celula(self,mapa)--&gt;
+dentro, invocamos con super() la actualización
+de la célula abstracta después de revisar
+el estado los vecinos
+
+</panel_attributes><additional_attributes></additional_attributes></element></diagram>
