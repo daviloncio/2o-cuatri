@@ -13,6 +13,10 @@ class MundoPlot:
         self.__rows = self.__mundo.getrows()
         
     def plot_estado(self,filename):
+<<<<<<< HEAD
+=======
+        self.__mundo
+>>>>>>> 5772101e44182db987fdc44e83fddc1122df9382
 
         cell_size = self.__cell_size
         estado = self.__mundo.estado
@@ -27,4 +31,9 @@ class MundoPlot:
                     for dx in range(cell_size):
                         image.putpixel((x+dx, y+dy), color)
         image.save(filename + ".png")
+<<<<<<< HEAD
     
+=======
+
+        
+>>>>>>> 5772101e44182db987fdc44e83fddc1122df9382
