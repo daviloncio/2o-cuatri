@@ -17,9 +17,6 @@ class Celula:
         self._i=coord[0]  #protegido para que puedan leerlo las clases que heredan de Celula
         self._j=coord[1]
         
-    def devolver_coordenadas(self):
-        
-        return self._i,self._j
     
     def revisar_estado_celula(self):
         

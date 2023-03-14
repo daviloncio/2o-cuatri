@@ -2,7 +2,7 @@
  hola
 </help_text><element><id>UMLClass</id><coordinates><x>234</x><y>270</y><w>189</w><h>135</h></coordinates><panel_attributes>CÉLULA
 --
-__estado (0/1)
+_estado (0/1)
 coord[0] -&gt; _i  
 coord[1] -&gt; _j
 
