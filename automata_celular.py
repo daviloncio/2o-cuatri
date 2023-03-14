@@ -104,14 +104,18 @@ class CelulaPersonal(Celula):
         con estado 0, comprobamos si la célula de la izquierda y la de la derecha están muertas, en cuyo caso la célula pasará
         a tener estado 1(morirá). si esto no pasa, la célula tendrá un 50% de probabilidades de salvarse."""
         try:
-            vecino_izq=mapa[self._i][self._j-1]
-            vecino_der=mapa[self._i][self._j+1]
-            
-            if (vecino_der,vecino_izq) == (1,1):
-                
-                super().actualización_celula(1)  #muere la célula
+            vecino_izq=mapa[self._i][self._j-1]  #si la célula está en un borde del mundo todo dependerá de si su otro vecino está muerto
         except:
-            None
+            vecino_izq = 1
+        try:
+            vecino_der=mapa[self._i][self._j+1]
+        except:
+            vecino_der = 1   
+             
+        if (vecino_der,vecino_izq) == (1,1):
+            
+            super().actualización_celula(1)  #muere la célula
+  
             
         if self._estado == 0:
             self._estado = random.randint(0,1) #50% de posibilidad de sobrevivir y seguir siendo 0.
