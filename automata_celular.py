@@ -95,51 +95,21 @@ class CelulaSumInvBin(Celula):
 class CelulaPersonal(Celula):
     
     def __init__(self, estado: int, coord: tuple) -> None:
-        super().__init__(estado, coord)  #esta vez el estado podrá ser 0,1,2 
+        super().__init__(estado, coord)   
         
-    def actualización_celula(self, mapa):
+    def actualización_celula(self, mapa):  
+        """digamos que esto es un mapa de supervivncia de células, el estado 0 implican que las células están vivas y 
+        el 1 que están muertas. Las células con estado 1 no podrán actualizar su estado. Al actualizar el estado de una célula
+        con estado 0, comprobamos si la célula de la izquierda y la de la derecha esyán muertas, en cuyo caso la célula pasará
+        a tener estado 1(morirá). si esto no pasa, la célula tendrá un 50% de probabilidades de salvarse."""
         
-        x,y=self._i-2,self._j-2 
+        vecino_izq=mapa[self._i][self._j-1]
+        vecino_der=mapa[self._i][self._j+1]
         
-        contador_vecinos_0 = 0
-        contador_vecinos_1 = 0
-        contador_vecinos_2 = 0
-
-        for e in range(x,x+5):  #revisamos si hay algún vecino que implique cambio de estado
-            for r in range(y,y+5):
-                
-                if (e,r) == (self._i,self._j):
-                    continue
-                
-                if e < 0 or r < 0 :
-                    continue
-                
-                try:
-
-                    estado_vecino = mapa[e][r]
-
-                    if estado_vecino == 0:
-                        contador_vecinos_0 += 1
-                        
-                    elif estado_vecino == 1:
-                        contador_vecinos_1 += 1
-                        
-                    elif estado_vecino == 2:
-                        contador_vecinos_1 += 1
-                except:
-                    continue
+        
+        
                     
-        if contador_vecinos_2>contador_vecinos_1 and contador_vecinos_2>contador_vecinos_0:
-            
-            super().actualización_celula(2)
         
-        elif contador_vecinos_1>contador_vecinos_2 and contador_vecinos_1>contador_vecinos_0:
-            
-            super().actualización_celula(1)
-            
-        elif contador_vecinos_0>contador_vecinos_2 and contador_vecinos_0>contador_vecinos_1:
-            
-            super().actualización_celula(0)
         
         else:  #si hay algún empate no cambiaremos 
             None
