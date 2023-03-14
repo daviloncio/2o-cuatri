@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 #mundo plot debe encapsular la lógica de impresión  (parte2)
         
@@ -11,7 +12,7 @@ import numpy as np
 class Celula:
     def __init__(self,estado:int,coord:tuple) -> None:
         
-        self.__estado=estado
+        self._estado=estado
         
         self._i=coord[0]  #protegido para que puedan leerlo las clases que heredan de Celula
         self._j=coord[1]
@@ -22,21 +23,21 @@ class Celula:
     
     def revisar_estado_celula(self):
         
-        return self.__estado #porque self.__estado es privado 
+        return self._estado #porque self._estado es privado 
     
     def actualización_celula(self,i):  
         if i == 0:
-            self.__estado = 0
+            self._estado = 0
         elif i == 1:
-            self.__estado = 1
+            self._estado = 1
         elif i == 2:   #esta condición solo la usaremos en la clase CelulaPersonal
-            self.__estado = 2  
+            self._estado = 2  
         elif i == "i":
-            if self.__estado== 1:
-                self.__estado = 0
+            if self._estado== 1:
+                self._estado = 0
             else:
-                self.__estado = 1
-        return self.__estado  
+                self._estado = 1
+        return self._estado  
         
         
 class CelulaInvBin(Celula):
@@ -100,19 +101,21 @@ class CelulaPersonal(Celula):
     def actualización_celula(self, mapa):  
         """digamos que esto es un mapa de supervivncia de células, el estado 0 implican que las células están vivas y 
         el 1 que están muertas. Las células con estado 1 no podrán actualizar su estado. Al actualizar el estado de una célula
-        con estado 0, comprobamos si la célula de la izquierda y la de la derecha esyán muertas, en cuyo caso la célula pasará
+        con estado 0, comprobamos si la célula de la izquierda y la de la derecha están muertas, en cuyo caso la célula pasará
         a tener estado 1(morirá). si esto no pasa, la célula tendrá un 50% de probabilidades de salvarse."""
-        
-        vecino_izq=mapa[self._i][self._j-1]
-        vecino_der=mapa[self._i][self._j+1]
-        
-        
-        
-                    
-        
-        
-        else:  #si hay algún empate no cambiaremos 
+        try:
+            vecino_izq=mapa[self._i][self._j-1]
+            vecino_der=mapa[self._i][self._j+1]
+            
+            if (vecino_der,vecino_izq) == (1,1):
+                
+                super().actualización_celula(1)  #muere la célula
+        except:
             None
+            
+        if self._estado == 0:
+            self._estado = random.randint(0,1) #50% de posibilidad de sobrevivir y seguir siendo 0.
+                
 class Mundo:
     def __init__(self,m,n,estado_inicial) -> None:
         
@@ -129,7 +132,7 @@ class Mundo:
     
             for e in range(self.__n):
                 
-                l.append(CelulaSumInvBin(self.estado[i*self.__m+e],(i,e)))  
+                l.append(CelulaPersonal(self.estado[i*self.__m+e],(i,e)))  
 
         self.matriz_celulas=np.array(l) #realmente hay que usarlo?
         self.matriz_celulas=self.matriz_celulas.reshape(self.__m,self.__n)
