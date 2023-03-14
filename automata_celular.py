@@ -12,32 +12,32 @@ import random
 class Celula:
     def __init__(self,estado:int,coord:tuple) -> None:
         
-        self._estado=estado
+        self.__estado=estado
         
-        self._i=coord[0]  #protegido para que puedan leerlo las clases que heredan de Celula
-        self._j=coord[1]
+        self.__i=coord[0]  #protegido para que puedan leerlo las clases que heredan de Celula
+        self.__j=coord[1]
         
     def devolver_coordenadas(self):
         
-        return self._i,self._j
+        return self.__i,self.__j
     
     def revisar_estado_celula(self):
         
-        return self._estado 
+        return self.__estado 
     
     def actualización_celula(self,i):  
         if i == 0:
-            self._estado = 0
+            self.__estado = 0
         elif i == 1:
-            self._estado = 1
+            self.__estado = 1
         elif i == 2:   #esta condición solo la usaremos en la clase CelulaPersonal
-            self._estado = 2  
+            self.__estado = 2  
         elif i == "i":
-            if self._estado== 1:
-                self._estado = 0
+            if self.__estado== 1:
+                self.__estado = 0
             else:
-                self._estado = 1
-        return self._estado  
+                self.__estado = 1
+        return self.__estado  
         
         
 class CelulaInvBin(Celula):
@@ -54,7 +54,7 @@ class CelulaSumInvBin(Celula):
 
     def actualización_celula(self,mapa_actual):
         
-        x,y=self._i-1,self._j-1
+        x,y=self.devolver_coordenadas()[0]-1,self.devolver_coordenadas()[1]-1
         
         contador_vecinos_0 = 0  
         contador_vecinos_1 = 0 
@@ -62,7 +62,7 @@ class CelulaSumInvBin(Celula):
         for e in range(x,x+3):  #si usamos continue, deja todo lo que este haciendo y pasa a la siguiente iteración del bucle
             for r in range(y,y+3):
                 
-                if (e,r) == (self._i,self._j):
+                if (e,r) == (self.devolver_coordenadas()[0],self.devolver_coordenadas())[1]:
                     continue
                 
                 if e < 0 or r < 0 :
@@ -104,11 +104,11 @@ class CelulaPersonal(Celula):
         con estado 0, comprobamos si la célula de la izquierda y la de la derecha están muertas, en cuyo caso la célula pasará
         a tener estado 1(morirá). si esto no pasa, la célula tendrá un 50% de probabilidades de salvarse."""
         try:
-            vecino_izq=mapa[self._i][self._j-1]  #si la célula está en un borde del mundo todo dependerá de si su otro vecino está muerto
+            vecino_izq=mapa[self.devolver_coordenadas()[0]][self.devolver_coordenadas()[1]]  #si la célula está en un borde del mundo todo dependerá de si su otro vecino está muerto
         except:
             vecino_izq = 1
         try:
-            vecino_der=mapa[self._i][self._j+1]
+            vecino_der=mapa[self.devolver_coordenadas()[0]][self.devolver_coordenadas()[1]]
         except:
             vecino_der = 1   
              
@@ -117,8 +117,8 @@ class CelulaPersonal(Celula):
             super().actualización_celula(1)  #muere la célula
   
             
-        if self._estado == 0:
-            self._estado = random.randint(0,1) #50% de posibilidad de sobrevivir y seguir siendo 0.
+        if self.revisar_estado_celula() == 0:
+            self.__estado = random.randint(0,1) #50% de posibilidad de sobrevivir y seguir siendo 0.
                 
 class Mundo:
     def __init__(self,m,n,estado_inicial) -> None:
@@ -136,7 +136,7 @@ class Mundo:
     
             for e in range(self.__n):
                 
-                l.append(CelulaPersonal(self.estado[i*self.__m+e],(i,e)))  
+                l.append(CelulaSumInvBin(self.estado[i*self.__m+e],(i,e)))  
 
         self.matriz_celulas=np.array(l) #realmente hay que usarlo?
         self.matriz_celulas=self.matriz_celulas.reshape(self.__m,self.__n)
