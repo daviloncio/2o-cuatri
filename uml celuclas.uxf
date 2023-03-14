@@ -8,7 +8,7 @@ coord[1] -&gt; _j
 
 --
 revisar_estado_célula(self)
-
+devolver_coordenadas(self):
 actualización_célula(self,i)
 
 
@@ -26,15 +26,15 @@ de la célula abstracta
 --
 __m
 __n
-__estado
-__array_estados (como estados, pero con coordenadas)
-__matriz_celulas (array con objetos celula)
+estado
+array_estados (como estados, pero con coordenadas)
+matriz_celulas (array con objetos celula)
 --
 estado_mundo()
 actualiza()
 get_cols()
 get_rows()
-estado_()
+estado()
 </panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>324</x><y>396</y><w>243</w><h>81</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;250;70</additional_attributes></element><element><id>Relation</id><coordinates><x>72</x><y>396</y><w>270</w><h>72</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>273;12;10;60</additional_attributes></element><element><id>Text</id><coordinates><x>36</x><y>666</y><w>720</w><h>144</h></coordinates><panel_attributes>cada célula tendrá unas coordenadas asignadas, cel inv binario no usará las coordenadas.
 
 estas coordenadas (i,j) son atributos protegidos debido a que las clases que heredan de celula deben de ser capaces de leer el atributo.
