@@ -9,16 +9,11 @@ class LinkedVertex:
         self._adyacents = {} # store the labels of its adyacent vertices
         self._attributes = {'key' : vertex,
                 'degree' : 0, # vertex degree
-                'color' : 'WHITE', # to mark nodes
+                'color' : 'white', # to mark nodes
                 'parent' : None } # to the dfs-tree
-    def add_adyacent(self,v,weight):
-        
-        if type(v) == LinkedVertex():
-            self._adyacents[v] = weight
-            valor = self._attributes['degree']
-            self._attributes['degree'] = valor+1
-        else:
-            raise TypeError("there is no vertex named" + v)
+    def add_adyacent(self,v:str,weight:str):
+        self._adyacents[v] = weight
+        self._attributes['degree'] += 1
     def exists_adyacent(self, v):
         '''Return True if v is adyacent otherwise return False'''
         if v in self._adyacents:
@@ -29,17 +24,16 @@ class LinkedVertex:
         '''Returns the attribute name of the vertex
         Raise TypeError exception if there is no such attribute
         '''
-        if name in self._attributes.keys:
-            return self._attributes(name)
-        
+        if name in self._attributes.keys():
+            return self._attributes[name]
         raise TypeError("There is not such attribute")
 
     def set_attribute(self, name, value):
         '''Set the attribute name of the vertex to value
         Raise TypeError exception if there is no such attribute
         '''
-        if name in self._attributes.keys:
-            self._attributes[name] = value
+        if name in self._attributes.keys():
+            self._attributes[name] = value 
         else:
             raise TypeError("There is not such attribute")
     def get_adyacents(self):  #??
@@ -70,24 +64,22 @@ class Graph:
             self._vertices[vertex] = LinkedVertex(vertex)
             self._vertices_count += 1
 
-    def add_edge_from_to(self, v_from: LinkedVertex, v_to: LinkedVertex, weight = None):  #david tio recuerda que un edge es una arista
-        if type(v_from) and type(v_to) == LinkedVertex():
-            v_from.add_adyacent(v_to,weight)
+    def add_edge_from_to(self, v_from, v_to:str, weight = None):  #david tio recuerda que un edge es una arista
+        if v_from in self._vertices and v_to in self._vertices:
+            self._vertices[v_from].add_adyacent(v_to,weight)
             self._edges_count += 1
+            
             
         else:
             raise TypeError("There is no such vertex")
     def vertices(self):
         '''Return an iterator over the graph vertices.'''
-        for vertice in self._vertices:
-            yield vertice
-    def neighbors(self, v:LinkedVertex):
+        for vertice in self._vertices():
+            yield vertice   
+    def neighbors(self, v):
         '''Returns a genearator over the outgoing edges of the vertex v'''
-        if type(v) != LinkedVertex():
-            raise TypeError('there is not such vertex')
-        else:
-            for vertice in v._adyacents:  #puedo usar directamente la función iter, pero esto viene a ser lo mismo
-                yield str(vertice) #si quitamos str devolverá el objeto
+        for vertice in self._vertices[v]._adyacents.keys():  #puedo usar directamente la función iter, pero esto viene a ser lo mismo
+            yield (vertice) #si quitamos str devolverá el objeto
                 
 #cuestión del profe:devería volver el objeto vértice en si o solo el nombre del vertice?
 #al parecer, nos será util para el futuro devolver el objeto, es una cuestion que quiere que tratemos
@@ -101,48 +93,35 @@ class Graph:
         '''name es un parámetro que debe ser un atributo del diccionario que cada vértice tiene.
         devuelve un diccinario de nombres de vértices(clave) y el atributo que queramos(valor)
         '''
-        if name in LinkedVertex()._attributes.keys():
-            dic = {}
-            for nombres_vertices in self._vertices:
-                 
-                objeto_vertice = self._vertices[nombres_vertices]
-                dic[nombres_vertices] = objeto_vertice._attributes[name]
+        dic = {}
+        for nombres_vertices in self._vertices:
+            objeto_vertice = self._vertices[nombres_vertices]
+            dic[nombres_vertices] = objeto_vertice._attributes[name]
+        return dic
 
-            return dic
-        else:
-            raise TypeError('atributo del vértice mal introducido')
             
     def set_vertices_attribute(self, name, value = 'white'):  #creo que name solo puede ser key,degree,color o parent
         '''Set name attribute of vertices to a value
-        '''
-        if name in LinkedVertex()._attributes.keys():
+        '''   
+        for nombres_vertices in self._vertices:
+            self._vertices[nombres_vertices].set_attribute(name,value)
             
-            for nombres_vertices in self._vertices:
-                 
-                nombres_vertices.set_attribute(name,value)
-            
-        else:
-            raise TypeError('atributo del vértice mal introducido')
             
     def get_vertex_attribute(self, v, name):
         '''Returns the attribute of the vertex v
         Raise TypeError exception if there is no such vertex
         '''
-        if v in self._vertices:
-            return  v.get_attribute(name)
-        else: 
-            raise TypeError("There is no such vertex")
+        return self._vertices[v].get_attribute(name)
+
         
     def set_vertex_attribute(self, v, name, value):
         '''
         Set name attributes of a vertex to a value
         Returns the attribute of the vertex v
         '''
-        if v in self._vertices and  name in LinkedVertex()._attributes.keys():
-            
-            v.set_attribute(name,value)
-        else: 
-            raise TypeError("There is no such vertex")
+        if v in self._vertices:
+            self._vertices[v].set_attribute(name,value)
+
         
     def __str__(self):
         '''Returns the string representation of the graph'''
@@ -155,31 +134,25 @@ g = Graph()
 #EJERCICIO 10
 #10.1: Busqueda en profundidad usando la pila
 
-def DFS_iter(G: Graph,vertex: LinkedVertex):
-    if type (G) != Graph:
-        raise KeyError("There is no such graph")
-    elif type(vertex) != LinkedVertex:
-        raise KeyError("There is no such vertex")
-    else:
-        G.set_vertices_attribute("color","white")
-        s = Stack()
-        s.push(vertex)
-        while s.is_empty == False:
-            v = s.pop()
-            if G.get_vertex_attribute(v,"color") == "white":
-                G.set_vertex_attribute(v,"color","black")
-                for w in G.neighbors(vertex):
-                    if G.get_vertex_attribute(w,"color")== "white":
-                        G.set_vertex_attribute(w,"parent",v)
-                        s.push(w)
+def DFS_iter(G: Graph,vertex:int):
+    G.set_vertices_attribute("color","white")
+    s = Stack()
+    s.push(vertex)
+    while s.is_empty() == False:
+        v = s.pop()
+        if G.get_vertex_attribute(v,"color") == "white":
+            G.set_vertex_attribute(v,"color","black")
+
+            for w in G.neighbors(v):
+                if G.get_vertex_attribute(w,"color")== "white":
+                    G.set_vertex_attribute(w,"parent",v)
+                    s.push(w)
 
 #10.2: Busqueda en profundidad recursivo
 
-def DFS_rec(G: Graph,v: LinkedVertex):
+def DFS_rec(G: Graph,v):
     if type (G) != Graph:
         raise KeyError("There is no such graph")
-    elif type(v) != LinkedVertex:
-        raise KeyError("There is no such vertex")
     else:
         G.set_vertex_attribute(v,"color","grey")
         for w in G.neighbors(v):
@@ -190,7 +163,7 @@ def DFS_rec(G: Graph,v: LinkedVertex):
         
         
 ##Si se quiere ejecutar este algoritmo más de una vez, descomentar la siguiente linea
-#graph.set_vertices_attribute("color","white") #donde graph es el grafo que sobre el que se desea implementar el alogritmo
+ #donde graph es el grafo que sobre el que se desea implementar el alogritmo
 
       
 #10.3: Busqueda de anchura
@@ -211,4 +184,31 @@ def BFS(G: Graph,v: LinkedVertex):
                     G.set_vertex_attribute(w,"parent",v)
                     q.enqueue(w)
             G.set_vertex_attribute(w,"color","black")
-                    
+            
+
+G = Graph()
+
+# add vertices
+for i in range(1, 4):
+        G.add_vertex(i)
+
+      
+# add edges
+G.add_edge_from_to(1, 2)
+G.add_edge_from_to(1, 3)
+G.add_edge_from_to(2, 3)
+G.set_vertices_attribute("color","white")
+print('Total edges in the graph:', G.edges_count())
+print('Total vertices in the graph:', G.vertices_count())
+print('\nPrint graph:\n', G)
+
+# DFS_iter
+DFS_iter(G, 1)
+atr = 'parent'
+print(f'\nAfter DFS_iter, Attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')
+    
+# DFS_rec
+G.set_vertices_attribute('color', 'WHITE')
+DFS_rec(G, 1)
+atr = 'parent'
+print(f'\n After DFS_rec, attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')
