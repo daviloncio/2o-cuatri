@@ -9,7 +9,7 @@ class LinkedVertex:
         self._adyacents = {} # store the labels of its adyacent vertices
         self._attributes = {'key' : vertex,
                 'degree' : 0, # vertex degree
-                'color' : 'white', # to mark nodes
+                'color' : 'WHITE', # to mark nodes
                 'parent' : None } # to the dfs-tree
     def add_adyacent(self,v:str,weight:str):
         self._adyacents[v] = weight
@@ -100,7 +100,7 @@ class Graph:
         return dic
 
             
-    def set_vertices_attribute(self, name, value = 'white'):  #creo que name solo puede ser key,degree,color o parent
+    def set_vertices_attribute(self, name, value = 'WHITE'):  #creo que name solo puede ser key,degree,color o parent
         '''Set name attribute of vertices to a value
         '''   
         for nombres_vertices in self._vertices:
@@ -135,16 +135,16 @@ g = Graph()
 #10.1: Busqueda en profundidad usando la pila
 
 def DFS_iter(G: Graph,vertex:int):
-    G.set_vertices_attribute("color","white")
+    G.set_vertices_attribute("color","WHITE")
     s = Stack()
     s.push(vertex)
     while s.is_empty() == False:
         v = s.pop()
-        if G.get_vertex_attribute(v,"color") == "white":
+        if G.get_vertex_attribute(v,"color") == "WHITE":
             G.set_vertex_attribute(v,"color","black")
 
             for w in G.neighbors(v):
-                if G.get_vertex_attribute(w,"color")== "white":
+                if G.get_vertex_attribute(w,"color")== "WHITE":
                     G.set_vertex_attribute(w,"parent",v)
                     s.push(w)
 
@@ -156,7 +156,7 @@ def DFS_rec(G: Graph,v):
     else:
         G.set_vertex_attribute(v,"color","grey")
         for w in G.neighbors(v):
-            if G.get_vertex_attribute(w,"color")== "white":
+            if G.get_vertex_attribute(w,"color")== "WHITE":
                 G.set_vertex_attribute(w,"parent",v)
                 DFS_rec(G,w)
         G.set_vertex_attribute(v,"color","black")
@@ -173,13 +173,13 @@ def BFS(G: Graph,v: LinkedVertex):
     elif type(v) != LinkedVertex:
         raise KeyError("There is no such vertex")
     else:
-        G.set_vertices_attribute("color","white")
+        G.set_vertices_attribute("color","WHITE")
         q = Queue()
         q.enqueue(v)
         while q.is_empty == False:
             v.deque
             for w in G.neighbors(v):
-                if g.get_vertex_attribute(w,"color")== "white":
+                if g.get_vertex_attribute(w,"color")== "WHITE":
                     G.set_vertex_attribute(w,"color","grey")
                     G.set_vertex_attribute(w,"parent",v)
                     q.enqueue(w)
@@ -197,7 +197,9 @@ for i in range(1, 4):
 G.add_edge_from_to(1, 2)
 G.add_edge_from_to(1, 3)
 G.add_edge_from_to(2, 3)
-G.set_vertices_attribute("color","white")
+G.add_edge_from_to(3, 2)
+
+G.set_vertices_attribute("color","WHITE")
 print('Total edges in the graph:', G.edges_count())
 print('Total vertices in the graph:', G.vertices_count())
 print('\nPrint graph:\n', G)
