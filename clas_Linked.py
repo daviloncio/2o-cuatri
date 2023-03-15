@@ -11,9 +11,14 @@ class LinkedVertex:
                 'degree' : 0, # vertex degree
                 'color' : 'white', # to mark nodes
                 'parent' : None } # to the dfs-tree
-    def add_adyacent(self,v:str,weight:str):
-        self._adyacents[v] = weight
-        self._attributes['degree'] += 1
+    def add_adyacent(self,v,weight):
+        
+        if type(v) == LinkedVertex():
+            self._adyacents[v] = weight
+            valor = self._attributes['degree']
+            self._attributes['degree'] = valor+1
+        else:
+            raise TypeError("there is no vertex named" + v)
     def exists_adyacent(self, v):
         '''Return True if v is adyacent otherwise return False'''
         if v in self._adyacents:
@@ -80,6 +85,8 @@ class Graph:
         '''Returns a genearator over the outgoing edges of the vertex v'''
         for vertice in self._vertices[v]._adyacents.keys():  #puedo usar directamente la función iter, pero esto viene a ser lo mismo
             yield (vertice) #si quitamos str devolverá el objeto
+        for vertice in self._vertices[v]._adyacents.keys():  #puedo usar directamente la función iter, pero esto viene a ser lo mismo
+            yield (vertice) #si quitamos str devolverá el objeto
                 
 #cuestión del profe:devería volver el objeto vértice en si o solo el nombre del vertice?
 #al parecer, nos será util para el futuro devolver el objeto, es una cuestion que quiere que tratemos
@@ -102,6 +109,9 @@ class Graph:
             
     def set_vertices_attribute(self, name, value = 'white'):  #creo que name solo puede ser key,degree,color o parent
         '''Set name attribute of vertices to a value
+        '''   
+        for nombres_vertices in self._vertices:
+            self._vertices[nombres_vertices].set_attribute(name,value)
         '''   
         for nombres_vertices in self._vertices:
             self._vertices[nombres_vertices].set_attribute(name,value)
@@ -134,19 +144,23 @@ g = Graph()
 #EJERCICIO 10
 #10.1: Busqueda en profundidad usando la pila
 
-def DFS_iter(G: Graph,vertex:int):
-    G.set_vertices_attribute("color","white")
-    s = Stack()
-    s.push(vertex)
-    while s.is_empty() == False:
-        v = s.pop()
-        if G.get_vertex_attribute(v,"color") == "white":
-            G.set_vertex_attribute(v,"color","black")
-
-            for w in G.neighbors(v):
-                if G.get_vertex_attribute(w,"color")== "white":
-                    G.set_vertex_attribute(w,"parent",v)
-                    s.push(w)
+def DFS_iter(G: Graph,vertex: LinkedVertex):
+    if type (G) != Graph:
+        raise KeyError("There is no such graph")
+    elif type(vertex) != LinkedVertex:
+        raise KeyError("There is no such vertex")
+    else:
+        G.set_vertices_attribute("color","white")
+        s = Stack()
+        s.push(vertex)
+        while s.is_empty == False:
+            v = s.pop()
+            if G.get_vertex_attribute(v,"color") == "white":
+                G.set_vertex_attribute(v,"color","black")
+                for w in G.neighbors(vertex):
+                    if G.get_vertex_attribute(w,"color")== "white":
+                        G.set_vertex_attribute(w,"parent",v)
+                        s.push(w)
 
 #10.2: Busqueda en profundidad recursivo
 
@@ -185,30 +199,3 @@ def BFS(G: Graph,v: LinkedVertex):
                     q.enqueue(w)
             G.set_vertex_attribute(w,"color","black")
             
-
-G = Graph()
-
-# add vertices
-for i in range(1, 4):
-        G.add_vertex(i)
-
-      
-# add edges
-G.add_edge_from_to(1, 2)
-G.add_edge_from_to(1, 3)
-G.add_edge_from_to(2, 3)
-G.set_vertices_attribute("color","white")
-print('Total edges in the graph:', G.edges_count())
-print('Total vertices in the graph:', G.vertices_count())
-print('\nPrint graph:\n', G)
-
-# DFS_iter
-DFS_iter(G, 1)
-atr = 'parent'
-print(f'\nAfter DFS_iter, Attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')
-    
-# DFS_rec
-G.set_vertices_attribute('color', 'WHITE')
-DFS_rec(G, 1)
-atr = 'parent'
-print(f'\n After DFS_rec, attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')
