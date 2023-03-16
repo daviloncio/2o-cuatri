@@ -1,3 +1,6 @@
+from LinkedList import LinkedList
+
+
 class Edge:
     def __init__(self, from_, to_, weight = None):
         self._from = from_
@@ -8,7 +11,6 @@ class Edge:
     def __str__(self) -> str:
         
         return f'arista de peso {self._weight} que va desde {self._from} hasta {self._to}'
-    
 x = Edge(1,2,3)
 print(x)
 
@@ -21,22 +23,6 @@ class Vertex:
         'degree' : 0, # vertex degree
         'color' : 'WHITE', # to mark nodes
         'parent' : None } # to the dfs-tree+
-        
-    def add_adyacent(self,v:str,weight:str=0):
-        #ahora los vecinos de los vértices los definimos en la clase Graph, 
-        #por lo que creo que hay q devolver en add_adyacent un objeto Edge para guardarlo posteriormente en el diccionario de grafo.
-        #Graph.add_edge from_to() accederá a esta función
-        arista = Edge(self._attributes['key'],v,weight)
-        return arista
-    
-    def exists_adyacent(self, v):
-        '''Return True if v is adyacent otherwise return False'''
-        #como coño vamos a revisar sus vecinos si los tenemos guardados en la clase grafo???
-        #creo que probable que sea uno de los métodos que hay q eliminar
-        if v in self._adyacents:
-            return True
-        
-        return False
     def get_attribute(self, name):
         '''Returns the attribute name of the vertex
         Raise TypeError exception if there is no such attribute
@@ -79,15 +65,19 @@ class Graph:
         if vertex in self._vertices:
             raise TypeError("Vertex already in the graph")
         else:
-            self._vertices[vertex] = LinkedVertex(vertex)
+            self._vertices[vertex] = Vertex(vertex)
             self._vertices_count += 1
 
-    def add_edge_from_to(self, v_from, v_to:str, weight = None):  #david tio recuerda que un edge es una arista
+    def add_edge_from_to(self, v_from, v_to:str, weight = None):
         if v_from in self._vertices and v_to in self._vertices:
-            self._vertices[v_from].add_adyacent(v_to,weight)
+            if v_from in self._adyacents:
+                self._adyacents[v_from].add_last(Edge(v_from,v_to,weight))
+            else:
+                self._adyacents[v_from]=LinkedList()
+                self._adyacents[v_from].add_last(Edge(v_from,v_to,weight))
             self._edges_count += 1
-            
-            
+            self._vertices[v_from].set_attribute("degree",(self._vertices[v_from].get_attribute("degree")+1))
+                               
         else:
             raise TypeError("There is no such vertex")
     def vertices(self):
@@ -169,3 +159,16 @@ if __name__ == '__main__':
     print('\nPrint graph:\n', G)
     atr = 'degree'
     print(f'\n Attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')
+    def DFS_rec(G: Graph,v: Vertex):
+        if type (G) != Graph:
+            raise KeyError("There is no such graph")
+        elif type(v) != Vertex:
+            raise KeyError("There is no such vertex")
+        else:
+            G.set_vertex_attribute(v,"color","grey")
+            for w in G.neighbors(v):
+                if G.get_vertex_attribute(w,"color") == "white":
+                    G.set_vertex_attribute(w,"parent",v)
+                    DFS_rec(G,w)
+            G.set_vertex_attribute(v,"color","black")
+    DFS_rec(G,2)
