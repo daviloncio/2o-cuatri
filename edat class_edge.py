@@ -1,21 +1,38 @@
-from stackarray import *
-from queue import *
-#Se debe tener la clase pila guardada como queue. En caso de no tenerse, sustituir from queue import * por la clase pila de el notebook de teoria
-#ejercicio 8
+class Edge:
+    def __init__(self, from_, to_, weight = None):
+        self._from = from_
+        self._to = to_
+        self._weight = weight
+    def endpoints(self):
+        return (self._from, self._to, self._weight)
+    def __str__(self) -> str:
+        
+        return f'arista de peso {self._weight} que va desde {self._from} hasta {self._to}'
+    
+x = Edge(1,2,3)
+print(x)
 
-
-class LinkedVertex:
-    def __init__(self, vertex:str):
-        self._adyacents = {} # store the labels of its adyacent vertices
+class Vertex:
+    def __init__(self, vertex): 
+        
         self._attributes = {'key' : vertex,
-                'degree' : 0, # vertex degree
-                'color' : 'WHITE', # to mark nodes
-                'parent' : None } # to the dfs-tree
-    def add_adyacent(self,v:str,weight:str):
-        self._adyacents[v] = weight
-        self._attributes['degree'] += 1
+        'd' : 0, # discover time DFS  #supongo que modificaremos estos valores a la hora de hacer el set_attribute para cambiar el color.
+        'f' : 0, # finalization DFS
+        'degree' : 0, # vertex degree
+        'color' : 'WHITE', # to mark nodes
+        'parent' : None } # to the dfs-tree+
+        
+    def add_adyacent(self,v:str,weight:str=0):
+        #ahora los vecinos de los vértices los definimos en la clase Graph, 
+        #por lo que creo que hay q devolver en add_adyacent un objeto Edge para guardarlo posteriormente en el diccionario de grafo.
+        #Graph.add_edge from_to() accederá a esta función
+        arista = Edge(self._attributes['key'],v,weight)
+        return arista
+    
     def exists_adyacent(self, v):
         '''Return True if v is adyacent otherwise return False'''
+        #como coño vamos a revisar sus vecinos si los tenemos guardados en la clase grafo???
+        #creo que probable que sea uno de los métodos que hay q eliminar
         if v in self._adyacents:
             return True
         
@@ -36,7 +53,7 @@ class LinkedVertex:
             self._attributes[name] = value 
         else:
             raise TypeError("There is not such attribute")
-    def get_adyacents(self):  #??
+    def get_adyacents(self):  #SUPONGO QUE ESTE MÉTODO TAMBIÉN HABRÁ QUE QUITARLO
         '''Returns a geneartor over the outcoming adyacent vertices'''
         for element in self._adyacents:
             yield element
@@ -44,16 +61,17 @@ class LinkedVertex:
         v = ' [' + str(self._attributes['key']) + ','
         v += ' atributos: ' + str(self._attributes )+ '] '
         return v
-    
-
-    
-#ejercicio 9s
+        
 class Graph:
+    '''Representation of a simple graph using an adjacency list'''
     def __init__(self):
         '''Create an empty directed graph.'''
         self._vertices_count = 0
         self._edges_count = 0
-        self._vertices = dict() # Dictionary of vertices    clave:vertex(str) valor:objeto vértice
+        self._vertices = dict() # Dictionary of vertices
+        self._adyacents = dict() # Adyacency list
+
+        
     def add_vertex(self, vertex:str):
         '''Add a node with the given label to the graph.
         Raise a TypeError exception if the vertex already exists
@@ -129,88 +147,25 @@ class Graph:
         for i in self._vertices:
             g += str(self._vertices[i])+'\n'
         return g
-    
-g = Graph()
-#EJERCICIO 10
-#10.1: Busqueda en profundidad usando la pila
-
-def DFS_iter(G: Graph,vertex:int):
-    G.set_vertices_attribute("color","WHITE")
-    s = Stack()
-    s.push(vertex)
-    while s.is_empty() == False:
-        v = s.pop()
-        if G.get_vertex_attribute(v,"color") == "WHITE":
-            G.set_vertex_attribute(v,"color","black")
-
-            for w in G.neighbors(v):
-                if G.get_vertex_attribute(w,"color")== "WHITE":
-                    G.set_vertex_attribute(w,"parent",v)
-                    s.push(w)
-
-#10.2: Busqueda en profundidad recursivo
-
-def DFS_rec(G: Graph,v):
-    if type (G) != Graph:
-        raise KeyError("There is no such graph")
-    else:
-        G.set_vertex_attribute(v,"color","grey")
-        for w in G.neighbors(v):
-            if G.get_vertex_attribute(w,"color")== "WHITE":
-                G.set_vertex_attribute(w,"parent",v)
-                DFS_rec(G,w)
-        G.set_vertex_attribute(v,"color","black")
         
-        
-##Si se quiere ejecutar este algoritmo más de una vez, descomentar la siguiente linea
- #donde graph es el grafo que sobre el que se desea implementar el alogritmo
 
-      
-#10.3: Busqueda de anchura
-def BFS(G: Graph,v: LinkedVertex):
-    if type (G) != Graph:
-        raise KeyError("There is no such graph")
-    elif type(v) != LinkedVertex:
-        raise KeyError("There is no such vertex")
-    else:
-        G.set_vertices_attribute("color","WHITE")
-        q = Queue()
-        q.enqueue(v)
-        while q.is_empty == False:
-            v.deque
-            for w in G.neighbors(v):
-                if g.get_vertex_attribute(w,"color")== "WHITE":
-                    G.set_vertex_attribute(w,"color","grey")
-                    G.set_vertex_attribute(w,"parent",v)
-                    q.enqueue(w)
-            G.set_vertex_attribute(w,"color","black")
-            
 
-'''G = Graph()
 
-# add vertices
-for i in range(1, 4):
+
+
+if __name__ == '__main__':
+    G = Graph()
+
+
+    for i in range(1, 4):
         G.add_vertex(i)
-
-      
-# add edges
-G.add_edge_from_to(1, 2)
-G.add_edge_from_to(1, 3)
-G.add_edge_from_to(2, 3)
-G.add_edge_from_to(3, 2)
-
-G.set_vertices_attribute("color","WHITE")
-print('Total edges in the graph:', G.edges_count())
-print('Total vertices in the graph:', G.vertices_count())
-print('\nPrint graph:\n', G)
-
-# DFS_iter
-DFS_iter(G, 1)
-atr = 'parent'
-print(f'\nAfter DFS_iter, Attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')
-    
-# DFS_rec
-G.set_vertices_attribute('color', 'WHITE')
-DFS_rec(G, 1)
-atr = 'parent'
-print(f'\n After DFS_rec, attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')'''
+    # add edges
+    G.add_edge_from_to(1, 2, 10)
+    G.add_edge_from_to(1, 3, 5)
+    G.add_edge_from_to(2, 3, 6)
+    G.add_edge_from_to(3, 2, 1)
+    print('Total edges in the graph:', G.edges_count())
+    print('Total vertices in the graph:', G.vertices_count())
+    print('\nPrint graph:\n', G)
+    atr = 'degree'
+    print(f'\n Attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')
