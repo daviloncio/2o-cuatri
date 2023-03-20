@@ -1,4 +1,4 @@
-from LinkedList import LinkedList
+from Linkedlist import LinkedList
 
 
 class Edge:
