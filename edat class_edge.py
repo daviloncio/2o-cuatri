@@ -95,11 +95,11 @@ class LinkedList:
             auxiliar = auxiliar._next
     
     def __str__(self): 
-        str_ = '< '
+        str_ = ''
         for elem in self:
-            str_ += str(elem) + ' '
+            str_ += str(elem) + ''
             
-        str_ += '>'
+        str_ += ''
         return str_
 
 
@@ -112,7 +112,7 @@ class Edge:
         return (self._from, self._to, self._weight)
     def __str__(self) -> str:
         
-        return f'arista de peso {self._weight} que va desde {self._from} hasta {self._to}'
+        return f'({self._from},{self._to},{self._weight})'
 x = Edge(1,2,3)
 print(x)
 
@@ -233,12 +233,14 @@ class Graph:
             self._vertices[v].set_attribute(name,value)
 
         
-    def __str__(self):
+    def __str__(self): #cambiar
         '''Returns the string representation of the graph'''
-        g = 'Este grafo esta formado por:\n'
-        for i in self._vertices:
-            g += str(self._vertices[i])+'\n'
-        return g
+        h='{'
+        for vertex in self._vertices.keys():
+            h += f'[{vertex}, adj:{str(self._adyacents[vertex])}]'
+        h+= '}'
+        return h
+
         
 
 
@@ -273,4 +275,4 @@ if __name__ == '__main__':
                     G.set_vertex_attribute(w,"parent",v)
                     DFS_rec(G,w)
             G.set_vertex_attribute(v,"color","black")
-    DFS_rec(G,2)
+  
