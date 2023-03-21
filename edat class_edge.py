@@ -263,10 +263,18 @@ if __name__ == '__main__':
     print('\nPrint graph:\n', G)
     atr = 'degree'
     print(f'\n Attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')
-    
+
+def DFS_rec(G: Graph,v):  #quitamos las excepciones, las pusimos ya fuera
+
+    G.set_vertex_attribute(v,"color","grey")
+    for w in G.neighbors(v):
+        if G.get_vertex_attribute(w,"color") == "white":
+            G.set_vertex_attribute(w,"parent",v)
+            DFS_rec(G,w)
+    G.set_vertex_attribute(v,"color","black")   
 
   
-def path_from_to(G:Graph, v_from, v_to, f):
+def path_from_to(G:Graph(), v_from, v_to, f):
     '''Return a path from v_from to v_to after traverse the graph with
     the procedure f'''
     if type (G) != Graph:
@@ -274,19 +282,14 @@ def path_from_to(G:Graph, v_from, v_to, f):
     elif v_from not in G._vertices.keys() or v_from not in G._vertices.keys():
         raise KeyError("Uno de los vértices introducidos no está presente en el grafo.")
     
-    def DFS_rec(G: Graph,v):  #quitamos las excepciones, las pusimos ya fuera
+    f(G,v_from)
+    
+    padre_punto = G.get_vertex_attribute(v_to,'parent')
+    
+    if padre_punto == None:
+        print(f'de {v_from} a {v_to}')
+    else:
+        path_from_to(G,v_from,padre_punto)
+        print(f'de {padre_punto} a {v_to}')
 
-        G.set_vertex_attribute(v,"color","grey")
-        for w in G.neighbors(v):
-            if G.get_vertex_attribute(w,"color") == "white":
-                G.set_vertex_attribute(w,"parent",v)
-                DFS_rec(G,w)
-        G.set_vertex_attribute(v,"color","black")
-    
-    DFS_rec(G,v_from)
-    
-    if G._vertices[v_to]._attributes['parent'] == None:
-        
-        return
-    
-    
+path_from_to(G,1,3,DFS_rec)
