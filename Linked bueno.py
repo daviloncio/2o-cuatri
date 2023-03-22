@@ -320,14 +320,14 @@ def path_from_to(G:Graph(), v_from, v_to, f):
         exec(compile(example.source, filename, "single",
       File "<doctest __main__.path_from_to[2]>", line 1, in <module>
         path_from_to(G,'hola',5,DFS_iter)
-      File "c:\Users\juanj\OneDrive\Documentos\2� cuatri\repositorio1\Linked bueno.py", line 329, in path_from_to
-        raise KeyError("Uno de los vertices introducidos no est� presente en el grafo.")
-    KeyError: 'Uno de los vertices introducidos no est� presente en el grafo.'
+      File "c:/Users/juanj/OneDrive/Documentos/2� cuatri/repositorio1/Linked bueno.py", line 329, in path_from_to
+        raise KeyError("Uno de los vertices introducidos no esta presente en el grafo.")
+    KeyError: 'Uno de los vertices introducidos no esta presente en el grafo.'
     """
     if type (G) != Graph:
         raise KeyError("There is no such graph")    
     elif v_from not in G._vertices.keys() or v_from not in G._vertices.keys():
-        raise KeyError("Uno de los vertices introducidos no está presente en el grafo.")
+        raise KeyError("Uno de los vertices introducidos no esta presente en el grafo.")
     
     f(G,v_from)
     
@@ -342,8 +342,7 @@ def path_from_to(G:Graph(), v_from, v_to, f):
 
 
 
-#path_from_to(G,'hola',5,DFS_iter)
-print(G.get_vertices_attribute('parent'))
+path_from_to(G,1,5,DFS_iter)
 
 if __name__ == "__main__":
     import doctest
