@@ -269,32 +269,81 @@ if __name__ == '__main__':
     atr = 'degree'
     print(f'\n Attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')
 
-def DFS_rec(G: Graph,v):  #quitamos las excepciones, las pusimos ya fuera
 
-    G.set_vertex_attribute(v,"color","grey")
-    for w in G.neighbors(v):
-        if G.get_vertex_attribute(w,"color") == "white":
-            G.set_vertex_attribute(w,"parent",v)
-            DFS_rec(G,w)
-    G.set_vertex_attribute(v,"color","black")   
+        
+#10.3: Busqueda de anchura
+from stackarray import Stack
 
-  
+def DFS_iter(G: Graph,vertex:int):
+    G.set_vertices_attribute("color","WHITE")
+    s = Stack()
+    s.push(vertex)
+    while s.is_empty() == False:
+        v = s.pop()
+        if G.get_vertex_attribute(v,"color") == "WHITE":
+            G.set_vertex_attribute(v,"color","black")
+
+            for w in G.neighbors(v):
+                if G.get_vertex_attribute(w,"color")== "WHITE":
+                    G.set_vertex_attribute(w,"parent",v)
+                    s.push(w)
+                    
+                    
+#para comprobar que la siguiente función de definir es correcta,
+#añadimos un cuarto vértice, que será vecino de 3.
+G.add_vertex(4)
+G.add_edge_from_to(3, 4, 6)  
+G.add_vertex(5)
+G.add_edge_from_to(2, 5, 6) 
 def path_from_to(G:Graph(), v_from, v_to, f):
     '''Return a path from v_from to v_to after traverse the graph with
-    the procedure f'''
+    the procedure f
+    
+    >>> path_from_to(G,1,5,DFS_iter)
+    empezamos desde 1, y hacemos el siguiente recorrido:
+    de 1 a 3
+    de 3 a 2
+    de 2 a 5
+    >>> path_from_to('not_a_graph',1,5,DFS_iter)
+    Traceback (most recent call last):
+      File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.2800.0_x64__qbz5n2kfra8p0\lib\doctest.py", line 1350, in __run
+        exec(compile(example.source, filename, "single",
+      File "<doctest __main__.path_from_to[1]>", line 1, in <module>
+        path_from_to('not_a_graph',1,5,DFS_iter)
+      File "c:\Users\juanj\OneDrive\Documentos\2� cuatri\repositorio1\Linked bueno.py", line 329, in path_from_to
+        raise KeyError("There is no such graph")
+    KeyError: 'There is no such graph' 
+    >>> path_from_to(G,'hola',5,DFS_iter)
+    Traceback (most recent call last):
+      File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.2800.0_x64__qbz5n2kfra8p0\lib\doctest.py", line 1350, in __run
+        exec(compile(example.source, filename, "single",
+      File "<doctest __main__.path_from_to[2]>", line 1, in <module>
+        path_from_to(G,'hola',5,DFS_iter)
+      File "c:\Users\juanj\OneDrive\Documentos\2� cuatri\repositorio1\Linked bueno.py", line 331, in path_from_to
+        raise KeyError("Uno de los vertices introducidos no est� presente en el grafo.")
+    KeyError: 'Uno de los vertices introducidos no est� presente en el grafo.'
+    '''
     if type (G) != Graph:
         raise KeyError("There is no such graph")    
     elif v_from not in G._vertices.keys() or v_from not in G._vertices.keys():
-        raise KeyError("Uno de los vértices introducidos no está presente en el grafo.")
+        raise KeyError("Uno de los vertices introducidos no está presente en el grafo.")
     
     f(G,v_from)
     
     padre_punto = G.get_vertex_attribute(v_to,'parent')
     
     if padre_punto == None:
-        print(f'de {v_from} a {v_to}')
+        print(f'empezamos desde {v_from}, y hacemos el siguiente recorrido:')
     else:
-        path_from_to(G,v_from,padre_punto)
+        path_from_to(G,v_from,padre_punto,DFS_iter)
         print(f'de {padre_punto} a {v_to}')
 
-path_from_to(G,1,3,DFS_rec)
+
+
+
+#path_from_to(G,'hola',5,DFS_iter)
+print(G.get_vertices_attribute('parent'))
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
