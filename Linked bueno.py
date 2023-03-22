@@ -296,7 +296,7 @@ G.add_edge_from_to(3, 4, 6)
 G.add_vertex(5)
 G.add_edge_from_to(2, 5, 6) 
 def path_from_to(G:Graph(), v_from, v_to, f):
-    '''Return a path from v_from to v_to after traverse the graph with
+    """Return a path from v_from to v_to after traverse the graph with
     the procedure f
     
     >>> path_from_to(G,1,5,DFS_iter)
@@ -310,19 +310,20 @@ def path_from_to(G:Graph(), v_from, v_to, f):
         exec(compile(example.source, filename, "single",
       File "<doctest __main__.path_from_to[1]>", line 1, in <module>
         path_from_to('not_a_graph',1,5,DFS_iter)
-      File "c:\Users\juanj\OneDrive\Documentos\2� cuatri\repositorio1\Linked bueno.py", line 329, in path_from_to
+      File "c:/Users/juanj/OneDrive/Documentos/2� cuatri/repositorio1/Linked bueno.py", line 313, in path_from_to
         raise KeyError("There is no such graph")
-    KeyError: 'There is no such graph' 
+    KeyError: 'There is no such graph'
+    
     >>> path_from_to(G,'hola',5,DFS_iter)
     Traceback (most recent call last):
       File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.2800.0_x64__qbz5n2kfra8p0\lib\doctest.py", line 1350, in __run
         exec(compile(example.source, filename, "single",
       File "<doctest __main__.path_from_to[2]>", line 1, in <module>
         path_from_to(G,'hola',5,DFS_iter)
-      File "c:\Users\juanj\OneDrive\Documentos\2� cuatri\repositorio1\Linked bueno.py", line 331, in path_from_to
+      File "c:\Users\juanj\OneDrive\Documentos\2� cuatri\repositorio1\Linked bueno.py", line 329, in path_from_to
         raise KeyError("Uno de los vertices introducidos no est� presente en el grafo.")
     KeyError: 'Uno de los vertices introducidos no est� presente en el grafo.'
-    '''
+    """
     if type (G) != Graph:
         raise KeyError("There is no such graph")    
     elif v_from not in G._vertices.keys() or v_from not in G._vertices.keys():
