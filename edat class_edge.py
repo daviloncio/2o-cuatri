@@ -275,7 +275,7 @@ def DFS_rec(G: Graph,v):  #quitamos las excepciones, las pusimos ya fuera
 
   
 def path_from_to(G:Graph(), v_from, v_to, f):
-    '''Return a path from v_from to v_to after traverse the graph with
+    '''Retu     rn a path from v_from to v_to after traverse the graph with
     the procedure f'''
     if type (G) != Graph:
         raise KeyError("There is no such graph")    
