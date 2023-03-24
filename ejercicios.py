@@ -172,14 +172,14 @@ class Graph:
         else:
             self._vertices[vertex] = Vertex(vertex)
             self._vertices_count += 1
+            self._adyacents[vertex]=LinkedList()
 
     def add_edge_from_to(self, v_from, v_to:str, weight = None):
         if v_from in self._vertices and v_to in self._vertices:
-            if v_from in self._adyacents:
+            if v_from in self._adyacents:               
                 self._adyacents[v_from].add_last(Edge(v_from,v_to,weight))
                 self._vertices[v_from].adyacent(v_to)
             else:
-                self._adyacents[v_from]=LinkedList()
                 self._adyacents[v_from].add_last(Edge(v_from,v_to,weight))
                 self._vertices[v_from].adyacent(v_to)
             self._edges_count += 1
@@ -213,7 +213,7 @@ class Graph:
             objeto_vertice = self._vertices[nombres_vertices]
             dic[nombres_vertices] = objeto_vertice._attributes[name]
         return dic
-
+    
             
     def set_vertices_attribute(self, name, value = 'WHITE'):  #creo que name solo puede ser key,degree,color o parent
         '''Set name attribute of vertices to a value
@@ -263,8 +263,7 @@ if __name__ == '__main__':
     G.add_edge_from_to(1, 3, 5)
     G.add_edge_from_to(2, 3, 6)
     G.add_edge_from_to(3, 2, 1)
-    print('Total edges in the graph:', G.edges_count())
-    print('Total vertices in the graph:', G.vertices_count())
+
     print('\nPrint graph:\n', G)
     atr = 'degree'
     print(f'\n Attribute {atr} of vertices:\n {G.get_vertices_attribute(atr)}')
@@ -342,8 +341,64 @@ def path_from_to(G:Graph(), v_from, v_to, f):
 
 
 
-path_from_to(G,1,5,DFS_iter)
+#path_from_to(G,1,5,DFS_iter)
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+    
+time = 0
+def dfs_rec(G:Graph,u):
+    global time
+    G.set_vertex_attribute(u,"color","gray")
+    time += 1
+    G.set_vertex_attribute(u,"d",time)
+    for w in G.neighbors(u):
+        if G.get_vertex_attribute(w,"color")=="white":
+            G.set_vertex_attribute(w,"parent",u)
+            dfs_rec(G,w)
+    time += 1
+    G.set_vertex_attribute(u,"f",time)
+    G.set_vertex_attribute(u,"color","black")
+
+
+    
+def DFS(G:Graph): 
+    G.set_vertices_attribute("color", "white") 
+    G.set_vertices_attribute("parent","none")
+    print(G.get_vertices_attribute("parent"))
+    global time
+    time = 0
+    for vertice in G._vertices:
+        if G.get_vertex_attribute(vertice,"color")=="white":
+            dfs_rec(G,vertice)
+
+
+G.set_vertices_attribute("parent","none")   
+DFS(G)
+print(G._adyacents)
+
+
+
+def graph_trapose(G:Graph)-> Graph:
+    
+    Tras = Graph()
+    for vertice in G._vertices:
+        Tras.add_vertex(vertice)
+    pepito= G._adyacents
+    for v in pepito:
+        lista= pepito[v]
+        while lista.is_empty() == False:
+            fr, to, weight = lista.first().endpoints()
+            Tras.add_edge_from_to(to,fr,weight)
+            lista.delete_first()
+    return Tras
+
+traspuesto = graph_trapose(G)
+
+
+print('Total edges in the graph:', G.edges_count())
+print('Total vertices in the graph:', G.vertices_count())
+print('Total edges in the graph:', traspuesto.edges_count())
+print('Total vertices in the graph:', traspuesto.vertices_count())
+
