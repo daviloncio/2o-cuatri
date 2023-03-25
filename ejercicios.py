@@ -176,9 +176,10 @@ class Graph:
 
     def add_edge_from_to(self, v_from, v_to:str, weight = None):
         if v_from in self._vertices and v_to in self._vertices:
+            linkedlist = self._adyacents[v_from]
             if v_from in self._adyacents:               
                 self._adyacents[v_from].add_last(Edge(v_from,v_to,weight))
-                self._vertices[v_from].adyacent(v_to)
+                self._vertices[v_from].adyacent(v_to)   #está mal, en el if y el else hay lo mismo
             else:
                 self._adyacents[v_from].add_last(Edge(v_from,v_to,weight))
                 self._vertices[v_from].adyacent(v_to)
@@ -256,13 +257,24 @@ if __name__ == '__main__':
     G = Graph()
 
 
-    for i in range(1, 4):
-        G.add_vertex(i)
+    for letra in ['A','B','C','D','E','F','G','H','I']:
+        G.add_vertex(letra)
+        
+    print(G.vertices_count)
     # add edges
-    G.add_edge_from_to(1, 2, 10)
-    G.add_edge_from_to(1, 3, 5)
-    G.add_edge_from_to(2, 3, 6)
-    G.add_edge_from_to(3, 2, 1)
+    G.add_edge_from_to('A', 'B', 1)
+    G.add_edge_from_to('B', 'C', 1)
+    G.add_edge_from_to('C', 'F', 1)
+    G.add_edge_from_to('F', 'H', 1)
+    G.add_edge_from_to('H', 'I', 1)
+    G.add_edge_from_to('E', 'D', 1)
+    G.add_edge_from_to('E', 'A', 1)
+    G.add_edge_from_to('D', 'B', 1)
+    G.add_edge_from_to('B', 'E', 1)
+    G.add_edge_from_to('G', 'E', 1)
+    G.add_edge_from_to('D', 'G', 1)
+    G.add_edge_from_to('I', 'F', 1)
+
 
     print('\nPrint graph:\n', G)
     atr = 'degree'
@@ -288,41 +300,11 @@ def DFS_iter(G: Graph,vertex:int):
                     s.push(w)
                     
                     
-#para comprobar que la siguiente función de definir es correcta,
-#añadimos un cuarto vértice, que será vecino de 3.
-G.add_vertex(4)
-G.add_edge_from_to(3, 4, 6)  
-G.add_vertex(5)
-G.add_edge_from_to(2, 5, 6) 
+
+
+ 
 def path_from_to(G:Graph(), v_from, v_to, f):
-    """Return a path from v_from to v_to after traverse the graph with
-    the procedure f
-    
-    >>> path_from_to(G,1,5,DFS_iter)
-    empezamos desde 1, y hacemos el siguiente recorrido:
-    de 1 a 3
-    de 3 a 2
-    de 2 a 5
-    >>> path_from_to('not_a_graph',1,5,DFS_iter)
-    Traceback (most recent call last):
-      File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.2800.0_x64__qbz5n2kfra8p0\lib\doctest.py", line 1350, in __run
-        exec(compile(example.source, filename, "single",
-      File "<doctest __main__.path_from_to[1]>", line 1, in <module>
-        path_from_to('not_a_graph',1,5,DFS_iter)
-      File "c:/Users/juanj/OneDrive/Documentos/2� cuatri/repositorio1/Linked bueno.py", line 313, in path_from_to
-        raise KeyError("There is no such graph")
-    KeyError: 'There is no such graph'
-    
-    >>> path_from_to(G,'hola',5,DFS_iter)
-    Traceback (most recent call last):
-      File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.2800.0_x64__qbz5n2kfra8p0\lib\doctest.py", line 1350, in __run
-        exec(compile(example.source, filename, "single",
-      File "<doctest __main__.path_from_to[2]>", line 1, in <module>
-        path_from_to(G,'hola',5,DFS_iter)
-      File "c:/Users/juanj/OneDrive/Documentos/2� cuatri/repositorio1/Linked bueno.py", line 329, in path_from_to
-        raise KeyError("Uno de los vertices introducidos no esta presente en el grafo.")
-    KeyError: 'Uno de los vertices introducidos no esta presente en el grafo.'
-    """
+
     if type (G) != Graph:
         raise KeyError("There is no such graph")    
     elif v_from not in G._vertices.keys() or v_from not in G._vertices.keys():
@@ -347,6 +329,13 @@ if __name__ == "__main__":
     import doctest
     doctest.testmod()
     
+    
+    
+    
+#EJERCICIOS 3 Y 4    
+    
+    
+
 time = 0
 def dfs_rec(G:Graph,u):
     global time
@@ -366,7 +355,7 @@ def dfs_rec(G:Graph,u):
 def DFS(G:Graph): 
     G.set_vertices_attribute("color", "white") 
     G.set_vertices_attribute("parent","none")
-    print(G.get_vertices_attribute("parent"))
+
     global time
     time = 0
     for vertice in G._vertices:
@@ -375,30 +364,70 @@ def DFS(G:Graph):
 
 
 G.set_vertices_attribute("parent","none")   
+  #creamos forest
+
+print('yeeeee')
 DFS(G)
-print(G._adyacents)
 
 
 
-def graph_trapose(G:Graph)-> Graph:
+def graph_traspose(G:Graph)-> Graph:
     
     Tras = Graph()
     for vertice in G._vertices:
         Tras.add_vertex(vertice)
-    pepito= G._adyacents
-    for v in pepito:
-        lista= pepito[v]
-        while lista.is_empty() == False:
-            fr, to, weight = lista.first().endpoints()
+
+    for v in G._adyacents:
+        linkedlist= G._adyacents[v]
+        for data in linkedlist:  #data viene a ser los datos que se guardan en los nodos de linkedlist (edges)
+            fr, to, weight = data.endpoints()
             Tras.add_edge_from_to(to,fr,weight)
-            lista.delete_first()
+
     return Tras
 
-traspuesto = graph_trapose(G)
+traspuesto = graph_traspose(G)
+
+
 
 
 print('Total edges in the graph:', G.edges_count())
 print('Total vertices in the graph:', G.vertices_count())
 print('Total edges in the graph:', traspuesto.edges_count())
 print('Total vertices in the graph:', traspuesto.vertices_count())
+print(traspuesto.get_vertices_attribute('parent'))
 
+print(G)
+print(G.get_vertices_attribute('f'))
+
+
+#creamos la lista de vértices con el orden decreciente del paso de los vértices
+dic_pasos_clave={}  
+lista_decr=[]
+#self._adyacents pero con claves y valores al revés
+for v in G._adyacents:
+    
+    paso=G.get_vertex_attribute(v,'f')
+    dic_pasos_clave[paso] = v
+    
+    lista_decr.append(paso)
+
+lista_decr.sort(reverse=True)
+
+for i in range(len(lista_decr)):
+    lista_decr[i] = dic_pasos_clave[lista_decr[i]]
+
+print(dic_pasos_clave)
+print(lista_decr)
+print(G.get_vertices_attribute('color'))  #todos los vértices en negro por el DFS de antes
+
+G.set_vertices_attribute('color','white')
+
+for v in lista_decr:
+    if traspuesto.get_vertex_attribute(v,'color') == 'white':
+        dfs_rec(G,v)
+        
+    
+
+
+
+    
