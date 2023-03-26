@@ -420,14 +420,28 @@ print(dic_pasos_clave)
 print(lista_decr)
 print(G.get_vertices_attribute('color'))  #todos los vértices en negro por el DFS de antes
 
-G.set_vertices_attribute('color','white')
+traspuesto.set_vertices_attribute('color','white')
 
+time = 0
+lista_SCC = []
 for v in lista_decr:
+    print
     if traspuesto.get_vertex_attribute(v,'color') == 'white':
-        dfs_rec(G,v)
-        
-    
+        dfs_rec(traspuesto,v)
+        SCC = Graph()
+        SCC.add_vertex(v)  #ahora nos centraremos en devolver los grafos resultantes 
+        for w in traspuesto._adyacents: 
+            linked = traspuesto._adyacents[w]
+            for data in linked:
+                fr, to, weight = data.endpoints()
+                if traspuesto.get_vertex_attribute(to,"parent") == w:
+                    SCC.add_vertex(to)
+                    print(fr)
+                    print(to)
+                    SCC.add_edge_from_to(w,to,weight)
+                    SCC.set_vertex_attribute(w,"d",traspuesto.get_vertex_attribute(w,"d"))
+                    SCC.set_vertex_attribute(w,"f",traspuesto.get_vertex_attribute(w,"f"))
+        lista_SCC.append[SCC]
 
-
-
-    
+print(traspuesto.get_vertices_attribute('parent'))
+print(lista_SCC)
