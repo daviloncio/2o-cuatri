@@ -434,34 +434,28 @@ for v in lista_decr:
         
 print('Mirar:',traspuesto.get_vertices_attribute('parent'))
 
-def encontrar_hijos(v_busca_hijos,grafo_result:Graph):  
-    '''este algoritmo recursivo se centra en encontrar los nodos hijos de cada vértice,
-    de forma que vamos creando y rellenando cada grafo fijándonos en el dic de padres resultante. '''
-    print(f'empieza la funcion con {v_busca_hijos}')
-    for vertice in ['A', 'B', 'E', 'D', 'G', 'C', 'F', 'H', 'I']:
-        if traspuesto.get_vertex_attribute(vertice,'parent') == v_busca_hijos:  #en traspuesto nos encontramos la inforamción final de quién es padre de quién
-            print(vertice,v_busca_hijos)
+for v_padre in bosque_final:
+    v_anterior = [v_padre]
 
-            grafo_result.add_vertex(vertice)
-
-            #ahora,podríamos sacar el edge de la linked list que hay en el grafo traspuesto para dárselo al bosque final,
-            # PERO NO ES NECESARIO PORQUE NOS DA IGUAL EL PESO DE LA ARISTA Y PODEMOS DEJAR ESA INFORMACIÓN ATRÁS 
-            grafo_result.add_edge_from_to(v_busca_hijos,vertice,1) #peso 1, no hemos accedido a la info de las linked list de los grafos anteriores.
-            print('te voy a encontrar',vertice)
-            encontrar_hijos(vertice,grafo_result)
-
-
-for nodo_raiz in bosque_final:
-    encontrar_hijos(nodo_raiz,bosque_final[nodo_raiz])
-
+    for i in range(traspuesto.edges_count()):
+        for v in traspuesto._adyacents:
+            if traspuesto.get_vertex_attribute(v,'parent') in v_anterior:  #en traspuesto nos encontramos la inforamción final de quién es padre de quién
+                v_from = traspuesto.get_vertex_attribute(v,'parent')
+                if v not in bosque_final[v_padre]._adyacents:
+                    
+                    bosque_final[v_padre].add_vertex(v)
+                    bosque_final[v_padre].add_edge_from_to(v_from,v)
+                    v_anterior.append(v)
+                        
+print(bosque_final)
+for grafo in bosque_final:
+    print(bosque_final[grafo])
+        
+        
     
-    
-            
-for nodo_raiz in bosque_final:
-    encontrar_hijos(nodo_raiz,bosque_final[nodo_raiz])
-for nodo_raiz in bosque_final:
 
-    print('EHHHH',bosque_final[nodo_raiz])
+
+
 
     
 
