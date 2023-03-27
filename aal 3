@@ -1,0 +1,77 @@
+import numpy as np
+import time 
+
+def max_heapify(h: np.ndarray, i: int):
+    izquierda = 2*i + 1
+    derecha = 2*i + 2
+    mayor = i
+    if derecha >= len(h) or izquierda >= len(h) or mayor >= len(h):
+        return
+    if len(h) ==2:
+
+        if h[0]<h[1]:
+            h[0],h[1] = h[1],h[0]
+    if len(h)<2:
+        return
+    if izquierda < len(h) and h[derecha] > h[mayor]:
+        mayor = izquierda
+    if derecha < len(h) and h[derecha] > h[mayor]:
+        mayor = derecha
+
+    if mayor != i:
+        h[i], h[mayor] = h[mayor], h[i]
+        max_heapify(h, mayor)
+
+
+def insert_maxheap(h: np.ndarray, k: int) -> np.ndarray:
+
+    n = len(h)
+    h = np.append(h, k)
+    i = n
+    
+    while i > 0 and h[i] > h[(i-1)//2]:
+        h[i], h[(i-1)//2] = h[(i-1)//2], h[i]
+        i = (i-1)//2
+    
+    return h
+
+
+def create_maxheap(h: np.ndarray):
+
+    for i in range((len(h)//2)-1, -1, -1):
+        max_heapify(h, i)
+        
+def sort_maxheap(h: np.ndarray):
+    for i in range(len(h)-1, 1, -1):
+        h[i],h[0]= h[0],h[i]
+        max_heapify(h[ :i],0)
+
+def hs(h: np.ndarray):
+    create_maxheap(h)
+    sort_maxheap(h)
+        
+
+j = [9,1,2,8,3,7,4,6,5]
+
+
+def time_heapsort(n_perms: int, size_ini: int, size_fin: int, step: int)-> list:
+    list_tiempos_medias = []
+    tamaño_array = []
+    for e in range(size_ini,size_fin,step):
+        tamaño_array.append(e)
+        hacer_media_tiempos = []
+        for i in range(n_perms):
+            creamos_permutación = np.random.permutation(tamaño_array)  
+            inicio=time.time()
+            hs(creamos_permutación)
+            fin = time.time()
+            tiempo_ejecucion = fin - inicio
+            hacer_media_tiempos.append(tiempo_ejecucion)
+        result = sum(hacer_media_tiempos)/n_perms
+        list_tiempos_medias.append(result)
+    return list_tiempos_medias
+
+a = time_heapsort(100,1,100,1)
+print(a)   
+
+
