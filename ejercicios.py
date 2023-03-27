@@ -416,32 +416,52 @@ lista_decr.sort(reverse=True)
 for i in range(len(lista_decr)):
     lista_decr[i] = dic_pasos_clave[lista_decr[i]]
 
-print(dic_pasos_clave)
-print(lista_decr)
-print(G.get_vertices_attribute('color'))  #todos los vértices en negro por el DFS de antes
+print(lista_decr)   #a continuación, lo que queremos es obtener una lista de listas, 
+#separando los vértices dependiendo de dónde se situen en el bosque final
+grafos_resultantes = []
 
+bosque_final = {}  #claves: nodos raices,valores: grafos finales
 traspuesto.set_vertices_attribute('color','white')
 
-time = 0
-lista_SCC = []
 for v in lista_decr:
-    print
-    if traspuesto.get_vertex_attribute(v,'color') == 'white':
-        dfs_rec(traspuesto,v)
-        SCC = Graph()
-        SCC.add_vertex(v)  #ahora nos centraremos en devolver los grafos resultantes 
-        for w in traspuesto._adyacents: 
-            linked = traspuesto._adyacents[w]
-            for data in linked:
-                fr, to, weight = data.endpoints()
-                if traspuesto.get_vertex_attribute(to,"parent") == w:
-                    SCC.add_vertex(to)
-                    print(fr)
-                    print(to)
-                    SCC.add_edge_from_to(w,to,weight)
-                    SCC.set_vertex_attribute(w,"d",traspuesto.get_vertex_attribute(w,"d"))
-                    SCC.set_vertex_attribute(w,"f",traspuesto.get_vertex_attribute(w,"f"))
-        lista_SCC.append[SCC]
+    if traspuesto.get_vertex_attribute(v,'color') == 'white': #de cumplirse esto, hemos dado con un nodo raiz de un grafo del bosque a devolver
+        print('introducido en grafo final:',v)
+        bosque_final[v] = Graph()  #este es uno de los grafos resultantes.
+        bosque_final[v].add_vertex(v)  #ahora nos centraremos en devolver los grafos resultantes
+         
+        dfs_rec(traspuesto,v)  #asigna los parents que pronto miraremos
+    
+        
+print('Mirar:',traspuesto.get_vertices_attribute('parent'))
 
-print(traspuesto.get_vertices_attribute('parent'))
-print(lista_SCC)
+def encontrar_hijos(v_busca_hijos,grafo_result:Graph):  
+    '''este algoritmo recursivo se centra en encontrar los nodos hijos de cada vértice,
+    de forma que vamos creando y rellenando cada grafo fijándonos en el dic de padres resultante. '''
+    print(f'empieza la funcion con {v_busca_hijos}')
+    for vertice in ['A', 'B', 'E', 'D', 'G', 'C', 'F', 'H', 'I']:
+        if traspuesto.get_vertex_attribute(vertice,'parent') == v_busca_hijos:  #en traspuesto nos encontramos la inforamción final de quién es padre de quién
+            print(vertice,v_busca_hijos)
+
+            grafo_result.add_vertex(vertice)
+
+            #ahora,podríamos sacar el edge de la linked list que hay en el grafo traspuesto para dárselo al bosque final,
+            # PERO NO ES NECESARIO PORQUE NOS DA IGUAL EL PESO DE LA ARISTA Y PODEMOS DEJAR ESA INFORMACIÓN ATRÁS 
+            grafo_result.add_edge_from_to(v_busca_hijos,vertice,1) #peso 1, no hemos accedido a la info de las linked list de los grafos anteriores.
+            print('te voy a encontrar',vertice)
+            encontrar_hijos(vertice,grafo_result)
+
+
+for nodo_raiz in bosque_final:
+    encontrar_hijos(nodo_raiz,bosque_final[nodo_raiz])
+
+    
+    
+            
+for nodo_raiz in bosque_final:
+    encontrar_hijos(nodo_raiz,bosque_final[nodo_raiz])
+for nodo_raiz in bosque_final:
+
+    print('EHHHH',bosque_final[nodo_raiz])
+
+    
+
