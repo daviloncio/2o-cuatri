@@ -353,6 +353,9 @@ def dfs_rec(G:Graph,u):
 
     
 def DFS(G:Graph): 
+    '''El algortimo DFS completo e indicando los pasos.El algortimo empieza por el primer vértice que habiamos introducido en el grafo.
+    No podemos ordenarle que queremos que empiece por otro vértice. Empezamos poniendo todos los vértices sin padre y con color blanco,
+    acaban todos con color negro y con padre(el nodo raíz queda negro pero sin padre).'''
     G.set_vertices_attribute("color", "white") 
     G.set_vertices_attribute("parent","none")
 
@@ -363,90 +366,111 @@ def DFS(G:Graph):
             dfs_rec(G,vertice)
 
 
-G.set_vertices_attribute("parent","none")   
-  #creamos forest
+#EJERCICIO 4
 
-print('yeeeee')
-DFS(G)
-
-
-
-def graph_traspose(G:Graph)-> Graph:
+def Tarjan(G:Graph):
+    '''En este código del algoritmo de tarjan se pueden distinguir distintas fases o etapas:
     
-    Tras = Graph()
-    for vertice in G._vertices:
-        Tras.add_vertex(vertice)
-
-    for v in G._adyacents:
-        linkedlist= G._adyacents[v]
-        for data in linkedlist:  #data viene a ser los datos que se guardan en los nodos de linkedlist (edges)
-            fr, to, weight = data.endpoints()
-            Tras.add_edge_from_to(to,fr,weight)
-
-    return Tras
-
-traspuesto = graph_traspose(G)
-
-
-
-
-print('Total edges in the graph:', G.edges_count())
-print('Total vertices in the graph:', G.vertices_count())
-print('Total edges in the graph:', traspuesto.edges_count())
-print('Total vertices in the graph:', traspuesto.vertices_count())
-print(traspuesto.get_vertices_attribute('parent'))
-
-print(G)
-print(G.get_vertices_attribute('f'))
-
-
-#creamos la lista de vértices con el orden decreciente del paso de los vértices
-dic_pasos_clave={}  
-lista_decr=[]
-#self._adyacents pero con claves y valores al revés
-for v in G._adyacents:
-    
-    paso=G.get_vertex_attribute(v,'f')
-    dic_pasos_clave[paso] = v
-    
-    lista_decr.append(paso)
-
-lista_decr.sort(reverse=True)
-
-for i in range(len(lista_decr)):
-    lista_decr[i] = dic_pasos_clave[lista_decr[i]]
-
-print(lista_decr)   #a continuación, lo que queremos es obtener una lista de listas, 
-#separando los vértices dependiendo de dónde se situen en el bosque final
-grafos_resultantes = []
-
-bosque_final = {}  #claves: nodos raices,valores: grafos finales
-traspuesto.set_vertices_attribute('color','white')
-
-for v in lista_decr:
-    if traspuesto.get_vertex_attribute(v,'color') == 'white': #de cumplirse esto, hemos dado con un nodo raiz de un grafo del bosque a devolver
-        print('introducido en grafo final:',v)
-        bosque_final[v] = Graph()  #este es uno de los grafos resultantes.
-        bosque_final[v].add_vertex(v)  #ahora nos centraremos en devolver los grafos resultantes
-         
-        dfs_rec(traspuesto,v)  #asigna los parents que pronto miraremos
-    
+        1.Aplicamos DFS en el grafo introducido como parámetro.
         
-print('Mirar:',traspuesto.get_vertices_attribute('parent'))
+        2.Debemnos crear el grafo traspuesto del grafo introducido como parámetro( como hemos hecho DFS los vertices tienen padres asignados).
+        En nuestro caso lo llamamos traspuesto.
+        
+        3.Fijándonos en el grafo del parámetro, creamos una lista (lista_decr) con los vértices ordenados por su paso final(paso en el que pasan a negro) de forma decreciente.
+        En nuestro caso ejemplo nos queda ['A', 'B', 'E', 'D', 'G', 'C', 'F', 'H', 'I'].
+        
+        4.Detectamos los vértices que van a ser nodos raíces en los grafos resultantes y aplicamos dfs_rec n veces,
+        siendo n el numero de vértices nodos raices y de grafos resultantes. 
+        NO podemos aplicar DFS debido a que no podemos ordenar por qué vértice debe empezar el algoritmo, por eso cogemos def_rec.
+        
+        5.Finalmente , creamos el bosque final y les introducimos los vértices y aristas fijándonos
+        en traspuesto después de haber ejecutado dfs_rec en él.
+        
+        
+        
+        '''
+        
+    G.set_vertices_attribute("parent","none")   
+    DFS(G)
+    
+    def graph_traspose(G:Graph)-> Graph:
+        
+        Tras = Graph()
+        for vertice in G._vertices:
+            Tras.add_vertex(vertice)
 
-for v_padre in bosque_final:
-    v_anterior = [v_padre]
+        for v in G._adyacents:
+            linkedlist= G._adyacents[v]
+            for data in linkedlist:  #data viene a ser los datos que se guardan en los nodos de linkedlist (edges)
+                fr, to, weight = data.endpoints()
+                Tras.add_edge_from_to(to,fr,weight)
 
-    for i in range(traspuesto.edges_count()):
-        for v in traspuesto._adyacents:
-            if traspuesto.get_vertex_attribute(v,'parent') in v_anterior:  #en traspuesto nos encontramos la inforamción final de quién es padre de quién
-                v_from = traspuesto.get_vertex_attribute(v,'parent')
-                if v not in bosque_final[v_padre]._adyacents:
-                    
-                    bosque_final[v_padre].add_vertex(v)
-                    bosque_final[v_padre].add_edge_from_to(v_from,v)
-                    v_anterior.append(v)
+        return Tras
+
+    traspuesto = graph_traspose(G)  
+
+    print('Total edges in the graph:', G.edges_count())
+    print('Total vertices in the graph:', G.vertices_count())
+    print('Total edges in the graph:', traspuesto.edges_count())
+    print('Total vertices in the graph:', traspuesto.vertices_count())
+    print(traspuesto.get_vertices_attribute('parent'))
+    print(G)
+    print(G.get_vertices_attribute('f'))
+    
+    #creamos la lista de vértices con el orden decreciente del paso de los vértices
+    dic_pasos_clave={}  
+    lista_decr=[]
+    #self._adyacents pero con claves y valores al revés
+    for v in G._adyacents:
+        
+        paso=G.get_vertex_attribute(v,'f')
+        dic_pasos_clave[paso] = v
+        
+        lista_decr.append(paso)
+
+    lista_decr.sort(reverse=True)
+
+    for i in range(len(lista_decr)):
+        lista_decr[i] = dic_pasos_clave[lista_decr[i]]
+
+    print(lista_decr)  
+
+    bosque_final = {}  #claves: nodos raices,valores: grafos finales
+    traspuesto.set_vertices_attribute('color','white')
+
+    for v in lista_decr:  #hay que tener en cuenta que cuando empieza este bucle todos los vértices estan en blanco, pero hay un dfs_rec() anidado los vértices de lista_decr vas cambiando de color
+                          #cuando se encuentre posteriormente con otro vertice en blanco significará que ese no entró en el anterior dfs_rec. Ese será un nodo raíz de otro grafo.
+        
+        if traspuesto.get_vertex_attribute(v,'color') == 'white': #de cumplirse esto, hemos dado con un nodo raiz de un grafo del bosque a devolver
+            print('introducido en grafo final:',v)                #en nuestor caso, la condición se cumplirá tres veces(se cumplirá tantas veces como SCC se formen)
+            bosque_final[v] = Graph()       #este es uno de los grafos resultantes.
+            bosque_final[v].add_vertex(v)   
+            
+            dfs_rec(traspuesto,v)  #asigna los parents que pronto miraremos
+        
+            
+    print('Mirar:',traspuesto.get_vertices_attribute('parent'))
+
+    for v_padre in bosque_final:  #ahora nos centraremos en llenar estos grafos de sus correspondientes vértices y aristas
+        vertices_colocados = [v_padre]
+
+        for i in range(traspuesto.edges_count()): #este bucle es necesario debido a que, sin él, es posible que hicisemos la comprobación de un vértice cuyo padre
+                                                  #aun no esté situado,por lo que tenemos que hacer la comprobación más veces.
+            
+            for v in traspuesto._adyacents:
+                
+                if traspuesto.get_vertex_attribute(v,'parent') in vertices_colocados:  #solo añadimos el vértice si ya hemos añadido a su padre al grafo resultante
+                    v_from = traspuesto.get_vertex_attribute(v,'parent')               #(y por tanto a la lista vertices_colocados).Recordemos que el vértice original ya
+                                                                                       #lo habíamos colocado a la hora de crear la instancia del grafo resultante.
+                    if v not in bosque_final[v_padre]._adyacents:    
                         
+                        bosque_final[v_padre].add_vertex(v)
+                        bosque_final[v_padre].add_edge_from_to(v_from,v)  #Una vez dentro los véritces padre e hijo,colocamos arista
+                        vertices_colocados.append(v)                      #No tiene peso ya que no lo usamos
+    return bosque_final                                                   #finalmente devolvemos el diccionario que contiene los grafos finales como valores
+
+bosque_final=Tarjan(G)  #el SCC formado por A,E,G,B,D 
+
 print(bosque_final)
 for grafo in bosque_final:
     print(bosque_final[grafo])
