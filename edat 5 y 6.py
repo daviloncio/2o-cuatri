@@ -103,6 +103,33 @@ class LinkedList:
         str_ += '>'
         return str_
     def add_two_numbers(self, l1, l2):
+        '''con esta función accedemos al contenido de las listas enlazadas 
+        introducidas como parámetros, vaciándolas para luego devolver la lista enlazada principal con las cifras del
+        resultado en orden inverso'''
+
+        sum_extra=0
+        while l1.is_empty()==False or l2.is_empty()==False:
+            try:
+                num1 = l1.delete_first()
+            except:
+                num1 = 0
+            try:
+                num2 = l2.delete_first()
+            except:
+                num2 = 0
+            print(num1,num2)
+            resultado_suma = num1+num2+sum_extra
+            print(resultado_suma)
+            if resultado_suma >= 10:
+                sum_extra = 1
+                resultado_suma -= 10
+            else:
+                sum_extra = 0
+            self.add_first(resultado_suma)
+        self.add_first(sum_extra)
+        print(self)
+            
+        
         
     
     
@@ -130,8 +157,18 @@ def eliminar(L:LinkedList,maximo=None):
     
 def main():
     l = LinkedList()
+    l1 = LinkedList()
+    l2 = LinkedList()
     
-    l.add_first(-21)
+    for i in (2,4,3):
+        l1.add_last(i)
+    for i in (5,6,7,9,9):
+        l2.add_last(i)
+            
+    l.add_two_numbers(l1,l2)
+    print(l)
+    
+    '''l.add_first(-21)
     l.add_first(-23)
     l.add_first(13)
     l.add_first(2)
@@ -144,7 +181,9 @@ def main():
     l.add_first(98)
     print(l)
     eliminar(l)
-    print(l)
+    print(l)'''
+    
+    l.add_two_numbers
     
     
     
