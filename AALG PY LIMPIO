@@ -1,0 +1,201 @@
+import numpy as np
+import time
+from matplotlib import pyplot as plt
+
+#II-A. QuickSort sobre lista:
+#II-A.1: Split lista:
+
+def split(t: list)-> list:
+    """ 
+    Recibe una lista de números y la divide en dos listas. Los elementos en l_left son menores que el pivote y los elementos en l_right mayores.
+
+    Args:
+        t (list): Lista de números sin repetición 
+
+    Returns:
+        pivot(int) : El número que usa como pivote (t[0]) 
+        l_left and l_right(lists): Las dos listas ya divididas
+    """
+    pivot= t[0]
+    l_left = []
+    l_right = []
+    
+    for element in t[1:]:
+        if element < pivot:  #no puede haber elementos repetidos
+            l_left.append(element)
+        else:
+            l_right.append(element)
+            
+    return l_left,pivot,l_right
+
+#II-A.2: Quicksort sobre lista lista:
+def qs(t: list)-> list:
+    """Implementación de Quicksort sobre una lista. Va dividiendose en listas mas y mas pequeñas mediante recursión usando el split anterior usando recursión,
+    para después juntarse como lista ordenada.
+
+    Args:
+        t (list): Lista de números sin repetición
+
+    Returns:
+        list: Lista ordenada de números
+    """
+
+
+    t_left, pivot, t_right = split(t)
+    
+    if len(t_left) > 1:
+        
+        t_left = qs(t_left)
+    
+    if len(t_right) > 1:
+        
+        t_right = qs(t_right)
+    
+    
+    return t_left + [pivot] + t_right
+#II-B.1: Split in place sobre array numPy:
+def split_ip(t: np.ndarray,f: int,l: int) -> int:
+    """Distribuye los elementos de un array entre dos indices dados y devuelve el indice que ocupa al final el elemento que inicialmente estaba en f (t[f])
+
+    Args:
+        t (np.ndarray): Array a ordenar
+        f (int): Indice inicial
+        l (int): Indice final
+
+    Returns:
+        int: Posición final elemento que inicialmente estaba en t[f]
+    """
+    piv = t[f]
+    m = f
+    for i in range(f+1, l):
+        if t[i] < piv:
+            m += 1
+            t[i], t[m] = t[m], t[i]
+    t[f], t[m] = t[m], t[f]
+    return m
+#II-B.2: Quicksort in place entre dos arrays:
+def qs_ip(t: np.ndarray,f:int,l:int):
+    """Realiza QuickSort in place sobre un array dado entre dos indices. Utiliza recursión para ir creando versiones más pequeñas de si mismo y ordenarlas.
+
+    Args:
+        t (np.ndarray): Array a ordenar 
+        f (int): Indice inicial
+        l (int): Indice final
+
+    """
+    if t == []:
+        return t
+    if f < l:
+        p = split_ip(t,f,l)
+        qs_ip(t,f,p)
+        qs_ip(t, p + 1,l)
+    if f >= l:
+        return
+    
+    
+#III-A. MaxHeap sobre arrays numPy:
+#III-A.1: Heapify sobre array numPy:
+def max_heapify(h: np.ndarray, i: int):
+    """Opreación Heapify sobre array numpy in place. De manera recursiva, va realizando heaps sobre arrays cada vez más pequeños.
+
+    Args:
+        h (np.ndarray): Array a transformar
+        i (int): Elemento sobre el que aplicar heapify
+    """
+    izquierda = 2*i + 1
+    derecha = 2*i + 2
+    mayor = i
+    if derecha >= len(h) or mayor >= len(h) or izquierda >= len(h):
+        return
+    if izquierda < len(h)-1 and h[izquierda] > h[mayor]:
+        mayor = izquierda
+    if derecha < len(h)-1 and h[derecha] > h[mayor]:
+        mayor = derecha
+
+    if mayor != i:
+        h[i], h[mayor] = h[mayor], h[i]
+        max_heapify(h, mayor)
+
+#III-A.2: Inserción de un elemento a un MaxHeap:
+def insert_maxheap(h: np.ndarray, k: int) -> np.ndarray:
+    """Inserta un nuevo elemento en el array y sobre ello realiza un nuevo maxheap sobre el array ampliado
+    Args:
+        h (np.ndarray): Array original
+        k (int): Elemento a añadir
+
+    Returns:
+        np.ndarray: Array transformado
+    """
+
+    n = len(h)
+    h = np.append(h, k)
+    i = n
+    
+    while i > 0 and h[i] > h[(i-1)//2]:
+        h[i], h[(i-1)//2] = h[(i-1)//2], h[i]
+        i = (i-1)//2
+    
+    return h
+
+#III-A.3: Transformación MaxHeap in place:
+def create_maxheap(h: np.ndarray):
+    """Crea un Max Heap sobre el array recibido utilizando las funciones anteriores de manera in place
+
+    Args:
+        h (np.ndarray): Array a transformar
+    """
+
+    for i in range((len(h)//2)-1, -1, -1):
+        max_heapify(h, i)
+        
+        
+#III-B. HeapSort:
+#III-B.1: Ordenación in place de array NumPy:
+def sort_maxheap(h: np.ndarray):
+    """Ordena un array con un maxheap de manera in place
+
+    Args:
+        h (np.ndarray): Array a ordenar
+    """
+    for i in range(len(h)-1, 1, -1):
+        h[i],h[0]= h[0],h[i]
+        max_heapify(h[ :i],0)
+#III-B.2: HeapSort combinando funciones anteriores:
+def hs(h: np.ndarray):
+    """Combinación de las funciones anteriores en un HeapSort. Todo realizado in place sobre el array dado
+
+    Args:
+        h (np.ndarray): Array a ordenar
+    """
+    create_maxheap(h)
+    sort_maxheap(h)
+#III-B.2: Tiempos Heapsort:
+def time_heapsort(n_perms: int, size_ini: int, size_fin: int, step: int)-> list:
+    """Mide tiempos de ejecución en HeapSort. sobre el numero n_perms de permutaciones de tamaños entre size_ini y size_fin, que se se van incrementando en tamanos step.
+
+
+    Args:
+        n_perms (int): Número de permutaciones
+        size_ini (int): Tamaño inicial de las permutaciones
+        size_fin (int): Tamaño final de las permutaciones
+        step (int): Tamaño de los aumentos
+
+    Returns:
+        list:  lista con los tiempos medios empleados por HeapSort
+    """
+    list_tiempos_medias = []
+    tamaño_array = []
+    for e in range(size_ini,size_fin,step):
+        tamaño_array.append(e)
+        hacer_media_tiempos = []
+        for i in range(n_perms):
+            
+            creamos_permutación = np.random.permutation(tamaño_array)  
+            inicio=time.time()
+            hs(creamos_permutación)
+            fin = time.time()
+            tiempo_ejecucion = fin - inicio
+            hacer_media_tiempos.append(tiempo_ejecucion)
+        result = sum(hacer_media_tiempos)/n_perms
+        list_tiempos_medias.append(result)
+    return list_tiempos_medias
