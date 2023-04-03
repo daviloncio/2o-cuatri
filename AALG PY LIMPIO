@@ -158,8 +158,11 @@ def sort_maxheap(h: np.ndarray):
         h (np.ndarray): Array a ordenar
     """
     for i in range(len(h)-1, 1, -1):
+        
         h[i],h[0]= h[0],h[i]
+        
         max_heapify(h[ :i],0)
+        
 #III-B.2: HeapSort combinando funciones anteriores:
 def hs(h: np.ndarray):
     """Combinación de las funciones anteriores en un HeapSort. Todo realizado in place sobre el array dado
@@ -186,16 +189,23 @@ def time_heapsort(n_perms: int, size_ini: int, size_fin: int, step: int)-> list:
     list_tiempos_medias = []
     tamaño_array = []
     for e in range(size_ini,size_fin,step):
+        
         tamaño_array.append(e)
         hacer_media_tiempos = []
+        
         for i in range(n_perms):
             
             creamos_permutación = np.random.permutation(tamaño_array)  
+            
             inicio=time.time()
             hs(creamos_permutación)
             fin = time.time()
             tiempo_ejecucion = fin - inicio
+            
             hacer_media_tiempos.append(tiempo_ejecucion)
+            
         result = sum(hacer_media_tiempos)/n_perms
+        
         list_tiempos_medias.append(result)
+        
     return list_tiempos_medias
