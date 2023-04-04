@@ -1,4 +1,5 @@
 
+
 factorial :: Int -> Int
 
 factorial 0 = 1
@@ -10,63 +11,84 @@ type Ident = Int
 type Nombre = String
 type Precio = Float
 
-type Cantidad = Int
+type Cantidad = Float
 
 type Producto = (Ident, Nombre, Precio)
 type Pedido = (Producto, Cantidad)
 
 type Compra = [Pedido]
 
-id0 :: Ident ; id0 = 0001
+id0 :: Ident ; id0 = 0000 
+id1 :: Ident ; id1 = 0001
 
 name0 :: Nombre ; name0 = "aspiradora"
+name1 :: Nombre ; name1 = "un yate super guapo"
 
-price0 :: Precio ; price0 = 100
+price0 :: Precio ; price0 = 100 
+price1 :: Precio ; price1 = 30000000
 
-product0 :: Producto; product0 = (id0,name0,price0)
+product0 :: Producto ; product0 = (id0,name0,price0)
+product1 :: Producto ; product1 = (id1,name1,price1)
 
-qty0 :: Cantidad ; qty0 = 4
+qty0 :: Cantidad ; qty0 = 4 
+qty1 :: Cantidad ; qty1 = 1
 
-order0 :: Producto; order0 = (product0,qty0)
+order0 :: Pedido ; order0 = (product0,qty0)  
+order1 :: Pedido ; order1 = (product1,qty1)
 
-pur0 :: Compra ; pur0 = [order0]
-
- 
+pur0 :: Compra ; pur0 = [order0] 
+pur1 :: Compra ; pur1 = [order1]
 
 --EJ 2:
 
 productoToString :: Producto -> String
-productoToString  (ident,nombre,precio) = "Producto numero" ++ show ident ++ ":" ++ Nombre ++ "de precio" ++ show precio 
+productoToString  (ident,nombre,precio) = "Producto numero" ++ show ident ++ ":" ++ name0 ++ "de precio" ++ show precio 
 
---pedidoToString ::  Pedido -> String
---pedidoToString ((id, nombre, precio), cantidad) = "El pedido está formado por " ++ show cantidad ++ " unidad(es) del Producto " ++ show ident ++ ": " ++ nombre ++ " de precio " ++ show precio ++". El precio total es " ++ show (precio * cantidad)
+pedidoToString ::  Pedido -> String
+pedidoToString ((id, nombre, precio), cantidad) = "El pedido está formado por " ++ show cantidad ++ " unidad(es) del Producto " ++ show id ++ ": " ++ nombre ++ " de precio " ++ show precio ++". El precio total es " ++ show (precio * cantidad)
 
 
 
---compraToString :: Compra -> String
---compraToString  [] = ""
---compraToString  (x:xs) = pedidoToString x ++ compraToString xs
+compraToString :: Compra -> String
+compraToString  [] = ""
+compraToString  (x:xs) = pedidoToString x ++ compraToString xs
 
 
 precioProducto :: Producto -> Float
 precioProducto (ident,nombre,precio) = precio
 
-precioCompra :: Compra -> Float
-precioCompra  [] = ""
-precioCompra (x:xs) = precioProducto x + precioProducto xs
+precioPedido :: Pedido -> Float
+precioPedido ((ident,nombre,precio),cantidad) = precio * cantidad
 
-fusionaCompras :: Compra -> Compra -> Compra
+precioCompra :: Compra -> Float
+precioCompra [] = 0
+precioCompra (x:xs) = precioPedido x + precioCompra xs
+--(precioProducto(x !! 0) * x !! 1 ) + precioCompra xs
+
+fusionaCompras :: Compra -> Compra -> Compra  --NO SE POR QUE PERO NO FUNCIONA
 fusionaCompras [] x = x
 fusionaCompras x [] = x
 fusionaCompras (x:xs) (y:ys) = x : y : fusionaCompras xs ys
 
-
---precioProductoCompra :: Compra -> Producto -> Float
---precioProductoCompra [] _ = 0
---precioProductoCompra (((id,_,precio),cant):xs) (a, _, _) = 
-  --if id  == a
-  --then precio * (+) precioProductoCompra xs (a,"",0)
-  --else precioProductoCompra xs (a,"",0)
+fusionaCompras2 :: Compra -> Compra -> Compra
+fusionaCompras2 [] ys = ys
+fusionaCompras2(x:xs) ys = x : fusionaCompras xs ys
 
 
+precioProductoCompra :: Compra -> Producto -> Float
+precioProductoCompra [] _ = 0
+precioProductoCompra (((id,_,precio),cant):xs) (a,_,_) = 
+  if id  == a
+  then precio * cant + precioProductoCompra xs (a,"", 0)
+  else precioProductoCompra xs (a,"",0)
+
+buscaPedidosConProducto :: Compra -> Producto -> Compra --Devolvemos otra compra ya que queremos una lista de pedidos
+buscaPedidosConProducto [] _ = []
+buscaPedidosConProducto (((id,nombre,precio),cant):xs) (a,nom_prod,prec_prod) =
+  if id == a
+  then ((id,nombre,precio),cant) : buscaPedidosConProducto xs (a,nombre,precio)
+  else buscaPedidosConProducto xs (a,nombre,precio)
+
+main :: IO ()
+main = buscaPedidosConProducto pur0 product0 
 

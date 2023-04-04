@@ -399,9 +399,19 @@ def Tarjan(G:Graph):
         dic_pasos_clave[paso] = v
         
         lista_decr.append(paso)
+    def counting_sort(arr):  #algortimo de ordenación con coste n(tarjan el lineal)
+        max_val = max(arr)
+        
+        count = [0] * (max_val + 1)
+        for i in arr:    
+            count[i] += 1
+            
+        output = []
+        for i in range(len(count)-1,-1,-1):
+            output += [i] * count[i]
 
-    lista_decr.sort(reverse=True)
-
+        return output
+    lista_decr = counting_sort(lista_decr)
     for i in range(len(lista_decr)):
         lista_decr[i] = dic_pasos_clave[lista_decr[i]]
  
@@ -490,6 +500,7 @@ if __name__ == '__main__':
     
 
     bosque_final=Tarjan(G)  #el SCC formado por A,E,G,B,D 
+    print(bosque_final)
     Erdos_renyi(H,(5))
     Erdos_renyi(I,(1))
     Erdos_renyi(J,(1.5))
