@@ -65,7 +65,7 @@ precioCompra [] = 0
 precioCompra (x:xs) = precioPedido x + precioCompra xs
 --(precioProducto(x !! 0) * x !! 1 ) + precioCompra xs
 
-fusionaCompras :: Compra -> Compra -> Compra  --NO SE POR QUE PERO NO FUNCIONA
+fusionaCompras :: Compra -> Compra -> Compra  -- FUNCIONAN AMBAS
 fusionaCompras [] x = x
 fusionaCompras x [] = x
 fusionaCompras (x:xs) (y:ys) = x : y : fusionaCompras xs ys
@@ -82,13 +82,32 @@ precioProductoCompra (((id,_,precio),cant):xs) (a,_,_) =
   then precio * cant + precioProductoCompra xs (a,"", 0)
   else precioProductoCompra xs (a,"",0)
 
-buscaPedidosConProducto :: Compra -> Producto -> Compra --Devolvemos otra compra ya que queremos una lista de pedidos
+buscaPedidosConProducto :: Compra -> Producto -> [Pedido] --Devolvemos otra compra o lista de pedidos, da igual ya que queremos una lista de pedidos
 buscaPedidosConProducto [] _ = []
 buscaPedidosConProducto (((id,nombre,precio),cant):xs) (a,nom_prod,prec_prod) =
   if id == a
   then ((id,nombre,precio),cant) : buscaPedidosConProducto xs (a,nombre,precio)
   else buscaPedidosConProducto xs (a,nombre,precio)
 
-main :: IO ()
-main = buscaPedidosConProducto pur0 product0 
+buscaPedidosConProductos :: Compra -> [Producto] -> [[Pedido]] --juraria que esta devolviendo lista de listas pero ns que está
+buscaPedidosConProductos compra [] = []  
+buscaPedidosConProductos compra ((a,nom_prod,prec_prod):xs) =
+  buscaPedidosConProducto compra (a,nom_prod,prec_prod) : buscaPedidosConProductos compra xs
+
+
+eliminaProductoCompra :: Compra -> Producto -> Compra
+eliminaProductoCompra [] _ = []
+eliminaProductoCompra (((id,name,precio),cant):xs) (a,b,c) =
+  if id==a
+  then eliminaProductoCompra xs (a,b,c)
+  else ((id,name,precio),cant) :eliminaProductoCompra xs (a,b,c)
+
+eliminaCompraCantidad :: Compra -> Cantidad -> Compra
+eliminaCompraCantidad [] _ = []
+eliminaCompraCantidad (((id,name,precio),cant):xs) cant_max =
+  if cant > cant_max
+  then eliminaCompraCantidad xs cant_max
+  else ((id,name,precio),cant) : eliminaCompraCantidad xs cant_max
+  
+--FUENCARRAL BOBO
 

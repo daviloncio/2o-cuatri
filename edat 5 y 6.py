@@ -168,7 +168,7 @@ def main():
     l.add_two_numbers(l1,l2)
     print(l)
     
-    '''l.add_first(-21)
+    l.add_first(-21)
     l.add_first(-23)
     l.add_first(13)
     l.add_first(2)
@@ -181,7 +181,7 @@ def main():
     l.add_first(98)
     print(l)
     eliminar(l)
-    print(l)'''
+    print(l)
     
     l.add_two_numbers
     
