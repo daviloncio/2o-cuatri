@@ -20,32 +20,41 @@ type Compra = [Pedido]
 
 id0 :: Ident ; id0 = 0000 
 id1 :: Ident ; id1 = 0001
+id2 :: Ident ; id2 = 0002
 
 name0 :: Nombre ; name0 = "aspiradora"
 name1 :: Nombre ; name1 = "un yate super guapo"
+name2 :: Nombre ; name2 = "batidora"
 
 price0 :: Precio ; price0 = 100 
 price1 :: Precio ; price1 = 30000000
+price2 :: Precio ; price2 = 250
 
 product0 :: Producto ; product0 = (id0,name0,price0)
 product1 :: Producto ; product1 = (id1,name1,price1)
+product2 :: Producto ; product2 = (id2,name2,price2)
 
 qty0 :: Cantidad ; qty0 = 4 
 qty1 :: Cantidad ; qty1 = 1
+qty2 :: Cantidad ; qty2 = 1
+
 
 order0 :: Pedido ; order0 = (product0,qty0)  
 order1 :: Pedido ; order1 = (product1,qty1)
+order2 :: Pedido ; order2 = (product2,qty2)
 
 pur0 :: Compra ; pur0 = [order0] 
 pur1 :: Compra ; pur1 = [order1]
+pur2 :: Compra ; pur2 = [order1,order2]  --pedidos de batidora y yate en misma compra
+
 
 --EJ 2:
 
 productoToString :: Producto -> String
-productoToString  (ident,nombre,precio) = "Producto numero" ++ show ident ++ ":" ++ name0 ++ "de precio" ++ show precio 
+productoToString  (ident,nombre,precio) = "Producto numero " ++ show ident ++ ": " ++ name0 ++ " de precio " ++ show precio 
 
 pedidoToString ::  Pedido -> String
-pedidoToString ((id, nombre, precio), cantidad) = "El pedido está formado por " ++ show cantidad ++ " unidad(es) del Producto " ++ show id ++ ": " ++ nombre ++ " de precio " ++ show precio ++". El precio total es " ++ show (precio * cantidad)
+pedidoToString ((id, nombre, precio), cantidad) = "El pedido esta formado por " ++ show cantidad ++ " unidad(es) del Producto " ++ show id ++ ": " ++ nombre ++ " de precio " ++ show precio ++". El precio total es " ++ show (precio * cantidad)
 
 
 
@@ -65,7 +74,7 @@ precioCompra [] = 0
 precioCompra (x:xs) = precioPedido x + precioCompra xs
 --(precioProducto(x !! 0) * x !! 1 ) + precioCompra xs
 
-fusionaCompras :: Compra -> Compra -> Compra  -- FUNCIONAN AMBAS
+fusionaCompras :: Compra -> Compra -> Compra  -- FUNCIONAN AMBAS FUSIONA COMPRAS
 fusionaCompras [] x = x
 fusionaCompras x [] = x
 fusionaCompras (x:xs) (y:ys) = x : y : fusionaCompras xs ys
@@ -89,7 +98,7 @@ buscaPedidosConProducto (((id,nombre,precio),cant):xs) (a,nom_prod,prec_prod) =
   then ((id,nombre,precio),cant) : buscaPedidosConProducto xs (a,nombre,precio)
   else buscaPedidosConProducto xs (a,nombre,precio)
 
-buscaPedidosConProductos :: Compra -> [Producto] -> [[Pedido]] --juraria que esta devolviendo lista de listas pero ns que está
+buscaPedidosConProductos :: Compra -> [Producto] -> [Pedido] --juraria que esta devolviendo lista de listas pero ns que está
 buscaPedidosConProductos compra [] = []  
 buscaPedidosConProductos compra ((a,nom_prod,prec_prod):xs) =
   buscaPedidosConProducto compra (a,nom_prod,prec_prod) : buscaPedidosConProductos compra xs
