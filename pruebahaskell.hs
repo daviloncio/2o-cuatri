@@ -1,10 +1,3 @@
-
-
-factorial :: Int -> Int
-
-factorial 0 = 1
-factorial n = n * factorial(n-1)
-
 --EJ1:
 
 type Ident = Int
@@ -98,7 +91,7 @@ buscaPedidosConProducto (((id,nombre,precio),cant):xs) (a,nom_prod,prec_prod) =
   then ((id,nombre,precio),cant) : buscaPedidosConProducto xs (a,nombre,precio)
   else buscaPedidosConProducto xs (a,nombre,precio)
 
-buscaPedidosConProductos :: Compra -> [Producto] -> [Pedido] --juraria que esta devolviendo lista de listas pero ns que está
+buscaPedidosConProductos :: Compra -> [Producto] -> [[Pedido]] --juraria que esta devolviendo lista de listas pero ns que está
 buscaPedidosConProductos compra [] = []  
 buscaPedidosConProductos compra ((a,nom_prod,prec_prod):xs) =
   buscaPedidosConProducto compra (a,nom_prod,prec_prod) : buscaPedidosConProductos compra xs
