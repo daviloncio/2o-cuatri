@@ -255,7 +255,7 @@ class Graph:
 
         
 #10.3: Busqueda de anchura
-"""from stackarray import Stack
+from stackarray import Stack
 
 def DFS_iter(G: Graph,vertex:int):
     G.set_vertices_attribute("color","WHITE")
@@ -269,7 +269,7 @@ def DFS_iter(G: Graph,vertex:int):
             for w in G.neighbors(v):
                 if G.get_vertex_attribute(w,"color")== "WHITE":
                     G.set_vertex_attribute(w,"parent",v)
-                    s.push(w)"""
+                    s.push(w)
                     
                     
 
@@ -359,7 +359,6 @@ def Tarjan(G:Graph):
         en traspuesto después de haber ejecutado dfs_rec en él.
         
         
-        
         '''
         
     G.set_vertices_attribute("parent","none")   
@@ -380,14 +379,6 @@ def Tarjan(G:Graph):
         return Tras
 
     traspuesto = graph_traspose(G)  
-    """
-    print('Total edges in the graph:', G.edges_count())
-    print('Total vertices in the graph:', G.vertices_count())
-    print('Total edges in the graph:', traspuesto.edges_count())
-    print('Total vertices in the graph:', traspuesto.vertices_count())
-    print(traspuesto.get_vertices_attribute('parent'))
-    print(G)
-    print(G.get_vertices_attribute('f'))"""
     
     #creamos la lista de vértices con el orden decreciente del paso de los vértices
     dic_pasos_clave={}  
@@ -415,12 +406,7 @@ def Tarjan(G:Graph):
     for i in range(len(lista_decr)):
         lista_decr[i] = dic_pasos_clave[lista_decr[i]]
  
-
-
     traspuesto.set_vertices_attribute('color','white')
-    
-            
-
     for v in lista_decr:  #hay que tener en cuenta que cuando empieza este bucle todos los vértices estan en blanco, pero hay un dfs_rec() anidado los vértices de lista_decr vas cambiando de color
                           #cuando se encuentre posteriormente con otro vertice en blanco significará que ese no entró en el anterior dfs_rec. Ese será un nodo raíz de otro grafo.
 
@@ -441,49 +427,26 @@ def Tarjan(G:Graph):
             lista_scc.insert(i,[])
             lista_scc[i].insert(i,vertice)
 
-    
+    return lista_scc    #finalmente devolvemos la lista, formada por distintas listas de SCC
 
-    """    for v_padre in bosque_final:  #ahora nos centraremos en llenar estos grafos de sus correspondientes vértices y aristas
-        vertices_colocados = [v_padre]
-
-        for i in range(traspuesto.edges_count()): #este bucle es necesario debido a que, sin él, es posible que hicisemos la comprobación de un vértice cuyo padre
-                                                  #aun no esté situado,por lo que tenemos que hacer la comprobación más veces.
-            
-            for v in traspuesto._adyacents:
-                
-                if traspuesto.get_vertex_attribute(v,'parent') in vertices_colocados:  #solo añadimos el vértice si ya hemos añadido a su padre al grafo resultante
-                    v_from = traspuesto.get_vertex_attribute(v,'parent')               #(y por tanto a la lista vertices_colocados).Recordemos que el vértice original ya
-                                                                                       #lo habíamos colocado a la hora de crear la instancia del grafo resultante.
-                    if v not in bosque_final[v_padre]._adyacents:    
-                        
-                        bosque_final[v_padre].add_vertex(v)
-                        bosque_final[v_padre].add_edge_from_to(v_from,v)  #Una vez dentro los véritces padre e hijo,colocamos arista
-                        vertices_colocados.append(v)                      #No tiene peso ya que no lo usamos"""
-    return lista_scc                                               #finalmente devolvemos la lista, formada por distintas listas de SCC
-
-def Erdos_renyi(G:Graph,h:int): #recibe un grafo vacío con n vertices
-    n = G._vertices_count 
-    if h >= n: #calcula la probabilidad de que dos verticces estén conectados.
-        p = h/n
-    else:
+def Erdos_renyi(n,h:int): #recibe el numero de vertices y la probabilidad de que dos esten conectados
+    G = Graph()
+    for i in range(n):
+        G.add_vertex(i)   
         p = h/n
     for vertice1 in G._vertices:
         for vertice2 in G._vertices:
             if random.random() < p:
                 G.add_edge_from_to(vertice1,vertice2)
+    return G
 
                 
     
 if __name__ == '__main__':
     G = Graph()
-    H = Graph()
-    I = Graph()
-    J = Graph()
     for letra in ['A','B','C','D','E','F','G','H','I']:
         G.add_vertex(letra)
-        H.add_vertex(letra)
-        I.add_vertex(letra)
-        J.add_vertex(letra)
+
     # add edges
     G.add_edge_from_to('A', 'B', 1)
     G.add_edge_from_to('B', 'C', 1)
@@ -500,8 +463,13 @@ if __name__ == '__main__':
     
 
     bosque_final=Tarjan(G)  #el SCC formado por A,E,G,B,D 
-    print(bosque_final)
-    Erdos_renyi(H,(5))
-    Erdos_renyi(I,(1))
-    Erdos_renyi(J,(1.5))
+    H = Erdos_renyi(100,1)
+    I = Erdos_renyi(250,1)
+    J = Erdos_renyi(500,1)
+
+    
+
+
+    
+    
     
