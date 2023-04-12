@@ -19,8 +19,8 @@ data Pedido = Pedido Producto Cantidad | PedidoUnitario Producto | (:+) Producto
 
 instance Show Pedido where
     show (Pedido producto cantidad) = "Pedido " ++ show producto ++ " " ++ show cantidad
-    show (PedidoUnitario producto) = "Pedido " ++ show producto ++ "1"
-    show (producto :+ Pedido producto) = show Pedido -- tengo dudas, hay que revisarla
+    show (PedidoUnitario producto) = "Pedido Unitario " ++ show producto
+    show (Producto :+ Pedido producto) = show Pedido -- tengo dudas, hay que revisarla
 
 data Compra = Compra [Pedido]
 instance Show Compra where
