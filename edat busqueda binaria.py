@@ -16,23 +16,61 @@
         """Returns a list with all nodes. Supports an inorder
         traversal on a view of self. Recursive
         """
-        def _inorder(node:self.Node):
+        result = []
+        def _inorder(node:self.Node,lista):
             if (node._left,node._right) == (None,None):
-                return
+                lista.append(node._data)
+                return 
+            else:
+                _inorder(node._left,lista)
                 
-                _inorder(node._left)
+                lista.append(node._data)
+                
+                if node._right != None:
+                    _inorder(node._right,lista)
+                    
+        _inorder(self._root,result)
+        return result
         
-        
-        _inorder(self._root)
     def preorder(self):
         """Returns a list with all nodes. Supports an inorder
         traversal on a view of self. Recursive
         """
+        result = []
+        def _preorder(node:self.Node,lista):
+            if (node._left,node._right) == (None,None):
+                lista.append(node._data)
+                return 
+            else:
+                lista.append(node._data)
+                
+                _preorder(node._left,lista)
+                #si tiene nodo hijo derecho
+                if node._right != None:
+                    _preorder(node._right,lista)
+                    
+        _preorder(self._root,result)
+        return result
         pass
     def postorder(self):
         """Returns a list with all nodes. Supports an inorder
         traversal on a view of self. Recursive
         """
+        result = []
+        def _postorder(node:self.Node,lista):
+            if (node._left,node._right) == (None,None):
+                lista.append(node._data)
+                return 
+            else:
+                _postorder(node._left,lista)
+                #si tiene nodo hijo derecho
+                if node._right != None:
+                    _postorder(node._right,lista)
+                
+                lista.append(node._data)
+            
+        _postorder(self._root,result)
+        return result
         pass
     def __str__(self):
         """Returns a string representation with the tree rotated
@@ -104,19 +142,31 @@ class BSTree(Tree):
 
     def find(self, item):
         def _find(node:self.Node,item):
+            print(node._data)
             if item == node._data:
                 return node
+            if (node._left,node._right) == (None,None):
+                return None
             else:
-                if node._left != None:
-                    return(_find(node._left,item))
-                if node._right != None:
-                    return(_find(node._right,item))
+                buscar_item = _find(node._left,item)
+                if buscar_item == None:  #si yendo por la izq con la recursión no hemos encontrado lo que buscábamos
+                    if node._right != None: #probamos recursión preguntando si hay un nodo hijo derecho
+                        return (_find(node._right,item))
+                    else:
+                        return None
+                else:
+                    return buscar_item
                 
         z=_find(self._root,item)
         return z._data
 j = BSTree()
-for i in (2,3,5,32,351):
+for i in (25,15,50,10,22,35,70,4,12,18,24,31,44,66,90):
     j.insert(i)
-print(j.find(5))
+print(j)
+
+print(j.inorder())
+print(j.preorder())
+print(j.postorder())
+#print(j.find(5))
 
     
