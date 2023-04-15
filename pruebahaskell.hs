@@ -44,19 +44,19 @@ pur2 :: Compra ; pur2 = [order1,order2]  --pedidos de batidora y yate en misma c
 --EJ 2:
 
 productoToString :: Producto -> String
-productoToString  (ident,nombre,precio) = "Producto numero " ++ show ident ++ ": " ++ name0 ++ " de precio " ++ show precio 
+productoToString  (ident,nombre,precio) = "Producto numero " ++ show ident ++ ": " ++ nombre ++ " de precio " ++ show precio 
 
 pedidoToString ::  Pedido -> String
 pedidoToString ((id, nombre, precio), cantidad) = "El pedido esta formado por " ++ show cantidad ++ " unidad(es) del Producto " ++ show id ++ ": " ++ nombre ++ " de precio " ++ show precio ++". El precio total es " ++ show (precio * cantidad)
 
 
 
-compraToString :: Compra -> String
+compraToString :: Compra -> String  
 compraToString  [] = ""
 compraToString  (x:xs) = pedidoToString x ++ compraToString xs
 
 
-precioProducto :: Producto -> Float
+precioProducto :: Producto -> Float  
 precioProducto (ident,nombre,precio) = precio
 
 precioPedido :: Pedido -> Float
@@ -77,7 +77,7 @@ fusionaCompras2 [] ys = ys
 fusionaCompras2(x:xs) ys = x : fusionaCompras xs ys
 
 
-precioProductoCompra :: Compra -> Producto -> Float
+precioProductoCompra :: Compra -> Producto -> Float --crear una lista por compresion y usar foldr
 precioProductoCompra [] _ = 0
 precioProductoCompra (((id,_,precio),cant):xs) (a,_,_) = 
   if id  == a

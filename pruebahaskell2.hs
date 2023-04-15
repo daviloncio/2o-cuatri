@@ -1,13 +1,9 @@
+
 type Ident = Int
 type Nombre = String
 type Precio = Float
-
 type Cantidad = Float
 
---type Producto = (Ident, Nombre, Precio)
---type Pedido = (Producto, Cantidad)
-
---type Compra = [Pedido]
 --EJERCICIO 6
 
 data Producto = Producto Ident Nombre Precio
@@ -15,12 +11,14 @@ data Producto = Producto Ident Nombre Precio
 instance Show Producto where
     show (Producto id nombre precio) = show (id, nombre, precio)
 
-data Pedido = Pedido Producto Cantidad | PedidoUnitario Producto | (:+) Producto
+data Pedido = PedidoConProducto Producto Cantidad | PedidoUnitario Producto | (:+) Producto
+
+
 
 instance Show Pedido where
-    show (Pedido producto cantidad) = "Pedido " ++ show producto ++ " " ++ show cantidad
+    show (PedidoConProducto producto cantidad) = "Pedido " ++ show producto ++ " " ++ show cantidad
     show (PedidoUnitario producto) = "Pedido Unitario " ++ show producto
-    show (Producto :+ Pedido producto) = show Pedido -- tengo dudas, hay que revisarla
+    show ((:+) producto) = "Pedido " ++ show producto -- tengo dudas, hay que revisarla
 
 data Compra = Compra [Pedido]
 instance Show Compra where
@@ -40,19 +38,29 @@ price0 :: Precio ; price0 = 100
 price1 :: Precio ; price1 = 30000000
 price2 :: Precio ; price2 = 250
 
-product0 = Producto 1 "la copa" 2000
+product0 = Producto 1 "la copa" 2000 
 product1 = (id1,name1,price1)
-product2 :: Producto ; product2 = (id2,name2,price2)
-
-qty0 :: Cantidad ; qty0 = 4 
-qty1 :: Cantidad ; qty1 = 1
-qty2 :: Cantidad ; qty2 = 1
 
 
-order0 :: Pedido ; order0 = (product0,qty0)  
-order1 :: Pedido ; order1 = (product1,qty1)
-order2 :: Pedido ; order2 = (product2,qty2)
 
-pur0 :: Compra ; pur0 = [order0] 
-pur1 :: Compra ; pur1 = [order1]
-pur2 :: Compra ; pur2 = [order1,order2]  --pedidos de batidora y yate en misma compra
+
+productoToString :: Producto -> String
+productoToString = show
+
+pedidoToString ::  Pedido -> String
+pedidoToString = show
+
+--compraToString :: Compra -> String  --usar foldr
+--compraToString compra="Esta compra está formada por los siguientes pedidos"
+                      --map(pedidoToString compra)
+
+
+--precioProducto :: Producto -> Float  --son muy sencillas estas dos, no habra que cambiar imagino
+--precioProducto (ident,nombre,precio) = precio
+
+--precioPedido :: Pedido -> Float
+--precioPedido ((ident,nombre,precio),cantidad) = precio * cantidad
+
+--precioCompra :: Compra -> Float
+--precioCompra  = foldr (\((ident,nombre,precio),cant) -> cant + acc) 0
+
