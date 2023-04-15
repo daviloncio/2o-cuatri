@@ -18,7 +18,8 @@ data Pedido = PedidoConProducto Producto Cantidad | PedidoUnitario Producto | (:
 instance Show Pedido where
     show (PedidoConProducto producto cantidad) = "Pedido " ++ show producto ++ " " ++ show cantidad
     show (PedidoUnitario producto) = "Pedido Unitario " ++ show producto
-    show ((:+) producto) = "Pedido " ++ show producto -- tengo dudas, hay que revisarla
+    show ((:+) pedido Nothing) = show pedido
+    show ((:+) pedido (Just cantidad)) = "Pedido " ++ show pedido ++ " " ++ show cantidad
 
 data Compra = Compra [Pedido]
 instance Show Compra where
