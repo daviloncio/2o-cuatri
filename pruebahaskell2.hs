@@ -13,8 +13,6 @@ instance Show Producto where
 
 data Pedido = PedidoConProducto Producto Cantidad | PedidoUnitario Producto | (:+) Producto
 
-
-
 instance Show Pedido where
     show (PedidoConProducto producto cantidad) = "Pedido " ++ show producto ++ "con cantidad" ++ show cantidad
     show (PedidoUnitario producto) = "Pedido Unitario " ++ show producto
