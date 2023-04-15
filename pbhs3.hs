@@ -26,3 +26,15 @@ ped = Pedido [] :+: pu1 :+: pu2
 
 print ped -- muestra "Pedido { pedidos = [PedidoUnitario { producto = Producto { id = 1, name = \"Tijeras\", precio = 10.0 }, cantidad = 1 },
 -- PedidoUnitario { producto = Producto { id = 2, name = \"Alfombra\", precio = 20.0 }, cantidad = 2 }] }"
+
+
+instance Show Pedido where
+    show (PedidoConProducto producto cantidad) = "Pedido " ++ show producto ++ "con cantidad" ++ show cantidad
+    show (PedidoUnitario producto) = "Pedido Unitario " ++ show producto
+    show ((:+) producto) = "Pedido usando el :+" ++ show producto -- así no daría error, pero ns cuándo hacemos este ultimo show
+
+data Compra = Compra [Pedido]
+instance Show Compra where
+    show :: Compra -> String
+    show (Compra []) = ""
+    show (Compra (pedido : xs)) = show pedido ++ show (Compra xs)

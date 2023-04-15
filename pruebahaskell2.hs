@@ -16,15 +16,14 @@ data Pedido = PedidoConProducto Producto Cantidad | PedidoUnitario Producto | (:
 
 
 instance Show Pedido where
-    show (PedidoConProducto producto cantidad) = "Pedido " ++ show producto ++ " " ++ show cantidad
+    show (PedidoConProducto producto cantidad) = "Pedido " ++ show producto ++ "con cantidad" ++ show cantidad
     show (PedidoUnitario producto) = "Pedido Unitario " ++ show producto
-    show ((:+) pedido Nothing) = show pedido
-    show ((:+) pedido (Just cantidad)) = "Pedido " ++ show pedido ++ " " ++ show cantidad
+    show ((:+) producto) = "Pedido usando el :+" ++ show producto -- así no daría error, pero ns cuándo hacemos este ultimo show
 
 data Compra = Compra [Pedido]
 instance Show Compra where
     show :: Compra -> String
-    show (Compra []) = "La compra está formada"
+    show (Compra []) = ""
     show (Compra (pedido : xs)) = show pedido ++ show (Compra xs)
 
 id0 :: Ident ; id0 = 0000 
