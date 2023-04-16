@@ -1,4 +1,5 @@
 
+
 type Ident = Int
 type Nombre = String
 type Precio = Float
@@ -22,7 +23,7 @@ data Compra = Compra [Pedido]
 instance Show Compra where
     show :: Compra -> String
     show (Compra []) = ""
-    show (Compra (pedido : xs)) = show pedido ++ show (Compra xs)
+    show (Compra (pedido : xs)) = show pedido ++" , "++ show (Compra xs)
 
 id0 :: Ident ; id0 = 0000 
 id1 :: Ident ; id1 = 0001
@@ -37,28 +38,32 @@ price1 :: Precio ; price1 = 30000000
 price2 :: Precio ; price2 = 250
 
 product0 = Producto 1 "la copa" 2000 
-product1 = (id1,name1,price1)
+product1 = Producto 2 "yate" 30000000 --yate
+order0 = PedidoUnitario product0 
+order1 = PedidoConProducto product1 2
+
+pur0 = Compra [order0,order1]
+
+
+--no tiene sentido reescribir las funciones ToString ya que usamos el show.
+
+precioProducto :: Producto -> Float  --son muy sencillas estas dos, no habra que cambiar imagino
+precioProducto (Producto id nombre precio) = precio
+
+precioPedido :: Pedido -> Float
+precioPedido (PedidoConProducto (Producto id nombre precio) cantidad) = precio * cantidad
+precioPedido (PedidoUnitario (Producto id nombre precio)) = precio
+
+precioCompra :: Compra -> Float
+precioCompra (Compra pedidos)= foldr ((+) . precioPedido) 0 pedidos
+
+fusionaCompras :: Compra -> Compra -> Compra  -- FUNCIONAN AMBAS FUSIONA COMPRAS
+fusionaCompras (Compra c1)(Compra c2) = Compra (concat [c1,c2]) --concat es una funcion de orden superior
 
 
 
 
-productoToString :: Producto -> String
-productoToString = show
-
-pedidoToString ::  Pedido -> String
-pedidoToString = show
-
---compraToString :: Compra -> String  --usar foldr
---compraToString compra="Esta compra está formada por los siguientes pedidos"
-                      --map(pedidoToString compra)
-
-
---precioProducto :: Producto -> Float  --son muy sencillas estas dos, no habra que cambiar imagino
---precioProducto (ident,nombre,precio) = precio
-
---precioPedido :: Pedido -> Float
---precioPedido ((ident,nombre,precio),cantidad) = precio * cantidad
-
---precioCompra :: Compra -> Float
---precioCompra  = foldr (\((ident,nombre,precio),cant) -> cant + acc) 0
-
+precioProductoCompra :: Compra -> Producto -> Float --crear una lista por compresion y usar foldr
+precioProductoCompra (Compra pedidos) prod = 
+    foldr ((+) . precioCompra) 0 Compra ([(PedidoConProducto (Producto id n p) cant) | Producto == prod, (PedidoConProducto (Producto id n p) cant) <- pedidos])
+    
