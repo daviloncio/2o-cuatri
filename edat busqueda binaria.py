@@ -95,6 +95,22 @@
             else:
                 return 1 + _num_nodes(node._left) + _num_nodes(node._right)
         _num_nodes(self._root)
+    def mirror(self):
+        def _mirror(node):
+  
+            if node._left == None: #no tendrá hijos
+                return
+            else:
+                _mirror(node._left)
+                if node._right != None:  #comprobación de que existe el hijo derecho
+
+                    node._right._data,node._left._data = node._left._data,node._right._data
+                    _mirror(node._right)  
+                    
+        _mirror(self._root) #no devolvemos nada, estamos modificando el árbol
+                            #por lo que hacemos un print para comprobar y ya
+
+        
         
 
     
@@ -163,10 +179,10 @@ j = BSTree()
 for i in (25,15,50,10,22,35,70,4,12,18,24,31,44,66,90):
     j.insert(i)
 print(j)
+print('mirror:')
+j.mirror()
+print(j)
 
-print(j.inorder())
-print(j.preorder())
-print(j.postorder())
 #print(j.find(5))
 
     
