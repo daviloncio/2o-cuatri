@@ -1,5 +1,6 @@
 
 
+
 type Ident = Int
 type Nombre = String
 type Precio = Float
@@ -12,18 +13,28 @@ data Producto = Producto Ident Nombre Precio
 instance Show Producto where
     show (Producto id nombre precio) = show (id, nombre, precio)
 
-data Pedido = PedidoConProducto Producto Cantidad | PedidoUnitario Producto | (:+) Producto
+data Pedido = Pedido Producto Cantidad | PedidoUnitario Producto | (:+) Producto Cantidad 
 
 instance Show Pedido where
-    show (PedidoConProducto producto cantidad) = "Pedido " ++ show producto ++ "con cantidad" ++ show cantidad
+    show (Pedido producto cantidad) = "Pedido " ++ show producto ++ "con cantidad" ++ show cantidad
     show (PedidoUnitario producto) = "Pedido Unitario " ++ show producto
-    show ((:+) producto) = "Pedido usando el :+" ++ show producto -- así no daría error, pero ns cuándo hacemos este ultimo show
+    show ((:+) Producto Cantidad) = "Pedido usando el :+" ++ show producto ++ "con cantidad" ++ show cantidad -- así no daría error, pero ns cuándo hacemos este ultimo show
+instance Eq Pedido where 
+    (==) :: Pedido -> Pedido -> Bool
+    (==) (Pedido producto1 _)(Pedido producto2 _) = producto1 == producto2
+    (==) (PedidoUnitario  producto1)(PedidoUnitario producto2) = producto1 == producto2
+    (==) ((:+) producto1 _)((:+) producto2 _) = producto1 == producto2
+    (/=) :: Pedido -> Pedido -> Bool
+    (/=) (Pedido producto1 _)(Pedido producto2 _) = producto1 == producto2
+    (/=) (PedidoUnitario  producto1)(PedidoUnitario producto2) = producto1 == producto2
+    (/=) ((:+) producto1 _)((:+) producto2 _) = producto1 == producto2
 
 data Compra = Compra [Pedido]
 instance Show Compra where
     show :: Compra -> String
     show (Compra []) = ""
     show (Compra (pedido : xs)) = show pedido ++" , "++ show (Compra xs)
+
 
 id0 :: Ident ; id0 = 0000 
 id1 :: Ident ; id1 = 0001
@@ -40,7 +51,7 @@ price2 :: Precio ; price2 = 250
 product0 = Producto 1 "la copa" 2000 
 product1 = Producto 2 "yate" 30000000 --yate
 order0 = PedidoUnitario product0 
-order1 = PedidoConProducto product1 2
+order1 = Pedido product1 2
 
 pur0 = Compra [order0,order1]
 
@@ -51,7 +62,7 @@ precioProducto :: Producto -> Float  --son muy sencillas estas dos, no habra que
 precioProducto (Producto id nombre precio) = precio
 
 precioPedido :: Pedido -> Float
-precioPedido (PedidoConProducto (Producto id nombre precio) cantidad) = precio * cantidad
+precioPedido (Pedido (Producto id nombre precio) cantidad) = precio * cantidad
 precioPedido (PedidoUnitario (Producto id nombre precio)) = precio
 
 precioCompra :: Compra -> Float
@@ -64,6 +75,10 @@ fusionaCompras (Compra c1)(Compra c2) = Compra (concat [c1,c2]) --concat es una 
 
 
 precioProductoCompra :: Compra -> Producto -> Float --crear una lista por compresion y usar foldr
-precioProductoCompra (Compra pedidos) prod = 
-    foldr ((+) . precioCompra) 0 Compra ([(PedidoConProducto (Producto id n p) cant) | Producto == prod, (PedidoConProducto (Producto id n p) cant) <- pedidos])
-    
+precioProductoCompra (Compra pedidos)(Producto a b c) = precioCompra (Compra [ (Pedido (Producto id nombre precio) cantidad)  | (Pedido (Producto id nombre precio) cantidad)  <- pedidos, Producto a b c == Producto id nombre precio])+
+                                             precioCompra (Compra [ (PedidoUnitario (Producto id nombre precio))  | (PedidoUnitario (Producto id nombre precio))  <- pedidos,Producto a b c == Producto id nombre precio])
+
+                --foldr ((+) . precioCompra) 0 Compra ([(Pedido (Producto id n p) cant) | Producto == prod, (Pedido (Producto id n p) cant) <- pedidos])
+
+
+

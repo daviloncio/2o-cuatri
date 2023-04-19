@@ -91,8 +91,9 @@ buscaPedidosConProducto (((id,nombre,precio),cant):xs) (a,nom_prod,prec_prod) =
   then ((id,nombre,precio),cant) : buscaPedidosConProducto xs (a,nombre,precio)
   else buscaPedidosConProducto xs (a,nombre,precio)
 
-buscaPedidosConProductos :: Compra -> [Producto] -> [[Pedido]] --juraria que esta devolviendo lista de listas pero ns que está
-buscaPedidosConProductos compra [] = []  
+buscaPedidosConProductos :: Compra -> [Producto] -> [[Pedido]] 
+--devuelve una lista con la lista de pedidos que incluyen el producto 1,otra lista con los pedidos del prodcuto 2 etc.
+buscaPedidosConProductos compra [] = []
 buscaPedidosConProductos compra ((a,nom_prod,prec_prod):xs) =
   buscaPedidosConProducto compra (a,nom_prod,prec_prod) : buscaPedidosConProductos compra xs
 
