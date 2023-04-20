@@ -10,6 +10,15 @@ type Cantidad = Float
 
 data Producto = Producto Ident Nombre Precio
 
+instance Eq Producto where 
+    (==) :: Producto -> Producto -> Bool
+    (==) (Producto id1 name1 price1)(Producto id2 name2 price2) = (id1,name1,price1) == (id2,name2,price2)
+    (/=) :: Producto -> Producto -> Bool
+    (/=)(Producto id1 name1 price1)(Producto id2 name2 price2) = not((id1,name1,price1) == (id2,name2,price2))
+
+
+ 
+
 instance Show Producto where
     show (Producto id nombre precio) = show (id, nombre, precio)
 
@@ -18,11 +27,11 @@ data Pedido = Pedido Producto Cantidad | PedidoUnitario Producto | (:+) Producto
 instance Show Pedido where
     show (Pedido producto cantidad) = "Pedido " ++ show producto ++ "con cantidad" ++ show cantidad
     show (PedidoUnitario producto) = "Pedido Unitario " ++ show producto
-    show ((:+) Producto Cantidad) = "Pedido usando el :+" ++ show producto ++ "con cantidad" ++ show cantidad -- así no daría error, pero ns cuándo hacemos este ultimo show
+    show ((:+) producto cantidad) = "Pedido usando el :+" ++ show producto ++ "con cantidad" ++ show cantidad -- así no daría error, pero ns cuándo hacemos este ultimo show
 instance Eq Pedido where 
     (==) :: Pedido -> Pedido -> Bool
     (==) (Pedido producto1 _)(Pedido producto2 _) = producto1 == producto2
-    (==) (PedidoUnitario  producto1)(PedidoUnitario producto2) = producto1 == producto2
+    (==) (PedidoUnitario producto1)(PedidoUnitario producto2) = producto1 == producto2
     (==) ((:+) producto1 _)((:+) producto2 _) = producto1 == producto2
     (/=) :: Pedido -> Pedido -> Bool
     (/=) (Pedido producto1 _)(Pedido producto2 _) = producto1 == producto2
@@ -53,7 +62,7 @@ product1 = Producto 2 "yate" 30000000 --yate
 order0 = PedidoUnitario product0 
 order1 = Pedido product1 2
 
-pur0 = Compra [order0,order1]
+pur0 = Compra [order0,order1,order1]
 
 
 --no tiene sentido reescribir las funciones ToString ya que usamos el show.
@@ -74,11 +83,50 @@ fusionaCompras (Compra c1)(Compra c2) = Compra (concat [c1,c2]) --concat es una 
 
 
 
-precioProductoCompra :: Compra -> Producto -> Float --crear una lista por compresion y usar foldr
-precioProductoCompra (Compra pedidos)(Producto a b c) = precioCompra (Compra [ (Pedido (Producto id nombre precio) cantidad)  | (Pedido (Producto id nombre precio) cantidad)  <- pedidos, Producto a b c == Producto id nombre precio])+
-                                             precioCompra (Compra [ (PedidoUnitario (Producto id nombre precio))  | (PedidoUnitario (Producto id nombre precio))  <- pedidos,Producto a b c == Producto id nombre precio])
+precioProductoCompra :: Compra -> Producto -> Float 
+--crear una lista por compresion,creamos dos compras con solo el producto ordenado
+--(una con los pedidos y otra con pedidos unitarios) y usar precio compra
+precioProductoCompra (Compra pedidos)(Producto a b c) = 
+ precioCompra (Compra [ Pedido (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  
+ <- pedidos, Producto a b c == Producto id nombre precio])+
+ precioCompra (Compra [ PedidoUnitario (Producto id nombre precio)  | (PedidoUnitario (Producto id nombre precio))  
+ <- pedidos,Producto a b c == Producto id nombre precio])
 
-                --foldr ((+) . precioCompra) 0 Compra ([(Pedido (Producto id n p) cant) | Producto == prod, (Pedido (Producto id n p) cant) <- pedidos])
+buscaPedidosConProducto :: Compra -> Producto -> Compra 
+buscaPedidosConProducto (Compra pedidos) (Producto a b c) = 
+    
+    let c1 = Compra [ Pedido (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  <- pedidos, Producto a b c == Producto id nombre precio]
+        c2 =(Compra [ PedidoUnitario (Producto id nombre precio)  | (PedidoUnitario (Producto id nombre precio))  <- pedidos,Producto a b c == Producto id nombre precio])
+    in fusionaCompras c1 c2
 
+buscaPedidosConProductos :: Compra -> [Producto] -> Compra
+--usamos la funcion anterior y foldl
+buscaPedidosConProductos (Compra pedidos) prods= 
+        let c1 = Compra [ Pedido (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  <- pedidos, elem (Producto id nombre precio) prods]
+            c2 =(Compra [ PedidoUnitario (Producto id nombre precio)  | (PedidoUnitario (Producto id nombre precio))  <- pedidos,elem (Producto id nombre precio) prods])
+        in fusionaCompras c1 c2
 
+eliminaProductoCompra :: Compra -> Producto -> Compra
+eliminaProductoCompra (Compra pedidos) prod= 
+        let c1 = Compra [ Pedido (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  <- pedidos, Producto id nombre precio/=prod]
+            c2 =(Compra [ PedidoUnitario (Producto id nombre precio)  | (PedidoUnitario (Producto id nombre precio))  <- pedidos,Producto id nombre precio/=prod])
+        in fusionaCompras c1 c2
 
+eliminaCompraCantidad :: Compra -> Cantidad -> Compra
+eliminaCompraCantidad(Compra pedidos) cant_max =
+        let c1 = Compra [ Pedido (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  <- pedidos,cant_max>=cantidad]
+            c2 =Compra [ PedidoUnitario (Producto id nombre precio)  | cant_max /= 1,(PedidoUnitario (Producto id nombre precio))  <- pedidos ]
+        in fusionaCompras c1 c2
+
+cantidadProducto :: Compra -> Producto -> Float
+--lo usamos para la funcion siguiente,y devuelve el numero de repeticiones que tiene un producto en una compra
+cantidadProducto (Compra pedidos) (Producto id nombre precio) = (precioProductoCompra (Compra pedidos) (Producto id nombre precio)/precio)
+--si dividimos el precio total de un producto en la compra entre el precio de la unidad obtenemos la cantidad del producto presente en la compra.
+
+eliminarRepeticiones :: Compra -> Compra
+eliminarRepeticiones (Compra pedidos) =         
+    let prods = [(Producto id nombre precio) | (Pedido (Producto id nombre precio) cantidad)  <- pedidos, not(elem (Producto id nombre precio) prods)]++
+                [(Producto id nombre precio) | PedidoUnitario (Producto id nombre precio)  <- pedidos, not(elem (Producto id nombre precio) prods)]
+        cantidades_prods = [cantidadProducto (Compra pedidos) un_producto | un_producto <- prods]
+        new_pedidos = [(Pedido un_producto cant) | un_producto <- prods,cant <- cantidades_prods]
+    in Compra new_pedidos

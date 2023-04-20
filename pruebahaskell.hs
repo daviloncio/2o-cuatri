@@ -31,7 +31,6 @@ qty0 :: Cantidad ; qty0 = 4
 qty1 :: Cantidad ; qty1 = 1
 qty2 :: Cantidad ; qty2 = 1
 
-
 order0 :: Pedido ; order0 = (product0,qty0)  
 order1 :: Pedido ; order1 = (product1,qty1)
 order2 :: Pedido ; order2 = (product2,qty2)
