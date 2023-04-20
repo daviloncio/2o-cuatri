@@ -45,6 +45,16 @@ instance Show Compra where
     show (Compra (pedido : xs)) = show pedido ++" , "++ show (Compra xs)
 
 
+errorCompra :: Compra -> Maybe Compra
+errorCompra _ = Nothing
+
+compraSegura :: Compra -> Maybe Compra
+compraSegura (Compra codigo nombre precio cantidad) 
+  | cantidad < 0 = errorCompra CantidadNegativa
+  | precio <= 0 || nombre == "" = errorCompra (NombrePrecioIncorrecto nombre precio)
+  | otherwise = Just (Compra codigo nombre precio cantidad)
+
+
 id0 :: Ident ; id0 = 0000 
 id1 :: Ident ; id1 = 0001
 id2 :: Ident ; id2 = 0002
@@ -62,7 +72,7 @@ product1 = Producto 2 "yate" 30000000 --yate
 order0 = PedidoUnitario product0 
 order1 = Pedido product1 2
 
-pur0 = Compra [order0,order1,order1]
+pur0 = Compra [order0,order1]
 
 
 --no tiene sentido reescribir las funciones ToString ya que usamos el show.
@@ -123,10 +133,10 @@ cantidadProducto :: Compra -> Producto -> Float
 cantidadProducto (Compra pedidos) (Producto id nombre precio) = (precioProductoCompra (Compra pedidos) (Producto id nombre precio)/precio)
 --si dividimos el precio total de un producto en la compra entre el precio de la unidad obtenemos la cantidad del producto presente en la compra.
 
-eliminarRepeticiones :: Compra -> Compra
+eliminarRepeticiones :: Compra -> Compra --funcion definida correctamente, por ahora el terminal se queda pillado
 eliminarRepeticiones (Compra pedidos) =         
-    let prods = [(Producto id nombre precio) | (Pedido (Producto id nombre precio) cantidad)  <- pedidos, not(elem (Producto id nombre precio) prods)]++
-                [(Producto id nombre precio) | PedidoUnitario (Producto id nombre precio)  <- pedidos, not(elem (Producto id nombre precio) prods)]
+    
+    let prods = [Producto id nombre precio | (Pedido (Producto id nombre precio) cantidad)  <- pedidos,  Producto id nombre precio `notElem` prods]++[Producto id nombre precio | PedidoUnitario (Producto id nombre precio)  <- pedidos,  Producto id nombre precio `notElem` prods]
         cantidades_prods = [cantidadProducto (Compra pedidos) un_producto | un_producto <- prods]
-        new_pedidos = [(Pedido un_producto cant) | un_producto <- prods,cant <- cantidades_prods]
+        new_pedidos = [Pedido un_producto cant | un_producto <- prods,cant <- cantidades_prods]
     in Compra new_pedidos
