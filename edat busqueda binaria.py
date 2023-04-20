@@ -1,11 +1,13 @@
-﻿class Tree:
+﻿from stackarray import Stack
+
+class Tree:
     class Node:
         __slots__ = '_data', '_left', '_right'
-        def __init__(self, element):
+        def __init__(self, element,parent = None):
             self._data = element
             self._left = None
             self._right = None
-            
+            self._parent = parent
             
     def __init__(self):
         self._root = None
@@ -110,8 +112,7 @@
         _mirror(self._root) #no devolvemos nada, estamos modificando el árbol
                             #por lo que hacemos un print para comprobar y ya
 
-        
-        
+            
 
     
 
@@ -130,7 +131,6 @@ class BSTree(Tree):
     
     def insert(self, item):
         '''Adds item to its proper place in the tree'''
-        
         
         def _insert(node, item):
             '''Assume BSTreee is not empty'''
@@ -160,7 +160,7 @@ class BSTree(Tree):
         def _find(node:self.Node,item):
             print(node._data)
             if item == node._data:
-                return node
+                return item
             if (node._left,node._right) == (None,None):
                 return None
             else:
@@ -174,15 +174,78 @@ class BSTree(Tree):
                     return buscar_item
                 
         z=_find(self._root,item)
-        return z._data
+        return z
+    def print_path(self,item):
+        def _print_path(node:self.Node,item):
+            if node == None:
+                return 
+            if node._data == item:
+                s = Stack()
+                
+                while node._parent != None:
+                    s.push(node._data)
+                    node = node._parent
+                s.push(node._data)
+                strng = ""
+                strng = strng + str(s.pop())
+                
+                while s.is_empty() == False:
+                    strng = strng + "->" + str(s.pop())
+                    
+                print (strng)
+            else:
+                _print_path(node._right,item)
+                _print_path(node._left,item)
+                          
+        _print_path(self._root,item)
+    
+    def successor(self, item):
+        x = self._find(self._root, item) # returns the node with item as data
+        if x != None:
+            y = self._successor(x)
+            
+            
+            
+               
+   
+   
+   
+   def delete (self,item):
+        def _delete(node:self.Node,item):
+            if node._data == None:
+                return
+            if node._data == item:
+                if ._left == None and item._right == None:
+                    a = self._parent
+                    if a._left == item:
+                        a._left = None
+                    if a._right == item:
+                        a._right = None
+            #NO ACABEEEEE
+            else:
+                _delete(node._right,item)
+                _delete(node._left,item)
+            
+            
+            
+            
+        
+ 
+            
+            
+                    
+                    
+                    
+
+
+    
+
 j = BSTree()
 for i in (25,15,50,10,22,35,70,4,12,18,24,31,44,66,90):
     j.insert(i)
-print(j)
-print('mirror:')
-j.mirror()
-print(j)
+j.find(90)
+j.print_path(90)
 
-#print(j.find(5))
+
 
     
