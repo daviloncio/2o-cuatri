@@ -1,4 +1,5 @@
 
+{-# LANGUAGE InstanceSigs #-}  
 
 
 type Ident = Int
@@ -12,7 +13,7 @@ data Producto = Producto Ident Nombre Precio
 
 instance Eq Producto where 
     (==) :: Producto -> Producto -> Bool
-    (==) (Producto id1 name1 price1)(Producto id2 name2 price2) = (id1,name1,price1) == (id2,name2,price2)
+    (==) (Producto id1 name1 price1)(Producto id2 name2 price2) = (Producto id1 name1 price1) == (Producto id2 name2 price2)
     (/=) :: Producto -> Producto -> Bool
     (/=)(Producto id1 name1 price1)(Producto id2 name2 price2) = not((id1,name1,price1) == (id2,name2,price2))
 
@@ -45,14 +46,14 @@ instance Show Compra where
     show (Compra (pedido : xs)) = show pedido ++" , "++ show (Compra xs)
 
 
-errorCompra :: Compra -> Maybe Compra
-errorCompra _ = Nothing
+errorPedido :: Pedido -> String-> Maybe Pedido
+errorPedido _  razon = error razon 
 
-compraSegura :: Compra -> Maybe Compra
-compraSegura (Compra codigo nombre precio cantidad) 
-  | cantidad < 0 = errorCompra CantidadNegativa
-  | precio <= 0 || nombre == "" = errorCompra (NombrePrecioIncorrecto nombre precio)
-  | otherwise = Just (Compra codigo nombre precio cantidad)
+pedidoSeguro :: Pedido -> Maybe Pedido
+pedidoSeguro (Pedido  (Producto codigo nombre precio) cantidad) 
+  | cantidad < 0 = errorPedido (Pedido (Producto codigo nombre precio) cantidad) "el pedido no puede tener cantidad negativa"
+  | precio <= 0 = errorPedido (Pedido (Producto codigo nombre precio) cantidad) "el precio del producto no puede ser negativo"
+  | nombre == "" = errorPedido (Pedido (Producto codigo nombre precio) cantidad) "el nombre del producto no se ha establecido"
 
 
 id0 :: Ident ; id0 = 0000 
@@ -72,7 +73,7 @@ product1 = Producto 2 "yate" 30000000 --yate
 order0 = PedidoUnitario product0 
 order1 = Pedido product1 2
 
-pur0 = Compra [order0,order1]
+pur0 = Compra [order0,order1,order1]
 
 
 --no tiene sentido reescribir las funciones ToString ya que usamos el show.
