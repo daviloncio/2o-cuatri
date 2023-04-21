@@ -23,7 +23,10 @@ instance Eq Producto where
 instance Show Producto where
     show (Producto id nombre precio) = show (id, nombre, precio)
 
-data Pedido = Pedido Producto Cantidad | PedidoUnitario Producto | (:+) Producto Cantidad 
+
+
+
+data Pedido = Pedido Producto Cantidad| PedidoUnitario Producto | (:+) Producto Cantidad 
 
 instance Show Pedido where
     show (Pedido producto cantidad) = "Pedido " ++ show producto ++ "con cantidad" ++ show cantidad
@@ -45,15 +48,29 @@ instance Show Compra where
     show (Compra []) = ""
     show (Compra (pedido : xs)) = show pedido ++" , "++ show (Compra xs)
 
+errorProducto :: Producto -> String -> Maybe Producto
+errorProducto _ razon = error razon
 
 errorPedido :: Pedido -> String-> Maybe Pedido
 errorPedido _  razon = error razon 
 
-pedidoSeguro :: Pedido -> Maybe Pedido
-pedidoSeguro (Pedido  (Producto codigo nombre precio) cantidad) 
-  | cantidad < 0 = errorPedido (Pedido (Producto codigo nombre precio) cantidad) "el pedido no puede tener cantidad negativa"
+
+
+
+
+
+productoS :: Producto -> Maybe Producto
+productoS (Pedido  (Producto codigo nombre precio) cantidad) 
   | precio <= 0 = errorPedido (Pedido (Producto codigo nombre precio) cantidad) "el precio del producto no puede ser negativo"
   | nombre == "" = errorPedido (Pedido (Producto codigo nombre precio) cantidad) "el nombre del producto no se ha establecido"
+
+pedidoS :: Producto -> Cantidad -> Maybe Pedido  
+--funcion que usaremos para crear instancias de Pedido
+--no hace falta una función de comprobación para crear un pedidoUnitario ya que nos hemos asegurado de que el 
+--producto está creado con los datos correctos
+pedidoS (Producto codigo nombre precio) cantidad
+  | cantidad < 0 = errorPedido (Pedido (Producto codigo nombre precio) cantidad) "el pedido no puede tener cantidad negativa"
+  | otherwise Pedido (ProductoS codigo nombre precio) cantidad
 
 
 id0 :: Ident ; id0 = 0000 
@@ -72,6 +89,7 @@ product0 = Producto 1 "la copa" 2000
 product1 = Producto 2 "yate" 30000000 --yate
 order0 = PedidoUnitario product0 
 order1 = Pedido product1 2
+order2 = Pedido (1 "uu" 200) 2
 
 pur0 = Compra [order0,order1,order1]
 
@@ -113,7 +131,7 @@ buscaPedidosConProducto (Compra pedidos) (Producto a b c) =
 buscaPedidosConProductos :: Compra -> [Producto] -> Compra
 --usamos la funcion anterior y foldl
 buscaPedidosConProductos (Compra pedidos) prods= 
-        let c1 = Compra [ Pedido (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  <- pedidos, elem (Producto id nombre precio) prods]
+        let c1 = Compra [ PedidoS (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  <- pedidos, elem (Producto id nombre precio) prods]
             c2 =(Compra [ PedidoUnitario (Producto id nombre precio)  | (PedidoUnitario (Producto id nombre precio))  <- pedidos,elem (Producto id nombre precio) prods])
         in fusionaCompras c1 c2
 
