@@ -1,4 +1,7 @@
 
+
+import P1A_EX2 where
+    
 {-# LANGUAGE InstanceSigs #-}  
 
 
