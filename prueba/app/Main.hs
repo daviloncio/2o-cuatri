@@ -1,6 +1,7 @@
 module Main (main) where
 
-import Lib
+import P1A_EX1
 
 main :: IO ()
-main = someFunc
+main = do
+       main1

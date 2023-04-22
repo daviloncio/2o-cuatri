@@ -1,3 +1,6 @@
+
+module P1A_EX1 where
+
 --EJ1:
 
 type Ident = Int
@@ -111,5 +114,7 @@ eliminaCompraCantidad (((id,name,precio),cant):xs) cant_max =
   then eliminaCompraCantidad xs cant_max
   else ((id,name,precio),cant) : eliminaCompraCantidad xs cant_max
   
---FUENCARRAL BOBO
+main1 :: IO()
+main1 = do
+        print("yeee")
 

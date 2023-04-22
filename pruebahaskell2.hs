@@ -64,11 +64,12 @@ productoS (Pedido  (Producto codigo nombre precio) cantidad)
   | precio <= 0 = errorPedido (Pedido (Producto codigo nombre precio) cantidad) "el precio del producto no puede ser negativo"
   | nombre == "" = errorPedido (Pedido (Producto codigo nombre precio) cantidad) "el nombre del producto no se ha establecido"
 
-pedidoS :: Producto -> Cantidad -> Maybe Pedido  
+
 --funcion que usaremos para crear instancias de Pedido
 --no hace falta una función de comprobación para crear un pedidoUnitario ya que nos hemos asegurado de que el 
 --producto está creado con los datos correctos
-pedidoS (Producto codigo nombre precio) cantidad
+pedidoS :: Producto -> Cantidad -> Pedido  
+pedidoS (Producto codigo nombre precio) cantidad 
   | cantidad < 0 = errorPedido (Pedido (Producto codigo nombre precio) cantidad) "el pedido no puede tener cantidad negativa"
   | otherwise Pedido (ProductoS codigo nombre precio) cantidad
 
