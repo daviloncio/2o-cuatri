@@ -1,4 +1,6 @@
-
+{-# OPTIONS_GHC -Wno-missing-export-lists #-}
+module P1A_EX2.P1A_EX2 where
+    
 {-# LANGUAGE InstanceSigs #-}  
 
 
@@ -107,12 +109,8 @@ fusionaCompras (Compra c1)(Compra c2) = Compra (concat [c1,c2]) --concat es una 
 --(una con los pedidos y otra con pedidos unitarios) y usar precio compra
 
 precioProductoCompra :: Compra -> Producto -> Float 
-
-precioProductoCompra (Compra pedidos)(Producto a b c) = 
- precioCompra (Compra [ pedidoS (Producto id nombre precio) cantidad |(a,b,c) == (id,nombre,precio),(Pedido (Producto id nombre precio) cantidad)  
- <- pedidos ])+
- precioCompra (Compra [ PedidoUnitario (Producto id nombre precio)  | (a,b,c) == (id,nombre,precio),(PedidoUnitario (Producto id nombre precio))  
- <- pedidos])
+precioProductoCompra (Compra pedidos) (Producto a b c)= precioCompra (Compra [ pedidoS (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  <- pedidos,(Producto a b c)==(Producto id nombre precio) ])+
+ precioCompra (Compra [ PedidoUnitario (Producto id nombre precio)  | (PedidoUnitario (Producto id nombre precio)) <- pedidos,(Producto a b c) == (Producto id nombre precio) ])
 
 buscaPedidosConProducto :: Compra -> Producto -> Compra
 buscaPedidosConProducto (Compra pedidos) (Producto a b c) = 

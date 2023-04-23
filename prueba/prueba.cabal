@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 71764490fc1d897bdbdfe9abd3f074f2238163fbc0be16ab960e365aec353e21
+-- hash: caa23d043c8509350c6496412b00b40a5216d8b479d10c05d5f9b5b240128a32
 
 name:           prueba
 version:        0.1.0.0
@@ -29,6 +29,7 @@ library
   exposed-modules:
       Lib
       P1A_EX1.P1A_EX1
+      P1A_EX2.P1A_EX2
   other-modules:
       Paths_prueba
   hs-source-dirs:
