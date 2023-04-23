@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.0.
+-- This file has been generated from package.yaml by hpack version 0.35.1.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2cc03732ef6ccc4c9b64e1bd8a45ed654df4d85e87004685e65face6c4be6e27
+-- hash: 71764490fc1d897bdbdfe9abd3f074f2238163fbc0be16ab960e365aec353e21
 
 name:           prueba
 version:        0.1.0.0
@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      P1A_EX1.P1A_EX1
   other-modules:
       Paths_prueba
   hs-source-dirs:
