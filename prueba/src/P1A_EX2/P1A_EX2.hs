@@ -82,7 +82,7 @@ product2 = productoS 3 "naranja" 2
 order0 = PedidoUnitario product0
 order1 = pedidoS product1 3
 order2 = pedidoS product2 5
-pur0 = Compra [order0,order1,order1]
+pur0 = Compra [order1]
 pur1 = Compra [order2]
 
 pedido_defectuoso = Pedido product1 (-1)
@@ -119,15 +119,12 @@ buscaPedidosConProducto :: Compra -> Producto -> Compra
 buscaPedidosConProducto (Compra pedidos) producto =
 
  let c1= Compra
-         [pedidoS p cantidad |
-            (Pedido p cantidad) <- pedidos,
-            producto == p]
+         [Pedido p cantidad | (Pedido p cantidad) <- pedidos,producto == p]
 
      c2= Compra
-         [PedidoUnitario p|
-           (PedidoUnitario p) <- pedidos,
-           producto == p]
+         [PedidoUnitario p| (PedidoUnitario p) <- pedidos,producto == p]
  in fusionaCompras c1 c2
+
 
 buscaPedidosConProductos :: Compra -> [Producto] -> Compra
 --usamos la funcion anterior y foldl
@@ -182,17 +179,17 @@ main2 = do
 
 
         --print (eliminaProductoCompra pur0 product0)
-        print (precioCompra pur0)
+        print(precioCompra pur0)
         print(fusionaCompras pur0 pur1)
         print(precioPedido order1)
         print "yee"
         print(fusionaCompras pur0 pur1)
         print("yeee")
-        print (buscaPedidosConProducto pur0 product1)
+        print(buscaPedidosConProducto pur0 product1)
         print(buscaPedidosConProducto pur0 product0)
         print(buscaPedidosConProductos pur0 [product0,product1])
         print(eliminaProductoCompra pur0 product0)
-        print (eliminaCompraCantidad pur0 1)
+        print(eliminaCompraCantidad pur0 1)
         print ()  --FALTARÍA AQUÍ LA FUNCIÓN DE ELIMINACIÓN DE REPETICIONES
         print ()
         print ()
