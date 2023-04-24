@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -Wno-missing-export-lists #-}
+
 {-# LANGUAGE InstanceSigs #-}
 module P1A_EX2.P1A_EX2 where
 
@@ -138,8 +138,8 @@ buscaPedidosConProductos (Compra pedidos) prods=
 
 eliminaProductoCompra :: Compra -> Producto -> Compra
 eliminaProductoCompra (Compra pedidos) prod=
-        let c1 =(Compra [ pedidoS (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  <- pedidos, (Producto id nombre precio)/=prod])
-            c2 =(Compra [ PedidoUnitario (Producto id nombre precio)  | (PedidoUnitario (Producto id nombre precio))  <- pedidos,(Producto id nombre precio)/=prod])
+        let c1 =(Compra [ pedidoS p cantidad | (Pedido p cantidad)  <- pedidos, p/=prod])
+            c2 =(Compra [ PedidoUnitario p  | (PedidoUnitario p)  <- pedidos,p/=prod])
         in fusionaCompras c1 c2
 
 eliminaCompraCantidad :: Compra -> Cantidad -> Compra
@@ -188,11 +188,12 @@ main2 = do
         print "yee"
         print(fusionaCompras pur0 pur1)
         print("yeee")
-        print (buscaPedidosConProducto pur0 product1)
-        print(buscaPedidosConProducto pur0 product0)
-        print(buscaPedidosConProductos pur0 [product0,product1])
-        print(eliminaProductoCompra pur0 product0)
         print (eliminaCompraCantidad pur0 1)
+
+        --print(buscaPedidosConProducto pur0 product0)
+        --Ñprint(buscaPedidosConProductos pur0 [product0,product1])
+        print(eliminaProductoCompra pur0 product0)
+        
         print ()  --FALTARÍA AQUÍ LA FUNCIÓN DE ELIMINACIÓN DE REPETICIONES
         print ()
         print ()
