@@ -5,10 +5,10 @@ module P1A_EX3.P1A_EX3 where
 module P1A_EX2.P1A_EX2 where
 import Data.List (nubBy)
 
-type Ident = Int
+type Ident = Integer
 type Nombre = String
 type Precio = Fractional
-type Cantidad = Float
+type Cantidad = Integer
 
 --EJERCICIO 6
 
