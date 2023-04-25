@@ -4,7 +4,7 @@ module P1A_EX3.P1A_EX3 where
 {-# LANGUAGE InstanceSigs #-}
 
 import Data.List (nubBy)
-import GHC.Generics (D1)
+
 
 
 
@@ -183,7 +183,7 @@ main3 = do
         print (eliminaProductoCompra pur0 product0)
         print ("eliminaCompraCantidad pur0 1")
         print (eliminaCompraCantidad pur0 1)
-        print "ELIMINAR REPETICIONES, JUNTAR PEDIDOS"
+        print "ELIMINAR REPETICIONES HA PODIDO CON NOSOTROS EN EL MAIN 3"
         print ()  --FALTARÍA AQUÍ LA FUNCIÓN DE ELIMINACIÓN DE REPETICIONES
         print ()
         print ()
@@ -194,6 +194,6 @@ main3 = do
         print ()
         print ()
         print ("")
-        print ("Fin de las ejecuciones del main2")
+        print ("Fin de las ejecuciones del main3!!!!!!")
 
 
