@@ -1,9 +1,9 @@
 
+{-# OPTIONS_GHC -Wno-missing-export-lists #-}
 module P1A_EX3.P1A_EX3 where
-
 {-# LANGUAGE InstanceSigs #-}
 
-import Data.List (nubBy)
+
 
 
 
