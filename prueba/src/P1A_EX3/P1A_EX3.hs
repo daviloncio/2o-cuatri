@@ -1,6 +1,8 @@
 
 {-# OPTIONS_GHC -Wno-missing-export-lists #-}
 module P1A_EX3.P1A_EX3 where
+
+
 {-# LANGUAGE InstanceSigs #-}
 
 
@@ -164,8 +166,10 @@ eliminaCompraCantidad(Compra pedidos) cant_max =
 
 main3:: IO ()
 main3 = do
-        print ("Comienzo de las ejecuciones del main2")
-        print ("")
+        print ("Comienzo de las ejecuciones del main3.")
+        print ""
+        print ("Nos salen todas las funciones excepto la de eliminarRepeticiones")
+        print ""
         --print(pedidoS product0 (-1) )
         print "precioCompra pur0"
         print (precioCompra pur0)
@@ -184,15 +188,9 @@ main3 = do
         print ("eliminaCompraCantidad pur0 1")
         print (eliminaCompraCantidad pur0 1)
         print "ELIMINAR REPETICIONES HA PODIDO CON NOSOTROS EN EL MAIN 3"
-        print ()  --FALTARÍA AQUÍ LA FUNCIÓN DE ELIMINACIÓN DE REPETICIONES
+        print ()  
         print ()
-        print ()
-        print ()
-        print ()
-        print ()
-        print ()
-        print ()
-        print ()
+     
         print ("")
         print ("Fin de las ejecuciones del main3!!!!!!")
 
