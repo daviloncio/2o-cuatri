@@ -1,13 +1,10 @@
 
-{-# OPTIONS_GHC -Wno-missing-export-lists #-}
-module P1A_EX3.P1A_EX3 where
-
-
 {-# LANGUAGE InstanceSigs #-}
-
-
-
-
+{-# OPTIONS_GHC -Wno-missing-export-lists #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE TypeFamilies #-}
+module P1A_EX3.P1A_EX3 where
 
 
 

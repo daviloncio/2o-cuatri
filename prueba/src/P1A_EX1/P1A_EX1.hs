@@ -1,5 +1,3 @@
-
-
 {-# OPTIONS_GHC -Wno-missing-export-lists #-}
 module P1A_EX1.P1A_EX1 where
 
