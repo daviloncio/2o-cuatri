@@ -1,15 +1,13 @@
+
+module P1A_EX3.P1A_EX3 where
+
 {-# LANGUAGE InstanceSigs #-}
 module P1A_EX2.P1A_EX2 where
 import Data.List (nubBy)
 
-
-
-
-
-
 type Ident = Int
 type Nombre = String
-type Precio = Float
+type Precio = Fractional
 type Cantidad = Float
 
 --EJERCICIO 6
@@ -179,8 +177,8 @@ eliminarRepeticiones1(Compra pedidos) =
       new_pedidos = [Pedido un_producto cant | (un_producto, cant) <- zip prods cantidades_prods]
   in Compra (nubBy (==) new_pedidos)
 
-main2 :: IO ()
-main2 = do
+main3:: IO ()
+main3 = do
         print ("Comienzo de las ejecuciones del main2")
         print ("")
         --print(pedidoS product0 (-1) )

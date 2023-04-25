@@ -1,3 +1,4 @@
+
 {-# LANGUAGE InstanceSigs #-}
 module P1A_EX2.P1A_EX2 where
 import Data.List (nubBy)
@@ -147,9 +148,6 @@ eliminaProductoCompra (Compra pedidos) prod=
 
 eliminaCompraCantidad :: Compra -> Cantidad -> Compra
 eliminaCompraCantidad(Compra pedidos) cant_max =
-      if cant_max <= 0
-      then error "la cantidad introducida no es correcta"
-      else
         let c1 = Compra [ pedidoS (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  <- pedidos,cant_max<=cantidad]
             c2 =Compra [ PedidoUnitario (Producto id nombre precio)  | cant_max == 1,(PedidoUnitario (Producto id nombre precio))  <- pedidos ]
         in fusionaCompras c1 c2
