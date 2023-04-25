@@ -2,17 +2,26 @@
 module P1A_EX3.P1A_EX3 where
 
 {-# LANGUAGE InstanceSigs #-}
-module P1A_EX2.P1A_EX2 where
-import Data.List (nubBy)
 
-type Ident = Integer
+import Data.List (nubBy)
+import GHC.Generics (D1)
+
+
+
+
+type Ident a= Integral a => a
 type Nombre = String
-type Precio = Fractional
-type Cantidad = Integer
+type Precio b = Fractional b => b
+type Cantidad c  = Integral c => c
+
+--EJERCICIO 6
+data Producto = Producto (Ident Int) Nombre (Precio Double)
+data Pedido   = Pedido Producto (Cantidad Int) | PedidoUnitario Producto | (:+) Producto (Cantidad Int)
+data Compra   = Compra [Pedido]
 
 --EJERCICIO 6
 
-data Producto = Producto Ident Nombre Precio
+
 
 instance Eq Producto where
     (==) :: Producto -> Producto -> Bool
@@ -29,7 +38,6 @@ instance Show Producto where
 
 
 
-data Pedido = Pedido Producto Cantidad| PedidoUnitario Producto | (:+) Producto Cantidad
 
 instance Show Pedido where
     show (Pedido producto cantidad) = "Pedido " ++ show producto ++ "con cantidad" ++ show cantidad
@@ -37,7 +45,6 @@ instance Show Pedido where
     show ((:+) producto cantidad) = "Pedido usando el :+" ++ show producto ++ "con cantidad" ++ show cantidad -- así no daría error, pero ns cuándo hacemos este ultimo show
 
 
-data Compra = Compra [Pedido]
 instance Show Compra where
     show :: Compra -> String
     show (Compra []) = ""
@@ -49,23 +56,23 @@ instance Eq Pedido where
     (==) (PedidoUnitario producto1)(PedidoUnitario producto2) = producto1 == producto2
     (==) ((:+) producto1 _)((:+) producto2 _) = producto1 == producto2
     (/=) :: Pedido -> Pedido -> Bool
-    (/=) (Pedido producto1 _)(Pedido producto2 _) = not(producto1 == producto2)
-    (/=) (PedidoUnitario  producto1)(PedidoUnitario producto2) = not(producto1 == producto2)
-    (/=) ((:+) producto1 _)((:+) producto2 _) = not(producto1 == producto2)
+    (/=) (Pedido producto1 _)(Pedido producto2 _) = not (producto1 == producto2)
+    (/=) (PedidoUnitario  producto1)(PedidoUnitario producto2) = not (producto1 == producto2)
+    (/=) ((:+) producto1 _)((:+) producto2 _) = not (producto1 == producto2)
 
 
 
 
 --FUNCIONES PARA CONTROLAR ERRORES
 
-productoS :: Int -> String -> Float -> Producto
+productoS :: Int -> String -> Double -> Producto
 productoS id nombre precio
   | precio <= 0 = error  "el precio del producto no puede ser negativo"
   | id <= 0 =  error "el identificador introducido no es correcto"
   | nombre == "" = error  "el nombre del producto no se ha establecido"
   | otherwise = Producto id nombre precio
 
-pedidoS :: Producto -> Cantidad -> Pedido
+pedidoS :: Producto -> Cantidad Int -> Pedido
 --no hace falta una función de comprobación para crear un pedidoUnitario ya que nos hemos asegurado de que el 
 --producto SABEMOS que está creado con los datos correctos
 pedidoS (Producto codigo nombre precio) cantidad
@@ -98,14 +105,14 @@ pur1 = Compra [order2]
 
 --no tiene sentido reescribir las funciones ToString ya que usamos el show.
 
-precioProducto :: Producto -> Float  --son muy sencillas estas dos, no habra que cambiar imagino
+precioProducto :: Producto -> Double --son muy sencillas estas dos, no habra que cambiar imagino
 precioProducto (Producto id nombre precio) = precio
 
-precioPedido :: Pedido -> Float
-precioPedido (Pedido (Producto id nombre precio) cantidad) = precio * cantidad
-precioPedido (PedidoUnitario (Producto id nombre precio)) = precio
+precioPedido :: Integral a => Pedido -> a
+precioPedido (Pedido (Producto id nombre precio) cantidad) = floor precio * fromIntegral cantidad
+precioPedido (PedidoUnitario (Producto id nombre precio)) = round precio
 
-precioCompra :: Compra -> Float
+precioCompra :: Integral a => Compra -> a
 precioCompra (Compra pedidos)= foldr ((+) . precioPedido) 0 pedidos
 
 fusionaCompras :: Compra -> Compra -> Compra  -- FUNCIONAN AMBAS FUSIONA COMPRAS
@@ -115,7 +122,7 @@ fusionaCompras (Compra c1)(Compra c2) = Compra (c1++c2)--concat es una funcion d
 --crear una lista por compresion,creamos dos compras con solo el producto ordenado
 --(una con los pedidos y otra con pedidos unitarios) y usar precio compra
 
-precioProductoCompra :: Compra -> Producto -> Float
+precioProductoCompra :: Integral a => Compra -> Producto -> a
 precioProductoCompra (Compra pedidos) (Producto a b c)= precioCompra (Compra [ pedidoS (Producto id nombre precio) cantidad | (Pedido (Producto id nombre precio) cantidad)  <- pedidos,Producto a b c==Producto id nombre precio ])+
  precioCompra (Compra [ PedidoUnitario (Producto id nombre precio)  | (PedidoUnitario (Producto id nombre precio)) <- pedidos,Producto a b c ==Producto id nombre precio ])
 
@@ -143,7 +150,7 @@ eliminaProductoCompra (Compra pedidos) prod=
             c2 =(Compra [ PedidoUnitario (Producto id nombre precio)  | (PedidoUnitario (Producto id nombre precio))  <- pedidos,(Producto id nombre precio)/=prod])
         in fusionaCompras c1 c2
 
-eliminaCompraCantidad :: Compra -> Cantidad -> Compra
+eliminaCompraCantidad :: Compra -> Cantidad Int -> Compra
 eliminaCompraCantidad(Compra pedidos) cant_max =
       if cant_max <= 0
       then error "la cantidad introducida no es correcta"
@@ -153,53 +160,31 @@ eliminaCompraCantidad(Compra pedidos) cant_max =
         in fusionaCompras c1 c2
 
 
-cantidadProducto :: Compra -> Producto -> Float
---lo usamos para la funcion siguiente,y devuelve el numero de repeticiones que tiene un producto en una compra
-cantidadProducto (Compra pedidos) (Producto id nombre precio) = (precioProductoCompra (Compra pedidos) (Producto id nombre precio)/precio)
---si dividimos el precio total de un producto en la compra entre el precio de la unidad obtenemos la cantidad del producto presente en la compra.
 
-
-eliminarRepeticiones :: Compra -> Compra
-eliminarRepeticiones (Compra pedidos) =
-  let prods1 = [p | (Pedido p cantidad) <- pedidos, notElem p prods1]
-      prods2 = [p | PedidoUnitario p <- pedidos,notElem p prods1 && notElem p prods2]
-      prods = prods1 ++ prods2  --prods es una lista de pedidos
-      cantidades_prods = [cantidadProducto (Compra pedidos) un_producto | un_producto <- prods]
-      new_pedidos = [Pedido un_producto cant | (un_producto, cant) <- zip prods cantidades_prods]
-  in Compra new_pedidos
-
-eliminarRepeticiones1 :: Compra -> Compra
-eliminarRepeticiones1(Compra pedidos) =
-  let prods1 = [Producto id nombre precio | (Pedido (Producto id nombre precio) cantidad) <- pedidos, notElem (Producto id nombre precio) prods2]
-      prods2 = [Producto id nombre precio | PedidoUnitario (Producto id nombre precio) <- pedidos]
-      prods = prods1 ++ [p | p <- prods2, notElem p prods1]
-      cantidades_prods = [cantidadProducto (Compra pedidos) un_producto | un_producto <- prods]
-      new_pedidos = [Pedido un_producto cant | (un_producto, cant) <- zip prods cantidades_prods]
-  in Compra (nubBy (==) new_pedidos)
 
 main3:: IO ()
 main3 = do
         print ("Comienzo de las ejecuciones del main2")
         print ("")
         --print(pedidoS product0 (-1) )
-        print"precioCompra pur0"
-        print(precioCompra pur0)
-        print"fusionaCompras pur0 pur1"
-        print(fusionaCompras pur0 pur1)
-        print"precioPedido order1"
-        print(precioPedido order1)
-        print("buscaPedidosConProducto pur0 product0")
-        print(buscaPedidosConProducto pur0 product1)
-        print("buscaPedidosConProducto pur0 product0")
-        print(buscaPedidosConProducto pur0 product0)
-        print("buscaPedidosConProductos pur0 [product0,product1]")
-        print(buscaPedidosConProductos pur0 [product0,product1])
-        print("eliminaProductoCompra pur0 product0")
-        print(eliminaProductoCompra pur0 product0)
-        print("eliminaCompraCantidad pur0 1")
-        print(eliminaCompraCantidad pur0 1)
+        print "precioCompra pur0"
+        print (precioCompra pur0)
+        print "fusionaCompras pur0 pur1"
+        print (fusionaCompras pur0 pur1)
+        print "precioPedido order1"
+        print (precioPedido order1)
+        print ("buscaPedidosConProducto pur0 product0")
+        print (buscaPedidosConProducto pur0 product1)
+        print ("buscaPedidosConProducto pur0 product0")
+        print (buscaPedidosConProducto pur0 product0)
+        print ("buscaPedidosConProductos pur0 [product0,product1]")
+        print (buscaPedidosConProductos pur0 [product0,product1])
+        print ("eliminaProductoCompra pur0 product0")
+        print (eliminaProductoCompra pur0 product0)
+        print ("eliminaCompraCantidad pur0 1")
+        print (eliminaCompraCantidad pur0 1)
         print "ELIMINAR REPETICIONES, JUNTAR PEDIDOS"
-        print(eliminarRepeticiones1 pur0)  --FALTARÍA AQUÍ LA FUNCIÓN DE ELIMINACIÓN DE REPETICIONES
+        print ()  --FALTARÍA AQUÍ LA FUNCIÓN DE ELIMINACIÓN DE REPETICIONES
         print ()
         print ()
         print ()

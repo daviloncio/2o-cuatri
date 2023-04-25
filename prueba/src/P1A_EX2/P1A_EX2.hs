@@ -1,8 +1,6 @@
-{-# LANGUAGE InstanceSigs #-}
-module P1A_EX2.P1A_EX2 where
+module P1A_EX2.P1A_EX2 where    
 import Data.List (nubBy)
-
-
+{-# LANGUAGE InstanceSigs #-}
 
 
 
@@ -202,14 +200,7 @@ main2 = do
         print(eliminaCompraCantidad pur0 1)
         print "ELIMINAR REPETICIONES, JUNTAR PEDIDOS"
         print(eliminarRepeticiones1 pur0)  --FALTARÍA AQUÍ LA FUNCIÓN DE ELIMINACIÓN DE REPETICIONES
-        print ()
-        print ()
-        print ()
-        print ()
-        print ()
-        print ()
-        print ()
-        print ()
+
         print ("")
         print ("Fin de las ejecuciones del main2")
 
