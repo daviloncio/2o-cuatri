@@ -1,6 +1,8 @@
-module P1A_EX2.P1A_EX2 where    
-import Data.List (nubBy)
 {-# LANGUAGE InstanceSigs #-}
+module P1A_EX2.P1A_EX2 where 
+
+import Data.List (nubBy)
+
 
 
 

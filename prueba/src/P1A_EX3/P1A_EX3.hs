@@ -11,7 +11,7 @@ module P1A_EX3.P1A_EX3 where
 
 
 
-type Ident a= Integral a => a
+type Ident a = Integral a => a
 type Nombre = String
 type Precio b = Fractional b => b
 type Cantidad c  = Integral c => c
