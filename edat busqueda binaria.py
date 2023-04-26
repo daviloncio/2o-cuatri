@@ -112,9 +112,30 @@ class Tree:
         _mirror(self._root) #no devolvemos nada, estamos modificando el árbol
                             #por lo que hacemos un print para comprobar y ya
 
+    def print_path_recursive(self,item):
+        '''tree tiene su propio print path como BSTree.Este es recursivo
+        el caso base se da al encontrar al elemento.USA EL PARENT'''
+        camino=''
+        def recursive(node:self.Node,item):
+            if node._data == item:
+                return f'{node._data}'
+            if (node._left,node._right) == (None,None):
+                return None
+            if node._left != None:
+                busco_izq=recursive(node._left,item)
+                
+            if busco_izq == None and node._right != None: 
+                #solo si hay hijo derecho y si no hemos encontrado por la derecha
+                busco_der = recursive(node._right,item)
+                
+                if busco_der != None: #encontramos algo por la derecha
+                    busco_der = f'{node._data}->'+busco_der   
+                return busco_der #sino devolvemos None
             
-
-    
+            if busco_izq != None: #ha habido suerte por la izq
+                busco_izq = f'{node._data}->'+busco_izq 
+            return busco_izq #devolvemos None
+        print(recursive(self._root,item))
 
 class BSTree(Tree):
     """A link-based binary search tree implementation.
@@ -158,11 +179,16 @@ class BSTree(Tree):
 
     def find(self, item):
         def _find(node:self.Node,item):
-            print(node._data)
+            
+            if node == None:
+                return None
+            
             if item == node._data:
-                return item
+                return node
+            
             if (node._left,node._right) == (None,None):
                 return None
+            
             else:
                 buscar_item = _find(node._left,item)
                 if buscar_item == None:  #si yendo por la izq con la recursión no hemos encontrado lo que buscábamos
@@ -198,19 +224,48 @@ class BSTree(Tree):
                 _print_path(node._left,item)
                           
         _print_path(self._root,item)
-    
+    def _successor(self,x):
+        '''si tiene hijo derecho,el sucesor será el menor del subárbol
+           sino, buscará al primer hijo izquierdo por arriba y cogerá a su padre
+           si nos encontramos con la raíz y no hemos dado con un hijo izq devolvemos None'''
+        if x._right != None:
+            buscar_min= x._right
+            while buscar_min._left != None:
+                buscar_min = buscar_min._left
+            return buscar_min
+        
+        buscar_hijo_izq = x
+        while buscar_hijo_izq._parent != None:
+            
+            if buscar_hijo_izq._parent._left == buscar_hijo_izq:
+                return buscar_hijo_izq._parent
+            
+            buscar_hijo_izq=buscar_hijo_izq._parent
+       
+        
     def successor(self, item):
-        x = self._find(self._root, item) # returns the node with item as data
+        x = self.find(item) # returns the node with item as data
         if x != None:
             y = self._successor(x)
+        else:
+            y = None
+        if y != None:
+            return y._data
+        return None
             
-            
-            
+j = BSTree()
+for i in (15,6,18,3,7,17,20,2,4,13,9):
+    j.insert(i)
+
+print(j)
+
+print(j.successor(15))
+     
                
    
+
    
-   
-   def delete (self,item):
+'''    def delete (self,item):
         def _delete(node:self.Node,item):
             if node._data == None:
                 return
@@ -224,27 +279,12 @@ class BSTree(Tree):
             #NO ACABEEEEE
             else:
                 _delete(node._right,item)
-                _delete(node._left,item)
+                _delete(node._left,item)'''
             
             
             
             
-        
- 
-            
-            
-                    
-                    
-                    
 
-
-    
-
-j = BSTree()
-for i in (25,15,50,10,22,35,70,4,12,18,24,31,44,66,90):
-    j.insert(i)
-j.find(90)
-j.print_path(90)
 
 
 
