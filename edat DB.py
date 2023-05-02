@@ -34,8 +34,7 @@ class DB:
         author_abdb = BSTree_Author()
         for i in range(len(self._records)):
             for autor in (self._records[i]["author"]):
-                author_abdb.insert(Author(autor,i))
-            
+                author_abdb.insert(Author(autor,i))  
         return author_abdb
  
     
@@ -50,13 +49,15 @@ class DB:
         '''Apply the function f to the author with key = author'''
         #hago find autor es str y lo hago sobre el nodo que devuelve find
         #la funcion tiene que devolver lo que deuvleva la función
+        return f(self._authors_tree.find(author), *args, **kwargs)
+    
     def get_authors_info(self, f, *args, **kwargs):
         '''Devuelve una lista con el resultado de aplicar la función f
         a todos los autores de la base datos.
         Para ello, se aplica la función f a todos los nodos del árbol
         '''
 
-        return self._authors_tree(f,*args,**kwargs)
+        return self._authors_tree.apply_function(f,*args,**kwargs)
     
     
     
@@ -147,7 +148,7 @@ class Author:
     def __add__(self, other):
         '''Modifica el diccionario de self._atrib con la información de other.
         Este metodo magico lo vamos a ir usando para poder modificar un nodo y meter más info haciendo []+[aquí iría la referencia del archivo]'''
-        self._cites += other.get_attrib['cites'] #lo usamos porque es privado
+        self._cites = self._cites + other.get_attrib['cites'] #lo usamos porque es privado
         self._colab.add(other.get_author())
     def __hash__(self):
         pass
