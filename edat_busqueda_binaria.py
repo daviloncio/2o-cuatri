@@ -53,7 +53,6 @@ class Tree:
                     
         _preorder(self._root,result)
         return result
-        pass
     def postorder(self):
         """Returns a list with all nodes. Supports an inorder
         traversal on a view of self. Recursive
