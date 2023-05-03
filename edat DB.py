@@ -1,4 +1,5 @@
 from edat_busqueda_binaria import BSTree,Tree
+
 import bibtexparser
 from bibtexparser.bparser import BibTexParser
 from bibtexparser.customization import author
@@ -6,7 +7,7 @@ from bibtexparser.customization import author
 #REUSAR DE LOS MÉTODOS DE ARBOL BINARIO LO MÁXIMO POSIBLE
 class DB:
     def __init__(self, file):
-        self._records = self._read_file(file) # list ofdictionaries
+        self._records = self._read_file(file) # list of dictionaries
         self._authors_tree = self._do_author_tree(self._records) #Author's ABdB
         self._file = file
     
@@ -31,35 +32,50 @@ class DB:
     def _do_author_tree(self, list_records: list):
         ''' Creates an ABdB with the authors. Returns the ABdB'''
         author_abdb = BSTree_Author()
-        for element in self._records:
-            author_abdb.insert(element["author"])
+        for i in range(len(self._records)):
+            for autor in (self._records[i]["author"]):
+                author_abdb.insert(Author(autor,i))  
+        return author_abdb
  
     
-    def get_author_records(self, author_:str) -> list: #
+    def get_author_records(self, author_:str) -> list: #recorremos el arbol binario
         "Returns the author's records"
-        pass
-    def get_author_info(self, author, f, *args, **kwargs) -> list:
-        '''Apply the function f to all nodes
-        devuelve el retorno de f
-        '''
-        pass
+        nodo_del_autor = self._authors_tree.find(author_)
+        if nodo_del_autor == None:
+            return None
+        return nodo_del_autor._data.get_attrib('cites')
+        
+    def get_author_info(self, author, f, *args, **kwargs):
+        '''Apply the function f to the author with key = author'''
+        #hago find autor es str y lo hago sobre el nodo que devuelve find
+        #la funcion tiene que devolver lo que deuvleva la función
+        return f(self._authors_tree.find(author), *args, **kwargs)
+    
     def get_authors_info(self, f, *args, **kwargs):
-        '''Apply the function f to all nodes
+        '''Devuelve una lista con el resultado de aplicar la función f
+        a todos los autores de la base datos.
+        Para ello, se aplica la función f a todos los nodos del árbol
         '''
-        pass
+
+        return self._authors_tree.apply_function(f,*args,**kwargs)
     
     
     
 class BSTree_Author(BSTree):
-    def insert(self, item):
+    def insert(self, item):  #objeto clase author
         '''Adds item to its proper place in the tree. Probablemente haya que modificar el insert
         '''
 
         def _insert(node, item):
+
             '''Assume BSTree is not empty'''
-            if item < node.data:   #nada más llamamos a la función, la primera compraración es con el nodo raíz
+            
+            if item == node._data:
+                node._data = node._data + item
+                
+            if item < node._data:   #nada más llamamos a la función, la primera compraración es con el nodo raíz
                 if node._left == None:
-                    node._left = self.Node(Author(item),node)
+                    node._left = self.Node(item,node)
                     
                 else:
                     _insert(node._left, item)
@@ -70,8 +86,6 @@ class BSTree_Author(BSTree):
                     _insert(node._right, item)
             else:
                 return
-            """if self.find(item) != None:
-            raise Exception('ese número ya está dentro del árbol')"""
         if self.is_empty():
             self._size += 1
             self._root = self.Node(item)
@@ -86,7 +100,20 @@ class BSTree_Author(BSTree):
         valor
         almacena el retorno de f sobre el nodo. (Recursiva)
         '''
-        pass
+        result=[]
+        def _apply_function(node:self.Node,lista):
+            if (node._left,node._right) == (None,None):
+                lista.append({node._data.get_author() : f(node, *args, **kwargs)})
+                return 
+            else:
+                lista.append({node._data.get_author() : f(node, *args, **kwargs)})
+                _apply_function(node._left,lista)
+                #si tiene nodo hijo derecho
+                if node._right != None:
+                    _apply_function(node._right,lista)
+                    
+        _apply_function(self._root,result)
+        return result
     
     
 class Author:
@@ -102,33 +129,50 @@ class Author:
             self._attrib['colab'] = colab
         else:
             self._attrib['colab'] = set()
-        def get_author(self):
-            return self._key
-        def get_attrib(self, attrib):
-            return self._attrib[attrib]
-        def __eq__(self, other):
-            if self._key == other._key:
-                return True
-            return False
-        def __gt__(self, other):
-            if self._key>other._key:
-                return True
-            return False
-        def __lt__(self, other):
-            if self._key<other._key:
-                return True
-            return False
-        def __add__(self, other):
-            '''Modifica el diccionario de self._atrib con la información de other.
-            Este metodo magico lo vamos a ir usando para poder modificar un nodo y meter más info haciendo []+[aquí iría la referencia del archivo]'''
-            self._cites += other.get_attrib["cites"] #lo usamos porque es privado
-            pass
-        def __hash__(self):
-            pass
-        def __str__(self):
-            str_ = self._key
-            return str_
+    def get_author(self):
+        return self._key
+    def get_attrib(self, attrib):
+        return self._attrib[attrib]
+    def __eq__(self, other):       
+        if self._key == other.get_author():
+            return True
+        return False         
+    def __gt__(self, other):
+        if self._key>other.get_author():
+            return True
+        return False
+    def __lt__(self, other):
+        if self._key<other.get_author():
+            return True
+        return False
+    def __add__(self, other):
+        '''Modifica el diccionario de self._atrib con la información de other.
+        Este metodo magico lo vamos a ir usando para poder modificar un nodo y meter más info haciendo []+[aquí iría la referencia del archivo]'''
+        self._cites = self._cites + other.get_attrib['cites'] #lo usamos porque es privado
+        self._colab.add(other.get_author())
+    def __hash__(self):
+        pass
+    def __str__(self):
+        str_ = self._key
+        return str_
 
-         
-db = DB("toy_bibtex.bib")
-print(db._records)
+
+
+#MAIN PROGRAM 
+
+db = DB('toy_bibtex.bib') # crea la BB.DD
+print(db._authors_tree)
+
+
+
+author = 'Clavito, Pablito'
+print(f'\nReferencias del autor: {author}')
+print(db.get_author_records(author))
+"""
+author = 'Clavito, Pablito'
+print(f'\nColaboradores del autor: {author}')
+print(db.get_author_info(author, Author.get_attrib, 'colab'))
+print(f'\nTotal de publicaciones del autor: {author}')
+print(len(db.get_author_info(author, Author.get_attrib, 'cites')))
+print(f'\nLista con los colaboradores de cada uno de los autores:')
+print(db.get_authors_info(Author.get_attrib, 'colab'))"""

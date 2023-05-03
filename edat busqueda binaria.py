@@ -53,6 +53,7 @@ class Tree:
                     
         _preorder(self._root,result)
         return result
+        pass
     def postorder(self):
         """Returns a list with all nodes. Supports an inorder
         traversal on a view of self. Recursive
@@ -240,6 +241,8 @@ class BSTree(Tree):
                 return buscar_hijo_izq._parent
             
             buscar_hijo_izq=buscar_hijo_izq._parent
+       
+        
     def successor(self, item):
         x = self.find(item) # returns the node with item as data
         if x != None:
@@ -249,31 +252,34 @@ class BSTree(Tree):
         if y != None:
             return y._data
         return None
-    
-    def _transplant(self, u, v):
-        if u._parent == None:
-            self._root = v
-        elif u == u._parent._left:
-            u._parent._left = v
-        
-        else:
-            u._parent._right = v
-        if v._data != None:
-            v._parent = u._parent
             
-'''j = BSTree()
+j = BSTree()
 for i in (15,6,18,3,7,17,20,2,4,13,9):
     j.insert(i)
 
 print(j)
 
-print(j.successor(15))'''
+print(j.successor(15))
      
                
    
 
    
-
+'''    def delete (self,item):
+        def _delete(node:self.Node,item):
+            if node._data == None:
+                return
+            if node._data == item:
+                if ._left == None and item._right == None:
+                    a = self._parent
+                    if a._left == item:
+                        a._left = None
+                    if a._right == item:
+                        a._right = None
+            #NO ACABEEEEE
+            else:
+                _delete(node._right,item)
+                _delete(node._left,item)'''
             
             
             
