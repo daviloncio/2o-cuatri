@@ -70,10 +70,10 @@ class BSTree_Author(BSTree):
 
             '''Assume BSTree is not empty'''
             
-            if item == node._data:
+            if item == node._data:  #????
                 node._data = node._data + item
                 
-            if item < node._data:   #nada más llamamos a la función, la primera compraración es con el nodo raíz
+            if item < node._data.get_author:   #node._data es el objeto autor
                 if node._left == None:
                     node._left = self.Node(item,node)
                     
@@ -122,7 +122,9 @@ class Author:
         self._key = author # author name:
         self._attrib = dict()
         if cites: # index cite in the db
-            self._attrib['cites'] = cites
+
+            self._attrib['cites'] = list()
+            self._attrib['cites'].append(cites)
         else:
             self._attrib['cites'] = list()
         if colab: # conjunto colaboradores
@@ -148,8 +150,8 @@ class Author:
     def __add__(self, other):
         '''Modifica el diccionario de self._atrib con la información de other.
         Este metodo magico lo vamos a ir usando para poder modificar un nodo y meter más info haciendo []+[aquí iría la referencia del archivo]'''
-        self._cites = self._cites + other.get_attrib['cites'] #lo usamos porque es privado
-        self._colab.add(other.get_author())
+        self._attrib['cites'] += other.get_attrib('cites') #lo usamos porque es privado
+        self._attrib['colab'].add(other.get_author())
     def __hash__(self):
         pass
     def __str__(self):
