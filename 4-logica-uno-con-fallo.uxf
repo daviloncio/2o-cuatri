@@ -1,0 +1,69 @@
+<diagram program="umletino" version="15.1"><zoom_level>8</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLUseCase</id><coordinates><x>96</x><y>184</y><w>176</w><h>40</h></coordinates><panel_attributes>sevilla cadiz</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>120</x><y>96</y><w>120</w><h>40</h></coordinates><panel_attributes>conectado
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>48</x><y>280</y><w>120</w><h>40</h></coordinates><panel_attributes>carretera(sevilla,cadiz)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>40</x><y>384</y><w>120</w><h>64</h></coordinates><panel_attributes>conectado(sevilla,cadiz)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>104</x><y>216</y><w>56</w><h>80</h></coordinates><panel_attributes>
+</panel_attributes><additional_attributes>50;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>72</x><y>312</y><w>48</w><h>88</h></coordinates><panel_attributes></panel_attributes><additional_attributes>40;10;15;90</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>72</x><y>488</y><w>24</w><h>24</h></coordinates><panel_attributes>V
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>72</x><y>440</y><w>32</w><h>64</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;15;60</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>152</x><y>144</y><w>24</w><h>24</h></coordinates><panel_attributes>1</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>96</x><y>224</y><w>24</w><h>24</h></coordinates><panel_attributes>2</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>64</x><y>328</y><w>24</w><h>24</h></coordinates><panel_attributes>3</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>56</x><y>448</y><w>24</w><h>24</h></coordinates><panel_attributes>C4</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>344</x><y>200</y><w>80</w><h>24</h></coordinates><panel_attributes>X=_20864
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>344</x><y>224</y><w>232</w><h>216</h></coordinates><panel_attributes>[trace] 5 ?- conectado(sevilla,cadiz).
+   Call: (10) conectado(sevilla, cadiz) ? creep
+   Call: (11) carretera(sevilla, cadiz) ? creep
+   Exit: (11) carretera(sevilla, cadiz) ? creep
+   Exit: (10) conectado(sevilla, cadiz) ? creep
+true .
+
+[trace] 6 ?- conectado(cadiz,sevilla). 
+   Call: (10) conectado(cadiz, sevilla) ? creep
+   Call: (11) carretera(cadiz, sevilla) ? creep
+   Fail: (11) carretera(cadiz, sevilla) ? creep
+   Redo: (10) conectado(cadiz, sevilla) ? creep
+   Call: (11) carretera(cadiz, _10586) ? creep
+   Fail: (11) carretera(cadiz, _10586) ? creep
+   Fail: (10) conectado(cadiz, sevilla) ? creep
+false.</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>344</x><y>80</y><w>144</w><h>104</h></coordinates><panel_attributes>    carretera(cordoba,granada).
+    carretera(cordoba,jaen).
+    carretera(cordoba,malaga).
+    carretera(cordoba,sevilla).
+    carretera(sevilla,cadiz).
+    carretera(sevilla,huelva).
+    carretera(sevilla,malaga).</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>0</x><y>248</y><w>80</w><h>24</h></coordinates><panel_attributes>Exit(2)=E2=f(a)
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>48</x><y>360</y><w>48</w><h>24</h></coordinates><panel_attributes>E3=g(a)
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>344</x><y>440</y><w>192</w><h>40</h></coordinates><panel_attributes>Backtracking 
+	Redo se ejecuta sobre "choice points"
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>872</x><y>120</y><w>176</w><h>40</h></coordinates><panel_attributes> cadiz sevilla</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>896</x><y>32</y><w>120</w><h>40</h></coordinates><panel_attributes>conectado
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>952</x><y>64</y><w>32</w><h>72</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;15;70</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>832</x><y>216</y><w>104</w><h>40</h></coordinates><panel_attributes>:- g(a), h(a)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>952</x><y>200</y><w>144</w><h>56</h></coordinates><panel_attributes>conectado(cadiz,sevilla)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>824</x><y>336</y><w>80</w><h>24</h></coordinates><panel_attributes>:- h(a)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>936</x><y>432</y><w>152</w><h>64</h></coordinates><panel_attributes>fail conectado(cadiz,sevilla)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>880</x><y>152</y><w>56</w><h>80</h></coordinates><panel_attributes>
+</panel_attributes><additional_attributes>50;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>976</x><y>152</y><w>48</w><h>64</h></coordinates><panel_attributes>
+</panel_attributes><additional_attributes>10;10;40;60</additional_attributes></element><element><id>Relation</id><coordinates><x>856</x><y>248</y><w>40</w><h>104</h></coordinates><panel_attributes></panel_attributes><additional_attributes>30;10;15;110</additional_attributes></element><element><id>Relation</id><coordinates><x>992</x><y>248</y><w>40</w><h>56</h></coordinates><panel_attributes></panel_attributes><additional_attributes>30;10;15;50</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>992</x><y>528</y><w>24</w><h>24</h></coordinates><panel_attributes>X</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>992</x><y>488</y><w>40</w><h>56</h></coordinates><panel_attributes></panel_attributes><additional_attributes>30;10;15;50</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>848</x><y>424</y><w>24</w><h>24</h></coordinates><panel_attributes>X
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>848</x><y>352</y><w>32</w><h>88</h></coordinates><panel_attributes></panel_attributes><additional_attributes>20;10;15;90</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>928</x><y>80</y><w>24</w><h>24</h></coordinates><panel_attributes>1</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>872</x><y>160</y><w>24</w><h>24</h></coordinates><panel_attributes>2</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>840</x><y>264</y><w>24</w><h>24</h></coordinates><panel_attributes>3</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>832</x><y>384</y><w>24</w><h>24</h></coordinates><panel_attributes>C4</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>1000</x><y>160</y><w>48</w><h>32</h></coordinates><panel_attributes>Redo 1</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>1024</x><y>264</y><w>24</w><h>24</h></coordinates><panel_attributes>3</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>1024</x><y>456</y><w>24</w><h>24</h></coordinates><panel_attributes>4</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1120</x><y>136</y><w>80</w><h>24</h></coordinates><panel_attributes>X=_20864
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>1104</x><y>160</y><w>232</w><h>216</h></coordinates><panel_attributes>[trace] 5 ?- conectado(sevilla,cadiz).
+   Call: (10) conectado(sevilla, cadiz) ? creep
+   Call: (11) carretera(sevilla, cadiz) ? creep
+   Exit: (11) carretera(sevilla, cadiz) ? creep
+   Exit: (10) conectado(sevilla, cadiz) ? creep
+true .
+
+[trace] 6 ?- conectado(cadiz,sevilla). 
+   Call: (10) conectado(cadiz, sevilla) ? creep
+   Call: (11) carretera(cadiz, sevilla) ? creep
+   Fail: (11) carretera(cadiz, sevilla) ? creep
+   Redo: (10) conectado(cadiz, sevilla) ? creep
+   Call: (11) carretera(cadiz, _10586) ? creep
+   Fail: (11) carretera(cadiz, _10586) ? creep
+   Fail: (10) conectado(cadiz, sevilla) ? creep
+false.</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>1120</x><y>16</y><w>144</w><h>104</h></coordinates><panel_attributes>    carretera(cordoba,granada).
+    carretera(cordoba,jaen).
+    carretera(cordoba,malaga).
+    carretera(cordoba,sevilla).
+    carretera(sevilla,cadiz).
+    carretera(sevilla,huelva).
+    carretera(sevilla,malaga).</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>816</x><y>184</y><w>80</w><h>24</h></coordinates><panel_attributes>Exit(2)=E2=f(a)
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>824</x><y>296</y><w>48</w><h>24</h></coordinates><panel_attributes>E3=g(a)
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1024</x><y>488</y><w>64</w><h>24</h></coordinates><panel_attributes>E4=h(b)
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1032</x><y>288</y><w>64</w><h>24</h></coordinates><panel_attributes>E3=g(b)
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>992</x><y>544</y><w>64</w><h>24</h></coordinates><panel_attributes>E1=k(b)
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1120</x><y>376</y><w>192</w><h>40</h></coordinates><panel_attributes>Backtracking 
+	Redo se ejecuta sobre "choice points"
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>928</x><y>288</y><w>152</w><h>64</h></coordinates><panel_attributes>fail conectado(cadiz,sevilla)</panel_attributes><additional_attributes></additional_attributes></element></diagram>

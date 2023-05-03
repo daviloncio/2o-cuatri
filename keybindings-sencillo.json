@@ -1,0 +1,72 @@
+[
+    {   // ejecutar en python
+        "key": "f5",
+        "command": "python.execInTerminal",
+        "when": "resourceLangId == python"
+    },
+    {   // arrancar intérprete haskell
+        "key": "Ctrl+F6",
+        "command": "extension.multiCommand.execute",
+        "when": "resourceLangId == haskell",        
+        "args": { 
+            "sequence": [
+                {
+                    "command": "workbench.action.files.save"
+                },  
+                {
+                    "command": "runInTerminal.run",
+                    "args": {"cmd": "cd \"${fileDirname}\"", "match": ".*"},
+                },				
+                {
+                    "command": "runInTerminal.run",
+                    "args": {"cmd": "stack ghci ${fileBasename}", "match": ".*"}
+                }
+            ]
+        }
+    },
+    {   // ejecutar "main" en haskell
+        "key": "F6",
+        "command": "extension.multiCommand.execute",
+        "when": "resourceLangId == haskell",
+        "args": { 
+            "sequence": [
+                {
+                    "command": "workbench.action.files.save"
+                },
+                {
+                    "command": "runInTerminal.run",
+                    "args": {"cmd": ":r", "match": ".*"}
+                },
+                {
+                    "command": "runInTerminal.run",
+                    "args": {"cmd": "main", "match": ".*"}
+                }
+            ]
+        }
+    },
+    {   // ejecutar "main" en prolog
+        "key": "F7", 
+        "command": "extension.multiCommand.execute",
+        "when": "resourceLangId == prolog",
+        "args": { 
+            "sequence": [
+                {
+                    "command": "workbench.action.files.save"
+                },
+                {
+                    "command": "prolog.load.document"
+                },                
+                {
+                    "command": "workbench.action.terminal.focus"
+                },
+                {
+                    "command": "workbench.action.terminal.sendSequence",
+                    "args": {"text": "main.\n"}
+                },
+                {
+                    "command": "workbench.action.focusActiveEditorGroup"
+                }                
+            ]
+        }
+    }
+]

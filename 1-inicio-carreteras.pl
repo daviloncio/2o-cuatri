@@ -1,3 +1,4 @@
+%logica1confallo->relacion trace y arbol de ejecucion
 % Hechos
     carretera(cordoba,granada).
     carretera(cordoba,jaen).
@@ -8,10 +9,16 @@
     carretera(sevilla,malaga).
 % Reglas
     conectado(Origen,Destino):- carretera(Origen, Destino).
+    conectado(Origen,Destino):- carretera(Destino,Origen).
     conectado(Origen,Destino):-  % definición con recursividad
         carretera(Origen,Intermedio), conectado(Intermedio,Destino).
+    conectado(Origen,Destino):-  % definición con recursividad
+        carretera(Destino,Intermedio), conectado(Intermedio,Origen).
+    
 
 main :- print("inicio-carreteras").
+     :- print("yea")
+
 
 /* Ejemplos de consultas
 
