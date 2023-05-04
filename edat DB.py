@@ -32,9 +32,13 @@ class DB:
     def _do_author_tree(self, list_records: list):
         ''' Creates an ABdB with the authors. Returns the ABdB'''
         author_abdb = BSTree_Author()
-        for i in range(len(self._records)):
-            for autor in (self._records[i]["author"]):
-                author_abdb.insert(Author(autor,i))  
+        for i in range(len(list_records)):
+            for autor in (list_records[i]["author"]):
+                colabs = list_records[i]["author"]
+                colabs.remove(autor)
+                print(colabs)
+                print("---------------------------------")
+                author_abdb.insert(Author(autor,i,colabs))  
         return author_abdb
  
     
@@ -45,11 +49,13 @@ class DB:
             return None
         return nodo_del_autor._data.get_attrib('cites')
         
-    def get_author_info(self, author, f, *args, **kwargs):
+    def get_author_info(self, author:str, f, *args, **kwargs):
         '''Apply the function f to the author with key = author'''
         #hago find autor es str y lo hago sobre el nodo que devuelve find
         #la funcion tiene que devolver lo que deuvleva la función
-        return f(self._authors_tree.find(author), *args, **kwargs)
+        author_node = self._authors_tree.find(author)
+        author_obj = author_node._data
+        return f(author_obj,*args, **kwargs)
     
     def get_authors_info(self, f, *args, **kwargs):
         '''Devuelve una lista con el resultado de aplicar la función f
@@ -65,15 +71,14 @@ class BSTree_Author(BSTree):
     def insert(self, item):  #objeto clase author
         '''Adds item to its proper place in the tree. Probablemente haya que modificar el insert
         '''
-
+        
         def _insert(node, item):
 
             '''Assume BSTree is not empty'''
-            
-            if item == node._data:  #????
-                node._data = node._data + item
+            if item == node._data:
+                node._data + item 
                 
-            if item < node._data.get_author:   #node._data es el objeto autor
+            if item < node._data:   #node._data es el objeto autor
                 if node._left == None:
                     node._left = self.Node(item,node)
                     
@@ -92,6 +97,32 @@ class BSTree_Author(BSTree):
         else:
             _insert(self._root,item)
             self._size += 1
+            
+
+    def find(self, item): 
+        def _find(node:self.Node,item):
+            if node == None:
+                return None
+            if item == node._data.get_author():
+                return node
+            
+            if (node._left,node._right) == (None,None):
+                return None
+            
+            else:
+                buscar_item = _find(node._left,item)
+                if buscar_item == None:  #si yendo por la izq con la recursión no hemos encontrado lo que buscábamos
+                    if node._right != None: #probamos recursión preguntando si hay un nodo hijo derecho
+                        return (_find(node._right,item))
+                    else:
+                        return None
+                else:
+                    return buscar_item
+                
+        z=_find(self._root,item)
+        return z
+    
+    
     def apply_function(self, f, *args, **kwargs) -> list:
         '''Recorre el arbol en preorden, aplica la funcion f
         a cada nodo.
@@ -99,22 +130,25 @@ class BSTree_Author(BSTree):
         es un diccionario cuya clave es la llave del nodo y cuyo
         valor
         almacena el retorno de f sobre el nodo. (Recursiva)
-        '''
-        result=[]
-        def _apply_function(node:self.Node,lista):
+            '''
+        result= list()
+        def _apply_function(node:self.Node,lista,f,*args,**kwargs):
             if (node._left,node._right) == (None,None):
-                lista.append({node._data.get_author() : f(node, *args, **kwargs)})
+                dic = dict()
+                dic[node._data.get_author()] =f(node._data,*args, **kwargs)
+                lista.append(dic)
                 return 
             else:
-                lista.append({node._data.get_author() : f(node, *args, **kwargs)})
-                _apply_function(node._left,lista)
-                #si tiene nodo hijo derecho
+                dic = dict()
+                dic[node._data.get_author()] =f(node._data,*args, **kwargs)
+                lista.append(dic)
+                _apply_function(node._left,lista,f,*args,**kwargs)
+                
                 if node._right != None:
-                    _apply_function(node._right,lista)
+                    _apply_function(node._right,lista,f,*args,**kwargs)
                     
-        _apply_function(self._root,result)
+        _apply_function(self._root,result,f,*args,**kwargs)
         return result
-    
     
 class Author:
     '''Información que se guarda en los nodos del árbol'''
@@ -152,6 +186,8 @@ class Author:
         Este metodo magico lo vamos a ir usando para poder modificar un nodo y meter más info haciendo []+[aquí iría la referencia del archivo]'''
         self._attrib['cites'] += other.get_attrib('cites') #lo usamos porque es privado
         self._attrib['colab'].add(other.get_author())
+        
+        
     def __hash__(self):
         pass
     def __str__(self):
@@ -170,11 +206,10 @@ print(db._authors_tree)
 author = 'Clavito, Pablito'
 print(f'\nReferencias del autor: {author}')
 print(db.get_author_records(author))
-"""
 author = 'Clavito, Pablito'
 print(f'\nColaboradores del autor: {author}')
 print(db.get_author_info(author, Author.get_attrib, 'colab'))
 print(f'\nTotal de publicaciones del autor: {author}')
 print(len(db.get_author_info(author, Author.get_attrib, 'cites')))
 print(f'\nLista con los colaboradores de cada uno de los autores:')
-print(db.get_authors_info(Author.get_attrib, 'colab'))"""
+print(db.get_authors_info(Author.get_attrib, 'colab'))
