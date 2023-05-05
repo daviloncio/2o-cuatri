@@ -32,13 +32,15 @@ class DB:
     def _do_author_tree(self, list_records: list):
         ''' Creates an ABdB with the authors. Returns the ABdB'''
         author_abdb = BSTree_Author()
+        
         for i in range(len(list_records)):
-            for autor in (list_records[i]["author"]):
-                colabs = list_records[i]["author"]
-                colabs.remove(autor)
-                print(colabs)
-                print("---------------------------------")
-                author_abdb.insert(Author(autor,i,colabs))  
+            autores=list_records[i]["author"]
+            print(autores)
+            for autor in autores:  #en la lista nos podemos encontrar uno o más autores
+                ind=autores.index(autor)
+                print(f'{autor} en el indice {i}')
+                author_abdb.insert(Author(autor,i,set(autores[:ind]+autores[ind+1:])))  
+                    
         return author_abdb
  
     
@@ -76,6 +78,8 @@ class BSTree_Author(BSTree):
 
             '''Assume BSTree is not empty'''
             if item == node._data:
+                cites = 'cites'
+                print(f'hacemos add a {node._data.get_attrib(cites)} sumando {item.get_attrib(cites)}')
                 node._data + item 
                 
             if item < node._data:   #node._data es el objeto autor
@@ -86,6 +90,8 @@ class BSTree_Author(BSTree):
                     _insert(node._left, item)
             elif item > node._data:
                 if node._right == None:
+                    colab = 'colab'
+                    print (f'creamos nodo con el autor {item.get_author()} y con colaboradores {item.get_attrib(colab)}')
                     node._right = self.Node(item,node)
                 else:
                     _insert(node._right, item)
@@ -93,6 +99,8 @@ class BSTree_Author(BSTree):
                 return
         if self.is_empty():
             self._size += 1
+            colab = 'colab'
+            print(f'creamos nodo con el autor {item.get_author()} y con colaboradores {item.get_attrib(colab)}')
             self._root = self.Node(item)
         else:
             _insert(self._root,item)
@@ -185,7 +193,8 @@ class Author:
         '''Modifica el diccionario de self._atrib con la información de other.
         Este metodo magico lo vamos a ir usando para poder modificar un nodo y meter más info haciendo []+[aquí iría la referencia del archivo]'''
         self._attrib['cites'] += other.get_attrib('cites') #lo usamos porque es privado
-        self._attrib['colab'].add(other.get_author())
+        
+        self._attrib['colab'].update(other.get_attrib('colab'))
         
         
     def __hash__(self):
@@ -200,7 +209,7 @@ class Author:
 
 db = DB('toy_bibtex.bib') # crea la BB.DD
 print(db._authors_tree)
-
+print(db._records)
 
 
 author = 'Clavito, Pablito'
