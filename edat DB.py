@@ -22,7 +22,7 @@ class DB:
             record = author(record)
             return record
 
-        with open(file) as bibtex_file:
+        with open(file,'r', encoding='utf-8',errors='ignore') as bibtex_file:
             parser = BibTexParser()
             parser.customization = customizations
             bib_database = bibtexparser.load(bibtex_file, parser=parser)
@@ -207,7 +207,7 @@ class Author:
 
 #MAIN PROGRAM 
 
-db = DB('toy_bibtex.bib') # crea la BB.DD
+db = DB('bibtex.bib') # crea la BB.DD
 print(db._authors_tree)
 print(db._records)
 
