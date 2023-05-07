@@ -177,29 +177,23 @@ class BSTree(Tree):
             self._size += 1
 
     def find(self, item):
-        def _find(node:self.Node,item):
-            
-            if node == None:
+        def _find(x:self.Node, item):
+            if x == None:
                 return None
             
-            if item == node._data:
-                return node
-            
-            if (node._left,node._right) == (None,None):
-                return None
-            
+            if item == x._data:
+                return x
+            if item < x._data:
+                return _find(x._left, item)
             else:
-                buscar_item = _find(node._left,item)
-                if buscar_item == None:  #si yendo por la izq con la recursión no hemos encontrado lo que buscábamos
-                    if node._right != None: #probamos recursión preguntando si hay un nodo hijo derecho
-                        return (_find(node._right,item))
-                    else:
-                        return None
-                else:
-                    return buscar_item
-                
-        z=_find(self._root,item)
-        return z
+                return _find(x._right,item)
+        
+        node=_find(self._root,item)
+        
+        if node != None:
+            return node._data
+        return None
+    
     def print_path(self,item):
         def _print_path(node:self.Node,item):
             if node == None:

@@ -14,10 +14,12 @@
         carretera(Origen,Intermedio), conectado(Intermedio,Destino).
     conectado(Origen,Destino):-  % definición con recursividad
         carretera(Destino,Intermedio), conectado(Intermedio,Origen).
-    
+
 
 main :- print("inicio-carreteras").
-     :- print("yea")
+     :- print("iyww").
+     :- conectado(sevilla,cordoba).
+     :- conectado(sevilla,granada).
 
 
 /* Ejemplos de consultas

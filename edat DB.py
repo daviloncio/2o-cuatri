@@ -1,3 +1,7 @@
+import sys
+
+sys.stdin.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8')
 from edat_busqueda_binaria import BSTree,Tree
 
 import bibtexparser
@@ -35,10 +39,10 @@ class DB:
         
         for i in range(len(list_records)):
             autores=list_records[i]["author"]
-            print(autores)
+            #print(autores)
             for autor in autores:  #en la lista nos podemos encontrar uno o más autores
                 ind=autores.index(autor)
-                print(f'{autor} en el indice {i}')
+                #print(f'{autor} en el indice {i}')
                 author_abdb.insert(Author(autor,i,set(autores[:ind]+autores[ind+1:])))  
                     
         return author_abdb
@@ -46,17 +50,26 @@ class DB:
     
     def get_author_records(self, author_:str) -> list: #recorremos el arbol binario
         "Returns the author's records"
-        nodo_del_autor = self._authors_tree.find(author_)
-        if nodo_del_autor == None:
+        nodo_del_autor = self._authors_tree.find(Author( author_))
+        if type(nodo_del_autor) == None:
             return None
-        return nodo_del_autor._data.get_attrib('cites')
+        cites=nodo_del_autor.get_attrib('cites')
+        publicaciones_del_autor=[]
+        
+        for cita in cites:
+            publicaciones_del_autor.append(self._records[cita])
+        return publicaciones_del_autor
         
     def get_author_info(self, author:str, f, *args, **kwargs):
         '''Apply the function f to the author with key = author'''
         #hago find autor es str y lo hago sobre el nodo que devuelve find
         #la funcion tiene que devolver lo que deuvleva la función
-        author_node = self._authors_tree.find(author)
-        author_obj = author_node._data
+        author_obj= self._authors_tree.find(Author(author))
+        
+        if type(author_obj) == None:
+            raise ValueError('jcnqooidcjoihouh')
+        
+        
         return f(author_obj,*args, **kwargs)
     
     def get_authors_info(self, f, *args, **kwargs):
@@ -79,7 +92,7 @@ class BSTree_Author(BSTree):
             '''Assume BSTree is not empty'''
             if item == node._data:
                 cites = 'cites'
-                print(f'hacemos add a {node._data.get_attrib(cites)} sumando {item.get_attrib(cites)}')
+                #print(f'hacemos add a {node._data.get_attrib(cites)} sumando {item.get_attrib(cites)}')
                 node._data + item 
                 
             if item < node._data:   #node._data es el objeto autor
@@ -91,7 +104,7 @@ class BSTree_Author(BSTree):
             elif item > node._data:
                 if node._right == None:
                     colab = 'colab'
-                    print (f'creamos nodo con el autor {item.get_author()} y con colaboradores {item.get_attrib(colab)}')
+                    #print (f'creamos nodo con el autor {item.get_author()} y con colaboradores {item.get_attrib(colab)}')
                     node._right = self.Node(item,node)
                 else:
                     _insert(node._right, item)
@@ -100,36 +113,31 @@ class BSTree_Author(BSTree):
         if self.is_empty():
             self._size += 1
             colab = 'colab'
-            print(f'creamos nodo con el autor {item.get_author()} y con colaboradores {item.get_attrib(colab)}')
+            #print(f'creamos nodo con el autor {item.get_author()} y con colaboradores {item.get_attrib(colab)}')
             self._root = self.Node(item)
         else:
             _insert(self._root,item)
             self._size += 1
             
 
-    def find(self, item): 
-        def _find(node:self.Node,item):
-            if node == None:
-                return None
-            if item == node._data.get_author():
-                return node
-            
-            if (node._left,node._right) == (None,None):
+    '''def find(self, item): 
+        
+        def _find(x:self.Node, item):
+            if x == None:
                 return None
             
+            if item == x._data.get_author():
+                return x
+            if item < x._data.get_author():
+                return _find(x._left, item)
             else:
-                buscar_item = _find(node._left,item)
-                if buscar_item == None:  #si yendo por la izq con la recursión no hemos encontrado lo que buscábamos
-                    if node._right != None: #probamos recursión preguntando si hay un nodo hijo derecho
-                        return (_find(node._right,item))
-                    else:
-                        return None
-                else:
-                    return buscar_item
-                
-        z=_find(self._root,item)
-        return z
-    
+                return _find(x._right,item)
+            
+        node=_find(self._root,item)
+        
+        if node != None:
+            return node._data
+        return None    '''
     
     def apply_function(self, f, *args, **kwargs) -> list:
         '''Recorre el arbol en preorden, aplica la funcion f
@@ -207,15 +215,14 @@ class Author:
 
 #MAIN PROGRAM 
 
-db = DB('bibtex.bib') # crea la BB.DD
+db = DB('toy_bibtex.bib') # crea la BB.DD
 print(db._authors_tree)
-print(db._records)
+#print(db._records)
 
 
 author = 'Clavito, Pablito'
 print(f'\nReferencias del autor: {author}')
 print(db.get_author_records(author))
-author = 'Clavito, Pablito'
 print(f'\nColaboradores del autor: {author}')
 print(db.get_author_info(author, Author.get_attrib, 'colab'))
 print(f'\nTotal de publicaciones del autor: {author}')
