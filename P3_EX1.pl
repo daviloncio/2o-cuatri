@@ -13,8 +13,11 @@
     conectado(Origen,Destino):-  % definición con recursividad
         carretera(Origen,Intermedio), conectado(Intermedio,Destino).
     conectado(Origen,Destino):-  % definición con recursividad
-        carretera(Destino,Intermedio), conectado(Intermedio,Origen).
+        carretera(Intermedio,Origen), conectado(Intermedio,Destino).
 
+
+    conectado_por(origen, destino, intermedio):-
+        conectado(Origen,Intermedio),conectado(Intermedio,Destino).
 
 main :- print("inicio-carreteras").
      :- print("iyww").

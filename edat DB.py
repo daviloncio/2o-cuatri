@@ -204,7 +204,6 @@ class Author:
         
         self._attrib['colab'].update(other.get_attrib('colab'))
         
-        
     def __hash__(self):
         pass
     def __str__(self):
