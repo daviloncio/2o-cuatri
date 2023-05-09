@@ -26,7 +26,7 @@ class DB:
             record = author(record)
             return record
 
-        with open(file,'r', encoding='utf-8') as bibtex_file:
+        with open(file,'r', encoding='utf-8',errors='ignore') as bibtex_file:
             parser = BibTexParser()
             parser.customization = customizations
             bib_database = bibtexparser.load(bibtex_file, parser=parser)
@@ -43,6 +43,7 @@ class DB:
             for autor in autores:  #en la lista nos podemos encontrar uno o más autores
                 ind=autores.index(autor)
                 #print(f'{autor} en el indice {i}')
+                print(i,autor)
                 author_abdb.insert(Author(autor,i,set(autores[:ind]+autores[ind+1:])))  
                     
         return author_abdb
@@ -171,10 +172,11 @@ class Author:
     def __init__(self, author, cites = None, colab = None):
         self._key = author # author name:
         self._attrib = dict()
-        if cites: # index cite in the db
+        if cites or cites==0: # index cite in the db
 
             self._attrib['cites'] = list()
             self._attrib['cites'].append(cites)
+            print(f'eeeey aqui meti el cite {cites} con {author}')
         else:
             self._attrib['cites'] = list()
         if colab: # conjunto colaboradores
@@ -215,11 +217,11 @@ class Author:
 #MAIN PROGRAM 
 
 db = DB('bibtex.bib') # crea la BB.DD
-print(db._authors_tree)
+print(db._records)
 #print(db._records)
 
 
-author = 'Clavito, Pablito'
+author ='Clavito, Pablito'
 print(f'\nReferencias del autor: {author}')
 print(db.get_author_records(author))
 print(f'\nColaboradores del autor: {author}')
