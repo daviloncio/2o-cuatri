@@ -43,7 +43,7 @@ class DB:
             for autor in autores:  #en la lista nos podemos encontrar uno o más autores
                 ind=autores.index(autor)
                 #print(f'{autor} en el indice {i}')
-                print(i,autor)
+                
                 author_abdb.insert(Author(autor,i,set(autores[:ind]+autores[ind+1:])))  
                     
         return author_abdb
@@ -152,14 +152,22 @@ class BSTree_Author(BSTree):
         def _apply_function(node:self.Node,lista,f,*args,**kwargs):
             if (node._left,node._right) == (None,None):
                 dic = dict()
-                dic[node._data.get_author()] =f(node._data,*args, **kwargs)
-                lista.append(dic)
+                result_func = f(node._data,*args, **kwargs)
+                if result_func != None:
+                    
+                    dic[node._data.get_author()] = result_func
+                    lista.append(dic)
                 return 
             else:
                 dic = dict()
-                dic[node._data.get_author()] =f(node._data,*args, **kwargs)
-                lista.append(dic)
-                _apply_function(node._left,lista,f,*args,**kwargs)
+                result_func = f(node._data,*args, **kwargs)
+                if result_func != None:
+                    
+                    dic[node._data.get_author()] = result_func
+                    lista.append(dic)
+                
+                if node._left != None:
+                    _apply_function(node._left,lista,f,*args,**kwargs)
                 
                 if node._right != None:
                     _apply_function(node._right,lista,f,*args,**kwargs)
@@ -176,7 +184,7 @@ class Author:
 
             self._attrib['cites'] = list()
             self._attrib['cites'].append(cites)
-            print(f'eeeey aqui meti el cite {cites} con {author}')
+            #print(f'eeeey aqui meti el cite {cites} con {author}')
         else:
             self._attrib['cites'] = list()
         if colab: # conjunto colaboradores
@@ -192,6 +200,7 @@ class Author:
             return True
         return False         
     def __gt__(self, other):
+ 
         if self._key>other.get_author():
             return True
         return False
@@ -217,11 +226,26 @@ class Author:
 #MAIN PROGRAM 
 
 db = DB('bibtex.bib') # crea la BB.DD
-print(db._records)
+
 #print(db._records)
 
+author ='Kondo, Tadashi'
+print(f'\nColaboradores del autor: {author}')
+print(db.get_author_info(author, Author.get_attrib, 'colab'))
+print(f'\nTotal de publicaciones del autor: {author}')
+print(len(db.get_author_info(author, Author.get_attrib, 'cites')))
+a = 10
+print(f"Lista los autores de l base de datos con mas de {a} publicaciones"
+)
+def citas_totales(data, a):
+    l = data.get_attrib('cites')
+    if len(l) > a:
+        return l
+print(db.get_authors_info(citas_totales, a))
 
-author ='Clavito, Pablito'
+
+
+'''
 print(f'\nReferencias del autor: {author}')
 print(db.get_author_records(author))
 print(f'\nColaboradores del autor: {author}')
@@ -229,4 +253,4 @@ print(db.get_author_info(author, Author.get_attrib, 'colab'))
 print(f'\nTotal de publicaciones del autor: {author}')
 print(len(db.get_author_info(author, Author.get_attrib, 'cites')))
 print(f'\nLista con los colaboradores de cada uno de los autores:')
-print(db.get_authors_info(Author.get_attrib, 'colab'))
+print(db.get_authors_info(Author.get_attrib, 'colab'))'''
