@@ -73,7 +73,7 @@ class Tree:
             
         _postorder(self._root,result)
         return result
-        pass
+        
     def __str__(self):
         """Returns a string representation with the tree rotated
         90 degrees counterclockwise.
@@ -112,6 +112,36 @@ class Tree:
         _mirror(self._root) #no devolvemos nada, estamos modificando el árbol
                             #por lo que hacemos un print para comprobar y ya
 
+        
+    def mirror_nuevo_objeto(self):
+        
+        def _mirror(node,objeto):
+            if (node._left,node._right)==(None,None):
+                return 
+            if node._left == None: #no tendrá hijos
+                None
+            else:
+                _mirror(node._left,objeto._left)
+            if node._right == None:
+                None
+            else:
+                _mirror(node._left,objeto._left)
+            
+                if node._right != None:  #comprobación de que existe el hijo derecho
+                    
+                    objeto._left._data, objeto._right._data = self.Node(node._right._data) ,self.Node(node._left._data)
+                    _mirror(node._right,objeto._right)  
+                           
+        nuevo_arbol = Tree()
+        
+        nuevo_arbol._root = self.Node(self._root._data)
+               
+        _mirror(self._root,nuevo_arbol._root) 
+                            
+        return nuevo_arbol
+
+        
+        
     def print_path_recursive(self,item):
         '''tree tiene su propio print path como BSTree.Este es recursivo
         el caso base se da al encontrar al elemento.USA EL PARENT'''
@@ -253,33 +283,22 @@ class BSTree(Tree):
             return y._data
         return None
             
+            
+            
+            
+
 j = BSTree()
-for i in (15,6,18,3,7,17,20,2,4,13,9):
+for i in (7,6,23,18,2,9,124,86,4,3):
     j.insert(i)
-
-print(j)
-
-print(j.successor(15))
+    
      
-               
+va=j.mirror_nuevo_objeto()
+print(va)
+j.mirror()
+print(j)              
    
 
-   
-'''    def delete (self,item):
-        def _delete(node:self.Node,item):
-            if node._data == None:
-                return
-            if node._data == item:
-                if ._left == None and item._right == None:
-                    a = self._parent
-                    if a._left == item:
-                        a._left = None
-                    if a._right == item:
-                        a._right = None
-            #NO ACABEEEEE
-            else:
-                _delete(node._right,item)
-                _delete(node._left,item)'''
+
             
             
             

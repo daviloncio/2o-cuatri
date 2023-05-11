@@ -39,12 +39,13 @@ class DB:
         
         for i in range(len(list_records)):
             autores=list_records[i]["author"]
+            año_publicacion=list_records[i]['year']
             #print(autores)
             for autor in autores:  #en la lista nos podemos encontrar uno o más autores
                 ind=autores.index(autor)
                 #print(f'{autor} en el indice {i}')
                 
-                author_abdb.insert(Author(autor,i,set(autores[:ind]+autores[ind+1:])))  
+                author_abdb.insert(Author(autor,i,set(autores[:ind]+autores[ind+1:]),año_publicacion))  
                     
         return author_abdb
  
@@ -92,8 +93,6 @@ class BSTree_Author(BSTree):
 
             '''Assume BSTree is not empty'''
             if item == node._data:
-                cites = 'cites'
-                #print(f'hacemos add a {node._data.get_attrib(cites)} sumando {item.get_attrib(cites)}')
                 node._data + item 
                 
             if item < node._data:   #node._data es el objeto autor
@@ -104,8 +103,6 @@ class BSTree_Author(BSTree):
                     _insert(node._left, item)
             elif item > node._data:
                 if node._right == None:
-                    colab = 'colab'
-                    #print (f'creamos nodo con el autor {item.get_author()} y con colaboradores {item.get_attrib(colab)}')
                     node._right = self.Node(item,node)
                 else:
                     _insert(node._right, item)
@@ -113,32 +110,12 @@ class BSTree_Author(BSTree):
                 return
         if self.is_empty():
             self._size += 1
-            colab = 'colab'
-            #print(f'creamos nodo con el autor {item.get_author()} y con colaboradores {item.get_attrib(colab)}')
             self._root = self.Node(item)
         else:
             _insert(self._root,item)
             self._size += 1
             
 
-    '''def find(self, item): 
-        
-        def _find(x:self.Node, item):
-            if x == None:
-                return None
-            
-            if item == x._data.get_author():
-                return x
-            if item < x._data.get_author():
-                return _find(x._left, item)
-            else:
-                return _find(x._right,item)
-            
-        node=_find(self._root,item)
-        
-        if node != None:
-            return node._data
-        return None    '''
     
     def apply_function(self, f, *args, **kwargs) -> list:
         '''Recorre el arbol en preorden, aplica la funcion f
@@ -177,7 +154,7 @@ class BSTree_Author(BSTree):
     
 class Author:
     '''Información que se guarda en los nodos del árbol'''
-    def __init__(self, author, cites = None, colab = None):
+    def __init__(self, author, cites = None, colab = None,año=None):
         self._key = author # author name:
         self._attrib = dict()
         if cites or cites==0: # index cite in the db
@@ -191,6 +168,11 @@ class Author:
             self._attrib['colab'] = colab
         else:
             self._attrib['colab'] = set()
+        if año:
+            self._attrib['año']= año
+        else:
+            self._attrib['año']= set()  
+            #lo hacemos con set,porque no queremos para nada tener años repetidos
     def get_author(self):
         return self._key
     def get_attrib(self, attrib):
@@ -215,6 +197,7 @@ class Author:
         
         self._attrib['colab'].update(other.get_attrib('colab'))
         
+        self._attrib['año'].update(other.get_attrib('año'))
     def __hash__(self):
         pass
     def __str__(self):
@@ -227,7 +210,7 @@ class Author:
 
 db = DB('bibtex.bib') # crea la BB.DD
 
-#print(db._records)
+print(db._records)
 
 author ='Kondo, Tadashi'
 print(f'\nColaboradores del autor: {author}')
@@ -241,11 +224,15 @@ def citas_totales(data, a):
     l = data.get_attrib('cites')
     if len(l) > a:
         return l
+def autores_2022(data):
+    años =data.get_attrib('año')
+    if 2022 in años:
+        return años
 print(db.get_authors_info(citas_totales, a))
-
-
-
+print(db.get_authors_info(autores_2022))
 '''
+print('Lista de los autores de la base de datos que publicaron en 2022')
+
 print(f'\nReferencias del autor: {author}')
 print(db.get_author_records(author))
 print(f'\nColaboradores del autor: {author}')
@@ -253,4 +240,5 @@ print(db.get_author_info(author, Author.get_attrib, 'colab'))
 print(f'\nTotal de publicaciones del autor: {author}')
 print(len(db.get_author_info(author, Author.get_attrib, 'cites')))
 print(f'\nLista con los colaboradores de cada uno de los autores:')
-print(db.get_authors_info(Author.get_attrib, 'colab'))'''
+print(db.get_authors_info(Author.get_attrib, 'colab'))
+'''
