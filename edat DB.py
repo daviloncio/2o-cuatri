@@ -39,7 +39,7 @@ class DB:
         
         for i in range(len(list_records)):
             autores=list_records[i]["author"]
-            año_publicacion=list_records[i]['year']
+            año_publicacion=list_records[i]["year"]
             #print(autores)
             for autor in autores:  #en la lista nos podemos encontrar uno o más autores
                 ind=autores.index(autor)
