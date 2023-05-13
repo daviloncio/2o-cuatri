@@ -39,13 +39,19 @@ class DB:
         
         for i in range(len(list_records)):
             autores=list_records[i]["author"]
-            año_publicacion=list_records[i]["year"]
+            try:
+                year_publicacion = int(list_records[i]["year"]) #no queremos str para neustro set()
+            except:
+                year_publicacion = "Unknown"
+            
+            
+            
             #print(autores)
             for autor in autores:  #en la lista nos podemos encontrar uno o más autores
                 ind=autores.index(autor)
                 #print(f'{autor} en el indice {i}')
                 
-                author_abdb.insert(Author(autor,i,set(autores[:ind]+autores[ind+1:]),año_publicacion))  
+                author_abdb.insert(Author(autor,i,set(autores[:ind]+autores[ind+1:]),{year_publicacion}))  
                     
         return author_abdb
  
@@ -93,7 +99,7 @@ class BSTree_Author(BSTree):
 
             '''Assume BSTree is not empty'''
             if item == node._data:
-                node._data + item 
+                node._data=node._data + item 
                 
             if item < node._data:   #node._data es el objeto autor
                 if node._left == None:
@@ -154,10 +160,14 @@ class BSTree_Author(BSTree):
     
 class Author:
     '''Información que se guarda en los nodos del árbol'''
-    def __init__(self, author, cites = None, colab = None,año=None):
+    def __init__(self, author, cites = None, colab = None,year=None):
         self._key = author # author name:
         self._attrib = dict()
-        if cites or cites==0: # index cite in the db
+        
+        if type(cites)==list: 
+            #a la hora de crear un nuevo author con add,podríamos querer introducir una lista de cites
+            self._attrib['cites'] = cites
+        elif cites or cites==0: # index cite in the db
 
             self._attrib['cites'] = list()
             self._attrib['cites'].append(cites)
@@ -168,11 +178,11 @@ class Author:
             self._attrib['colab'] = colab
         else:
             self._attrib['colab'] = set()
-        if año:
-            self._attrib['año']= año
+        if year:
+            self._attrib['year']= year
         else:
-            self._attrib['año']= set()  
-            #lo hacemos con set,porque no queremos para nada tener años repetidos
+            self._attrib['year']= set()  
+            #lo hacemos con set,porque no queremos para nada tener years repetidos
     def get_author(self):
         return self._key
     def get_attrib(self, attrib):
@@ -190,14 +200,23 @@ class Author:
         if self._key<other.get_author():
             return True
         return False
-    def __add__(self, other):
+    
+    def __add__(self,other):
+        
+        new_cites=self._attrib['cites'] + other.get_attrib('cites')
+        new_colab = self._attrib['colab'].union(other.get_attrib('colab'))
+        new_year=self._attrib['year'].union(other.get_attrib('year'))
+        
+        return Author(self._key,new_cites,new_colab,new_year)
+        
+    def __add__antiguo(self, other):
         '''Modifica el diccionario de self._atrib con la información de other.
         Este metodo magico lo vamos a ir usando para poder modificar un nodo y meter más info haciendo []+[aquí iría la referencia del archivo]'''
         self._attrib['cites'] += other.get_attrib('cites') #lo usamos porque es privado
         
         self._attrib['colab'].update(other.get_attrib('colab'))
         
-        self._attrib['año'].update(other.get_attrib('año'))
+        self._attrib['year'].update(other.get_attrib('year'))
     def __hash__(self):
         pass
     def __str__(self):
@@ -217,19 +236,35 @@ print(f'\nColaboradores del autor: {author}')
 print(db.get_author_info(author, Author.get_attrib, 'colab'))
 print(f'\nTotal de publicaciones del autor: {author}')
 print(len(db.get_author_info(author, Author.get_attrib, 'cites')))
+
 a = 10
-print(f"Lista los autores de l base de datos con mas de {a} publicaciones"
-)
+print(f"Lista los autores de l base de datos con mas de {a} publicaciones")
 def citas_totales(data, a):
     l = data.get_attrib('cites')
     if len(l) > a:
         return l
 def autores_2022(data):
-    años =data.get_attrib('año')
-    if 2022 in años:
-        return años
+    years =data.get_attrib('year')
+    print(years)
+    if 2022 in years:
+        return years
+def medias(data,attrib,num_publis:list):
+    l = data.get_attrib(attrib)
+    num_publis.append(len(l))
+    
 print(db.get_authors_info(citas_totales, a))
 print(db.get_authors_info(autores_2022))
+
+num_publis=[]
+db.get_authors_info(medias,'cites',num_publis)
+media_publicaciones_por_autor=sum(num_publis)/len(num_publis)
+print('media de publicaciones por autor:',media_publicaciones_por_autor)
+
+num_colabs=[]
+db.get_authors_info(medias,'colab',num_colabs)
+media_colaboraciones_por_autor=sum(num_colabs)/len(num_colabs)
+print('media de colaboraciones por autor:',media_colaboraciones_por_autor)
+
 '''
 print('Lista de los autores de la base de datos que publicaron en 2022')
 

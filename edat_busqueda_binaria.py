@@ -254,14 +254,33 @@ class BSTree(Tree):
             u._parent._right = v
         if v._data != None:
             v._parent = u._parent
+    def delete(self, item):
+        z = self.find(item)
+        if z == None:
+            raise TypeError("Given node does not exist.")
+        if z._left == None:
+            self._transplant(z, z._right)
+        elif z._right == None:
+            self._transplant(z, z._left)
+        else:
+            y = self.successor(z)
+            if y != z._right:
+                self._transplant(y, y._right) 
+                y._right = z._right
+                y._right._parent = y
+            self._transplant(z, y)
+            y._left = z._left
+            y._left._parent = y 
             
-'''j = BSTree()
-for i in (15,6,18,3,7,17,20,2,4,13,9):
-    j.insert(i)
+ar = BSTree()
+for i in (7,6,5,8,9,4,3,2):
+    ar.insert(i)
 
-print(j)
 
-print(j.successor(15))'''
+
+print(ar)
+ar.delete(6)
+print(ar)
      
                
    
