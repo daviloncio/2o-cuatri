@@ -191,7 +191,7 @@ class BSTree(Tree):
         node=_find(self._root,item)
         
         if node != None:
-            return node._data
+            return node
         return None
     
     def print_path(self,item):
@@ -241,7 +241,7 @@ class BSTree(Tree):
         else:
             y = None
         if y != None:
-            return y._data
+            return y
         return None
     
     def _transplant(self, u, v):
@@ -263,7 +263,7 @@ class BSTree(Tree):
         elif z._right == None:
             self._transplant(z, z._left)
         else:
-            y = self.successor(z)
+            y = self.successor(z._data)
             if y != z._right:
                 self._transplant(y, y._right) 
                 y._right = z._right
@@ -272,15 +272,17 @@ class BSTree(Tree):
             y._left = z._left
             y._left._parent = y 
             
-ar = BSTree()
+'''ar = BSTree()
 for i in (7,6,5,8,9,4,3,2):
     ar.insert(i)
 
+k=ar.successor(7)
+print(k._data)
 
 
 print(ar)
 ar.delete(6)
-print(ar)
+print(ar)'''
      
                
    
