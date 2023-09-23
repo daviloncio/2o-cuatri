@@ -1,1 +1,2 @@
-print(ye)
+for i in range(1):
+    print('ye')
