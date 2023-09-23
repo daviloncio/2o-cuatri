@@ -32,12 +32,6 @@ distancia(Origen,Destino,X):-%caso pasamos por cordoba-sevilla
 distancia(Origen,Destino,X):-%caso pasamos por cordoba-sevilla
     carretera(cordoba,sevilla,W),carretera(sevilla,Origen,Y),carretera(cordoba,Destino,Z),X is Y+Z+W.
 
-ruta(Origen,Destino,X):-
-    carretera(Origen,Destino,_),X is [Origen,Destino].
-ruta(Origen,Destino,X):-
-    carretera(Destino,Origen,_),X is [Origen,Destino].
-ruta(Origen,Destino,X):-
-    carretera(cordoba,Origen,_),carretera(cordoba,Destino,_),X is [Origen,cordoba,Destino].
 
 %A CONTINUACIÓN ESCRIBIMOS LAS REGLAS QUE NOS AYUDARÁN A HACER EL FILTRADO Y 
 %ELIMINAR DE DISTANCIAS AQUELLAS DISTANCIAS QUE 
@@ -57,10 +51,6 @@ distancias_con_filtrado(Origen, Destino, ListaFinal) :-
     distancias_sin_filtrado(Origen, Destino, Distancias),
     eliminar_iguales(Distancias, ListaFinal),
     write(ListaFinal).
-nums([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).
-parejas_nums(Parejas) :-
-    nums(Lista),
-    findall((X, Y), (member(X, Lista), member(Y, Lista), X \= Y), Parejas),
-    write(Parejas).
-main :- print("inicio-carreteras").
 
+
+main :- print("inicio-carreteras").
